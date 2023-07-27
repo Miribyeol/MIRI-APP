@@ -184,14 +184,14 @@ class ChallengPage extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Day $day',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 30.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Expanded(
+                      const Expanded(
                         flex: 1,
                         child: Text('오늘 하루는 어떠셨나요?'),
                       ),
@@ -233,11 +233,11 @@ class ChallengPage extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text('목록으로'),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
                                   const Color(0xff3a3b50)),
                             ),
+                            child: const Text('목록으로'),
                           ),
                           const SizedBox(width: 10),
                           ElevatedButton(
@@ -251,11 +251,11 @@ class ChallengPage extends StatelessWidget {
                                 },
                               );
                             },
-                            child: const Text('완료'),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
                                   const Color(0xFF6B42F8)),
                             ),
+                            child: const Text('완료'),
                           ),
                         ],
                       ),
@@ -381,7 +381,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               Navigator.pushNamed(context, '/challenge_list');
             },
             style: ButtonStyle(
-              fixedSize: MaterialStateProperty.all(Size(520, 20)),
+              fixedSize: MaterialStateProperty.all(const Size(520, 20)),
               backgroundColor:
                   MaterialStateProperty.all(const Color(0xFF6B42F8)),
             ),

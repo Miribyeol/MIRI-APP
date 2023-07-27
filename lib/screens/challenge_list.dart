@@ -71,7 +71,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Day ${index + 1}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                           ),
