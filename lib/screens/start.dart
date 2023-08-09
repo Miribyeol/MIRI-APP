@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
 
-  const StartScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     // Replace this variable with the actual progress value (0 to 1) of ChallengPage 1~14단계

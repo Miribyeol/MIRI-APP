@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 class AIOnboardingScreen extends StatelessWidget {
   const AIOnboardingScreen({super.key});
 
-  const AIOnboardingScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
