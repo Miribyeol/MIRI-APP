@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class AIOnboardingScreen extends StatelessWidget {
   const AIOnboardingScreen({super.key});
 
+  const AIOnboardingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,14 +79,12 @@ class AIOnboardingScreen extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Handle the button press to proceed
-                    // Replace `NextScreenPage` with the page you want to navigate to
-                    // For example, Navigator.push(context, MaterialPageRoute(builder: (context) => NextScreenPage()),);
+                    Navigator.pushNamed(context, '/ai_consulting');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF6B42F8),
-                    minimumSize:
-                        const Size(250, 50), // Set the width and height of the button
+                    minimumSize: const Size(
+                        250, 50), // Set the width and height of the button
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
                           25.0), // Set the border radius here
