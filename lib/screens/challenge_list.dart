@@ -7,11 +7,11 @@ import 'package:miri_app/screens/challeng.dart';
 //   _StartScreenState createState() => _StartScreenState();
 // }
 
-void main() {
-  runApp(const MaterialApp(
-    home: ChallengeListScreen(),
-  ));
-}
+// void main() {
+//   runApp(const MaterialApp(
+//     home: ChallengeListScreen(),
+//   ));
+// }
 
 class ChallengeListScreen extends StatefulWidget {
   const ChallengeListScreen({super.key});
