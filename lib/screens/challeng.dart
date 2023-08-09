@@ -324,14 +324,14 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text('error'),
-                  content: Text('max 3'),
+                  title: const Text('error'),
+                  content: const Text('max 3'),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('ok'),
+                      child: const Text('ok'),
                     ),
                   ],
                 ),
@@ -351,7 +351,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
 
 // 팝업창에서 선택된 버튼을 DB에 저장
   Future<void> saveSelectedButtonsToDB() async {
-    final url = 'https://your-server.com/challenges';
+    const url = 'https://your-server.com/challenges';
     final response = await http.post(
       Uri.parse(url),
       body: {

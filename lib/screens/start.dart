@@ -1,4 +1,21 @@
 import 'package:flutter/material.dart';
+import 'onboarding.dart';
+import 'challenge_list.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: OnBoarding(),
+    );
+  }
+}
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -19,7 +36,7 @@ class StartScreen extends StatelessWidget {
               color: const Color(0xFF6B42F8),
               child: Stack(
                 children: [
-                  Positioned(
+                  const Positioned(
                     top: 85,
                     left: 35,
                     child: Text(
@@ -60,7 +77,7 @@ class StartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     top: 230,
                     left: 15,
                     child: Text(
@@ -106,23 +123,28 @@ class StartScreen extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 111,
                     child: ElevatedButton(
+                      //onPressed 실행시 이동이 안되면 이렇게 수정해야함!
                       onPressed: () {
-                        Navigator.pushNamed(context, '/challenge_list');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChallengeListScreen()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFF1F2839),
+                        backgroundColor: const Color(0xFF1F2839),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,25 +175,25 @@ class StartScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, '/ai_onboarding');
                     },
-                    child: Text('별이와 대화하기'),
+                    child: const Text('별이와 대화하기'),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/pet_charnel');
                     },
-                    child: Text('영원한 발자국'),
+                    child: const Text('영원한 발자국'),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Align(
               alignment: Alignment.topRight,
               child: IconButton(
                 onPressed: () {
                   // Add your action for the "더보기" button here
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.more_vert,
                   color: Colors.black,
                 ),
