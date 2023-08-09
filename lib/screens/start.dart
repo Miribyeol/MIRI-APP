@@ -149,17 +149,85 @@ class StartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/ai_onboarding');
-                    },
-                    child: Text('별이와 대화하기'),
+                  SizedBox(height: 10),
+                  Container(
+                    height: 111,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/ai_onboarding');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xFF1F2839),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '\n 별이와 대화하기',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 7),
+                            Text(
+                              ' 미리별 만의 AI 친구 별이에게 고민을 말해보세요 !',
+                              style: TextStyle(
+                                color: Color(0xFFBBBBBB),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/pet_charnel');
-                    },
-                    child: Text('영원한 발자국'),
+                  SizedBox(height: 10),
+                  Container(
+                    height: 111,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/pet_charnel');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xFF1F2839),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '\n 영원한 발자국',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 7),
+                            Text(
+                              ' 애완동물과 함께한 순간들을 기억하는 공간',
+                              style: TextStyle(
+                                color: Color(0xFFBBBBBB),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
