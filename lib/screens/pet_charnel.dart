@@ -6,14 +6,16 @@ import 'package:flutter/material.dart';
 // }
 
 class PetCharnelScreen extends StatelessWidget {
+  const PetCharnelScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("영원한 발자국"),
+        title: const Text("영원한 발자국"),
       ),
       body: Container(
-        child: Center(
+        child: const Center(
           child: Text("Pet Charnel Screen"),
         ),
       ),

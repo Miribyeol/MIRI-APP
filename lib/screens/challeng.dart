@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:miri_app/screens/challenge_list.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({Key? key}) : super(key: key);
+// 라우터 부분
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,11 +21,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//챌린지 시작부분
 class ChallengPage extends StatelessWidget {
   final int day;
 
   const ChallengPage({Key? key, required this.day}) : super(key: key);
-
+//챌린지 윗부분 내용
   List<Widget> _challengeStory(int day) {
     switch (day) {
       case 1:
@@ -120,6 +122,7 @@ class ChallengPage extends StatelessWidget {
     }
   }
 
+//챌린지 아랫부분 내용
   String _challengeEnd(int day) {
     switch (day) {
       case 1:
@@ -155,6 +158,7 @@ class ChallengPage extends StatelessWidget {
     }
   }
 
+// 챌린지 화면 UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,14 +188,14 @@ class ChallengPage extends StatelessWidget {
                         flex: 1,
                         child: Text(
                           'Day $day',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 30.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                       const SizedBox(
                         height: 20,
                       ),
-                      Expanded(
+                      const Expanded(
                         flex: 1,
                         child: Text('오늘 하루는 어떠셨나요?'),
                       ),
@@ -233,11 +237,11 @@ class ChallengPage extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text('목록으로'),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
                                   const Color(0xff3a3b50)),
                             ),
+                            child: const Text('목록으로'),
                           ),
                           const SizedBox(width: 10),
                           ElevatedButton(
@@ -251,11 +255,11 @@ class ChallengPage extends StatelessWidget {
                                 },
                               );
                             },
-                            child: const Text('완료'),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
                                   const Color(0xFF6B42F8)),
                             ),
+                            child: const Text('완료'),
                           ),
                         ],
                       ),
@@ -269,6 +273,7 @@ class ChallengPage extends StatelessWidget {
   }
 }
 
+//팝업창 시작 부분
 class ChallengPopUp extends StatefulWidget {
   final int day;
 
@@ -279,43 +284,63 @@ class ChallengPopUp extends StatefulWidget {
 }
 
 class ChallengPopUpState extends State<ChallengPopUp> {
-  List<bool> pressed = List.generate(17, (index) => false);
-
-  Widget createButton(int index) {
-    List<String> buttonTexts = [
-      '기분전환',
-      '희망찬',
-      '보람찬',
-      '우울한',
-      '드라이브 가고 싶은',
-      '미련',
-      '아직 잘 모르겠어요',
-      '울고 싶은',
-      '어제보다 나은',
-      '무력한',
-      '떠나고 싶은',
-      '후회스러운',
-      '두려운',
-      '불면증',
-    ];
-
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+  Set<int> selectedButtons = {};
+  //버튼 내용
+  List<String> buttonTexts = [
+    '기분전환',
+    '희망찬',
+    '보람찬',
+    '우울한',
+    '드라이브 가고 싶은',
+    '미련',
+    '아직 잘 모르겠어요',
+    '울고 싶은',
+    '어제보다 나은',
+    '무력한',
+    '떠나고 싶은',
+    '후회스러운',
+    '두려운',
+    '불면증',
+  ];
+//팝업창에서 최대 3개의 버튼을 선택하게하기
+  Widget createButton(int index, {width = 100, height = 30}) {
+    bool isSelected = selectedButtons.contains(index);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: width,
+        height: height,
         child: ElevatedButton(
           onPressed: () {
-            setState(() {
-              pressed[index] = !pressed[index];
-            });
+            if (isSelected) {
+              setState(() {
+                selectedButtons.remove(index);
+              });
+            } else if (selectedButtons.length < 3) {
+              setState(() {
+                selectedButtons.add(index);
+              });
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('error'),
+                  content: Text('max 3'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('ok'),
+                    ),
+                  ],
+                ),
+              );
+            }
           },
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-                if (states.contains(MaterialState.pressed) || pressed[index]) {
-                  return const Color(0xff6b42f8);
-                }
-                return const Color(0xff3d4353);
-              },
+            backgroundColor: MaterialStateProperty.all(
+              isSelected ? const Color(0xff6b42f8) : const Color(0xff3d4353),
             ),
           ),
           child: Text('# ${buttonTexts[index]}'),
@@ -324,6 +349,23 @@ class ChallengPopUpState extends State<ChallengPopUp> {
     );
   }
 
+// 팝업창에서 선택된 버튼을 DB에 저장
+  Future<void> saveSelectedButtonsToDB() async {
+    final url = 'https://your-server.com/challenges';
+    final response = await http.post(
+      Uri.parse(url),
+      body: {
+        'day': widget.day.toString(),
+        'selected_buttons': selectedButtons.toList().join(','),
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to save the selected buttons');
+    }
+  }
+
+// 완료시 팝업창 UI
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -336,52 +378,66 @@ class ChallengPopUpState extends State<ChallengPopUp> {
         children: [
           const Text('방금 챌린지를 마친 기분이 어떤지 알려줄래요?'),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              createButton(0),
-              createButton(1),
-              createButton(2),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              createButton(3),
-              createButton(4),
-              createButton(5),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              createButton(6),
-              createButton(7),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              createButton(8),
-              createButton(9),
-              createButton(10),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              createButton(11),
-              createButton(12),
-              createButton(13),
-            ],
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    createButton(0),
+                    createButton(1),
+                    createButton(2),
+                    createButton(13),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    createButton(3),
+                    createButton(4),
+                    createButton(5),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    createButton(6, width: 300, height: 25),
+                    createButton(7, width: 300, height: 25),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    createButton(8),
+                    createButton(9),
+                    createButton(10),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    createButton(11),
+                    createButton(12),
+                    createButton(13),
+                  ],
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 15),
           ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/challenge_list');
+            onPressed: () async {
+              // await saveSelectedButtonsToDB();
+              print('완료 버튼이 눌렸습니다.');
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (context) => const ChallengeListScreen()),
+              );
             },
             style: ButtonStyle(
-              fixedSize: MaterialStateProperty.all(Size(520, 20)),
+              fixedSize: MaterialStateProperty.all(const Size(520, 20)),
               backgroundColor:
                   MaterialStateProperty.all(const Color(0xFF6B42F8)),
             ),

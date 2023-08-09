@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miri_app/screens/challeng.dart';
+// import 'package:http/http.dart' as http;
 
 // class StartScreen extends StatefulWidget {
 //   @override
@@ -20,6 +21,39 @@ class ChallengeListScreen extends StatefulWidget {
 }
 
 class ChallengeListScreenState extends State<ChallengeListScreen> {
+  List<bool> daysCompleted = List.filled(14, false);
+
+  @override
+  void initState() {
+    super.initState();
+    //loadDays();
+  }
+//저장된Day를 불러오기
+  //loadDays() async {
+  // try {
+  //   final response = await http.get(Uri.parse('https://your-server.com/api/days'));
+
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> daysData = json.decode(response.body);
+
+  //     // 응답에서 일자별 완료 여부를 가져와 daysCompleted 리스트에 저장
+  //     for (int i = 0; i < daysData.length; i++) {
+  //       daysCompleted[i] = daysData[i]['completed']; // 서버 응답에 맞게 조정
+  //     }
+
+  //     // UI 업데이트
+  //     setState(() {});
+  //   } else {
+  //     // 서버 응답 오류 처리
+  //     print('Failed to load days.');
+  //   }
+  // } catch (e) {
+  //   // 예외 처리
+  //   print('An error occurred while fetching days: $e');
+  // }
+  // }
+
+  //챌린지 리스트 UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,12 +100,13 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(
                             const Color(0xff6B42F8)),
+                        //daysCompleted[index] ? const Color(0xff6B42F8) : Colors.grey),
                       ),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Day ${index + 1}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
                           ),

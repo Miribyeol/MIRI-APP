@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:miri_app/screens/start.dart';
 
 class StoryScreen extends StatelessWidget {
+  const StoryScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF121824),
+      backgroundColor: const Color(0xFF121824),
       body: Stack(
         children: [
-          Positioned(
+          const Positioned(
             top: 380.0,
             left: 0,
             right: 0,
@@ -33,23 +35,23 @@ class StoryScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => StartScreen()),
+                  MaterialPageRoute(builder: (context) => const StartScreen()),
                 );
               },
-              child: Text(
-                '시작하기',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               style: ElevatedButton.styleFrom(
-                primary: Color(0xFF6B42F8),
-                minimumSize: Size(double.infinity,
+                backgroundColor: const Color(0xFF6B42F8),
+                minimumSize: const Size(double.infinity,
                     50), // Set the width and height of the button
                 shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.circular(10.0), // Set the border radius here
+                ),
+              ),
+              child: const Text(
+                '시작하기',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
