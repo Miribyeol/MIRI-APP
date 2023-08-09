@@ -7,6 +7,7 @@ import 'screens/login.dart';
 import 'screens/pet_info_input.dart';
 import 'screens/story.dart';
 import 'screens/ai_consulting.dart';
+import 'screens/onboarding.dart';
 
 void main() => runApp(const MyApp());
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home: const StartScreen(),
+      home: OnboardingScreen(),
       routes: {
         '/login': (context) => const LoginScreen(),
         '/start': (context) => const StartScreen(),
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/pet_info_input': (context) => const PetInfoInputScreen(),
         '/story': (context) => const StoryScreen(),
         '/ai_consulting': (context) => const AIConsultingScreen(),
+        '/onboarding': (context) => OnboardingScreen(),
       },
     );
   }
