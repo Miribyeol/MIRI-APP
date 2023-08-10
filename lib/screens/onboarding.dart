@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'start.dart';
 
 class OnBoarding extends StatefulWidget {
+  const OnBoarding({super.key});
+
   @override
   OnBoardingState createState() => OnBoardingState();
 }
@@ -28,7 +30,7 @@ class OnBoardingState extends State<OnBoarding> {
         onTap: () {
           if (currentPage != pages.length - 1) {
             pageController.nextPage(
-                duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+                duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
           } else {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => const StartScreen()),
