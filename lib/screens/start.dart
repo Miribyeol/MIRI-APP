@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'challenge_list.dart';
+import 'onboarding.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: OnBoarding(),
+      home: OnboardingScreen(),
     );
   }
 }
