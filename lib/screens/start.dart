@@ -119,7 +119,8 @@ class StartScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ChallengeListScreen()),
+                              builder: (context) =>
+                                  const ChallengeListScreen()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -155,20 +156,20 @@ class StartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Container(
+                  const SizedBox(height: 10),
+                  SizedBox(
                     height: 111,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/ai_onboarding');
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFF1F2839),
+                        backgroundColor: const Color(0xFF1F2839),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,20 +196,20 @@ class StartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Container(
+                  const SizedBox(height: 10),
+                  SizedBox(
                     height: 111,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/pet_charnel');
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFF1F2839),
+                        backgroundColor: const Color(0xFF1F2839),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
