@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miri_app/screens/challeng.dart';
+import 'package:miri_app/screens/challenge.dart';
 // import 'package:http/http.dart' as http;
 
 // class StartScreen extends StatefulWidget {
