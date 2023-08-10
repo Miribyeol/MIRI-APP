@@ -32,7 +32,7 @@ class AnimalScreenState extends State<AnimalScreen> {
 
   Widget _buildDateSelector(bool isBirthDate) {
     final pickedDate = isBirthDate ? _pickedBirthDate : _pickedDeathDate;
-    final labelText = isBirthDate ? '출생일' : '사망일';
+    // final labelText = isBirthDate ? '출생일' : '사망일';
 
     return InkWell(
       onTap: () => _selectDate(context, isBirthDate),
