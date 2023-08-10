@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'challenge_list.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -114,15 +113,10 @@ class StartScreen extends StatelessWidget {
                   SizedBox(
                     height: 111,
                     child: ElevatedButton(
-                      //onPressed 실행시 이동이 안되면 이렇게 수정해야함!
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const ChallengeListScreen()),
-                        );
+                        Navigator.pushNamed(context, '/challenge_list');
                       },
+                      //onPressed 실행시 이동이 안되면 이렇게 수정해야함!
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1F2839),
                         shape: RoundedRectangleBorder(
@@ -156,7 +150,7 @@ class StartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   SizedBox(
                     height: 111,
                     child: ElevatedButton(
@@ -196,7 +190,7 @@ class StartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   SizedBox(
                     height: 111,
                     child: ElevatedButton(

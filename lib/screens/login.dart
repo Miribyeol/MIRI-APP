@@ -1,57 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
-
-//   Future<void> _handleKakaoLogin(BuildContext context) async {
-//     final response = await http.post(
-//       Uri.parse('https://kauth.kakao.com/oauth/token'),
-//       headers: <String, String>{
-//         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-//       },
-//       body: <String, String>{
-//         'grant_type': 'authorization_code',
-//         'client_id': 'YOUR_CLIENT_ID',
-//         'redirect_uri': 'YOUR_REDIRECT_URI',
-//         'code': 'AUTHORIZATION_CODE',
-//       },
-//     );
-
-//     if (response.statusCode == 200) {
-//       final Map<String, dynamic> responseData = json.decode(response.body);
-//       final String accessToken = responseData['access_token'];
-//       saveAccessToken(accessToken);
-//       getProfileInfo(accessToken);
-//     }
-//   }
-
-//   Future<void> getProfileInfo(String accessToken) async {
-//     final response = await http.get(
-//       Uri.parse('https://kapi.kakao.com/v2/user/me'),
-//       headers: <String, String>{
-//         'Authorization': 'Bearer $accessToken',
-//       },
-//     );
-
-//     if (response.statusCode == 200) {
-//       final Map<String, dynamic> profileData = json.decode(response.body);
-//     } else {
-//       throw Exception('Failed to fetch profile information.');
-//     }
-//   }
-
-//   Future<void> saveAccessToken(String accessToken) async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     prefs.setString('access_token', accessToken);
-//   }
-
-//   Future<String?> getAccessToken() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     return prefs.getString('access_token');
-//   }
 
   @override
   Widget build(BuildContext context) {
@@ -95,13 +45,25 @@ class LoginScreen extends StatelessWidget {
               ],
             ),
           ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/pet_info_input');
+                  },
+                  child: Image.asset(
+                    'assets/image/kakao_login_large_wide.png',
+                    width: 380,
+                    height: 130,
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/pet_info_input');
-        },
-        child: const Icon(Icons.login),
       ),
     );
   }
