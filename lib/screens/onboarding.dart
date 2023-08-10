@@ -1,68 +1,152 @@
 import 'package:flutter/material.dart';
-import 'start.dart';
 
-class OnBoarding extends StatefulWidget {
-  const OnBoarding({super.key});
-
-  @override
-  OnBoardingState createState() => OnBoardingState();
-}
-
-class OnBoardingState extends State<OnBoarding> {
-  late PageController pageController;
-  int currentPage = 0;
-
-  static const List<Map<String, dynamic>> pages = [
-    {'image': 'assets/image/OnBoarding1.png'},
-    {'image': 'assets/image/OnBoarding2.png'},
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    pageController = PageController();
-  }
-
+class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          if (currentPage != pages.length - 1) {
-            pageController.nextPage(
-                duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-          } else {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const StartScreen()),
-            );
-          }
-        },
-        child: PageView.builder(
-          controller: pageController,
-          itemCount: pages.length,
-          onPageChanged: (index) {
-            if (currentPage != index) {
-              setState(() {
-                currentPage = index;
-              });
-            }
-          },
-          itemBuilder: (context, index) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(pages[index]['image']),
-              ],
-            );
-          },
+      backgroundColor: const Color(0xFF121824),
+      body: Center(
+        child: Stack(
+          children: [
+            Positioned(
+              top: 150,
+              left: 20,
+              child: _buildCircle(143, const Color(0xFFFFA0A0)),
+            ),
+            Positioned(
+              top: 170,
+              left: 190,
+              child: _buildCircleWithText(
+                  106.62, const Color(0xFF4F4867), "우울감", 20),
+            ),
+            Positioned(
+              top: 240,
+              left: 300,
+              child: _buildCircleWithImage(
+                  134, 'assets/image/onboarding_m_cat.jpeg'),
+            ),
+            Positioned(
+              top: 315,
+              left: -40,
+              child:
+                  _buildCircleWithText(133, const Color(0xFF9F8DDC), "외로움", 24),
+            ),
+            Positioned(
+              top: 300,
+              left: 107,
+              child: _buildCircleWithImage(
+                  209, 'assets/image/onboarding_dog.jpeg'),
+            ),
+            Positioned(
+              top: 420,
+              left: 310,
+              child: _buildCircleWithText(
+                  152, const Color(0xFF6B42F8), "펫로스 증후군", 23),
+            ),
+            Positioned(
+              top: 480,
+              left: 20,
+              child: _buildCircleWithText(
+                  112, const Color(0xFFB36EBE), "반려동물", 20),
+            ),
+            Positioned(
+              top: 530,
+              left: 160,
+              child: _buildCircleWithImage(
+                  139, 'assets/image/onboarding_cat.jpeg'),
+            ),
+            Positioned(
+              top: 600,
+              left: -50,
+              child: _buildCircle(95, const Color(0xFF646A6B)),
+            ),
+            Positioned(
+              top: 650,
+              left: 50,
+              child: _buildCircle(137, const Color(0xFF8FC2DD)),
+            ),
+            Positioned(
+              top: 690,
+              left: 210,
+              child: _buildArrowCircle(114, const Color(0xFF0A85A1), context),
+            ),
+            Positioned(
+              top: 600,
+              left: 320,
+              child: _buildCircle(111, const Color(0xFFE4E3E3)),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  @override
-  void dispose() {
-    pageController.dispose();
-    super.dispose();
+  Widget _buildCircle(double size, Color color) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+      ),
+    );
+  }
+
+  Widget _buildCircleWithImage(double size, String imagePath) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildArrowCircle(double size, Color color, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to login screen
+        Navigator.pushNamed(context, '/login');
+      },
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+        ),
+        child: Icon(
+          Icons.arrow_forward,
+          color: Colors.white,
+          size: size * 0.6,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCircleWithText(
+      double size, Color color, String text, double fontSize) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
   }
 }

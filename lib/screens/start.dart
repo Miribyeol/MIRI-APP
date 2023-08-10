@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'onboarding.dart';
 import 'challenge_list.dart';
 
 void main() {
@@ -135,7 +134,8 @@ class StartScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ChallengeListScreen()),
+                              builder: (context) =>
+                                  const ChallengeListScreen()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
