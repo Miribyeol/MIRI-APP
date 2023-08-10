@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home: const OnboardingScreen(),
+      home: const StartScreen(),
       routes: {
         '/login': (context) => const LoginScreen(),
         '/start': (context) => const StartScreen(),

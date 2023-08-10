@@ -56,30 +56,36 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
   //챌린지 리스트 UI
   @override
   Widget build(BuildContext context) {
+    const TextStyle customStyle =
+        TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
     return Scaffold(
-      appBar: AppBar(
-        // title: Text('My App'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      backgroundColor: const Color(0xFF3D4353),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               const Text(
                 '챌린지',
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red),
               ),
               const SizedBox(height: 10),
               const Text(
                 '14일동안 미션을 수행해보아요',
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red),
               ),
               const SizedBox(height: 20),
               ...List.generate(14, (index) {

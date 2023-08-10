@@ -12,6 +12,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        ),
+      ),
       // Define the routes
       routes: {
         '/': (context) => const ChallengPage(day: 1),
@@ -28,96 +33,98 @@ class ChallengPage extends StatelessWidget {
   const ChallengPage({Key? key, required this.day}) : super(key: key);
 //챌린지 윗부분 내용
   List<Widget> _challengeStory(int day) {
+    const TextStyle customStyle =
+        TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
     switch (day) {
       case 1:
         return [
           const Icon(Icons.star),
           const SizedBox(height: 20),
-          const Text('친구나 가족과의 만남'),
+          const Text('친구나 가족과의 만남', style: customStyle),
         ];
       case 2:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('물 마시기'),
+          const Text('물 마시기', style: customStyle),
         ];
       case 3:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('명상 및 호흡 운동'),
+          const Text('명상 및 호흡 운동', style: customStyle),
         ];
       case 4:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('음악 감상'),
+          const Text('음악 감상', style: customStyle),
         ];
       case 5:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('자기 사랑 연습'),
+          const Text('자기 사랑 연습', style: customStyle),
         ];
       case 6:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('긍정적인 인용구 모으기'),
+          const Text('긍정적인 인용구 모으기', style: customStyle),
         ];
       case 7:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('자기 선물'),
+          const Text('자기 선물', style: customStyle),
         ];
       case 8:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('봉사 활동'),
+          const Text('봉사 활동', style: customStyle),
         ];
       case 9:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('웃음 요법'),
+          const Text('웃음 요법', style: customStyle),
         ];
       case 10:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('사진 도전'),
+          const Text('사진 도전', style: customStyle),
         ];
       case 11:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('자연 치유'),
+          const Text('자연 치유', style: customStyle),
         ];
       case 12:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('일기 쓰기'),
+          const Text('일기 쓰기', style: customStyle),
         ];
       case 13:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('책 읽기'),
+          const Text('책 읽기', style: customStyle),
         ];
       case 14:
         return [
           const Icon(Icons.android),
           const SizedBox(height: 20),
-          const Text('새로운 취미 시작'),
+          const Text('새로운 취미 시작', style: customStyle),
         ];
       default:
         return [
           const Icon(Icons.arrow_back_ios_new_sharp),
           const SizedBox(height: 20),
-          const Text('그 외 내용'),
+          const Text('그 외 내용', style: customStyle),
         ];
     }
   }
@@ -161,115 +168,130 @@ class ChallengPage extends StatelessWidget {
 // 챌린지 화면 UI
   @override
   Widget build(BuildContext context) {
+    const TextStyle customStyle =
+        TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Challenge Day $day'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+        body: Column(
+      children: <Widget>[
+        Expanded(
+          flex: 6,
+          child: Container(
+            color: const Color(0xff6b42f8),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      'Day $day',
+                      style: const TextStyle(
+                          fontSize: 30.0, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Expanded(
+                    flex: 1,
+                    child: Text(
+                      '오늘 하루는 어떠셨나요?',
+                      style: customStyle,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  for (var widget in _challengeStory(day))
+                    Expanded(flex: 1, child: widget),
+                  // ..._challengeStory(day),
+                ],
+              ),
+            ),
           ),
         ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 6,
-              child: Container(
-                color: const Color(0xff6b42f8),
-                child: Center(
-                  child: Column(
+        Expanded(
+          flex: 4,
+          child: Container(
+            color: const Color(0xff3a3b50),
+            child: Center(
+              child: Column(children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Center(
+                    child: Text(
+                      _challengeEnd(day),
+                      style: customStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          'Day $day',
-                          style: const TextStyle(
-                              fontSize: 30.0, fontWeight: FontWeight.bold),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xff3a3b50)),
+                        ),
+                        child: const Text(
+                          '목록으로',
+                          style: customStyle,
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ChallengPopUp(
+                                day: day,
+                              );
+                            },
+                          );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              const Color(0xFF6B42F8)),
+                        ),
+                        child: const Text(
+                          '완료',
+                          style: customStyle,
+                        ),
                       ),
-                      const Expanded(
-                        flex: 1,
-                        child: Text('오늘 하루는 어떠셨나요?'),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      for (var widget in _challengeStory(day))
-                        Expanded(flex: 1, child: widget),
-                      // ..._challengeStory(day),
                     ],
                   ),
                 ),
-              ),
+              ]),
             ),
-            Expanded(
-              flex: 4,
-              child: Container(
-                color: const Color(0xff3a3b50),
-                child: Center(
-                  child: Column(children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Center(
-                        child: Text(
-                          _challengeEnd(day),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xff3a3b50)),
-                            ),
-                            child: const Text('목록으로'),
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return ChallengPopUp(
-                                    day: day,
-                                  );
-                                },
-                              );
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  const Color(0xFF6B42F8)),
-                            ),
-                            child: const Text('완료'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ]),
-                ),
-              ),
-            ),
-          ],
-        ));
+          ),
+        ),
+      ],
+    ));
   }
 }
 
