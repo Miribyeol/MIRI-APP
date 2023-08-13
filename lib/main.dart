@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home: const OnboardingScreen(),
+      home: const StartScreen(),
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
         '/start': (context) => const StartScreen(),
