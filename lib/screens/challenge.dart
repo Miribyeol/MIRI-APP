@@ -160,7 +160,7 @@ class ChallengPage extends StatelessWidget {
                       flex: 1,
                       child: Text(
                         'Day $day',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 30.0, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -197,7 +197,7 @@ class ChallengPage extends StatelessWidget {
                     child: Center(
                       child: Text(
                         _challengeEnd(day),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -360,7 +360,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
         children: [
           const Text(
             '방금 챌린지를 마친 기분이 어떤지 알려줄래요?',
-            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
           SingleChildScrollView(
@@ -424,7 +424,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
             child: const Text(
               '완료',
               style:
-                  const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
+                  TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 10),
