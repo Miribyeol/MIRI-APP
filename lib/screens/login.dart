@@ -9,6 +9,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 자동 로그인 로직 실행
+    kakaoLoginService.autoLogin(context);
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       body: Stack(
@@ -56,7 +58,8 @@ class LoginScreen extends StatelessWidget {
                 InkWell(
                   onTap: () async {
                     try {
-                      final success = await kakaoLoginService.kakaoLogin();
+                      final success =
+                          await kakaoLoginService.kakaoLogin(context);
                       if (success) {
                         Navigator.pushReplacementNamed(context, '/story');
                       } else {
