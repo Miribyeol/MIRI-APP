@@ -64,7 +64,7 @@ class LoginScreen extends StatelessWidget {
                         Navigator.pushReplacementNamed(context, '/story');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text('카카오 로그인에 실패하였습니다.'),
                           ),
                         );
@@ -72,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                     } catch (error) {
                       print("Kakao login error: $error");
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('카카오 로그인 중 오류가 발생하였습니다.'),
                         ),
                       );
