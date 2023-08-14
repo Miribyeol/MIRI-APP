@@ -1,10 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-// import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-// import '../models/user_info_model.dart';
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key});
@@ -21,7 +18,6 @@ class InformationScreenState extends State<InformationScreen> {
   void initState() {
     super.initState();
     _nicknameController = TextEditingController();
-// Initialize with an empty nickname
     fetchUserNickname();
   }
 
@@ -31,7 +27,7 @@ class InformationScreenState extends State<InformationScreen> {
       if (storedToken != null) {
         var url = Uri.parse('http://192.168.200.192:3000/user');
         var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken', // Include the token
+          'Authorization': 'Bearer $storedToken',
         });
 
         if (response.statusCode == 200) {
@@ -51,28 +47,39 @@ class InformationScreenState extends State<InformationScreen> {
   Future<void> updateUserNickname() async {
     try {
       var newNickname = _nicknameController.text;
-      var response = await http.put(
-          Uri.parse('http://192.168.200.192:3000/user'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'nickname': newNickname}));
-
-      if (response.statusCode == 200) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              content: const Text("수정이 완료되었습니다:)"),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("닫기"),
-                ),
-              ],
-            );
+      String? storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        var url = Uri.parse('http://192.168.200.192:3000/user/nickname');
+        var response = await http.put(
+          url,
+          headers: {
+            'Authorization': 'Bearer $storedToken',
+            'Content-Type': 'application/json',
           },
+          body: jsonEncode({'nickname': newNickname}),
         );
-      } else {
-        print('Failed to update user nickname: ${response.statusCode}');
+
+        if (response.statusCode == 200) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: const Text("수정이 완료되었습니다:)"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      fetchUserNickname(); // Refresh the user nickname after updating
+                    },
+                    child: const Text("닫기"),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          print('Failed to update user nickname: ${response.statusCode}');
+        }
       }
     } catch (error) {
       print('Failed to update user nickname: $error');
