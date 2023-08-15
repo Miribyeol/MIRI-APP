@@ -1,23 +1,101 @@
 import 'package:flutter/material.dart';
 
-// class StartScreen extends StatefulWidget {
-//   @override
-//   _StartScreenState createState() => _StartScreenState();
-// }
-
 class PetCharnelScreen extends StatelessWidget {
-  const PetCharnelScreen({super.key});
+  const PetCharnelScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("영원한 발자국"),
-      ),
-      body: Container(
-        child: const Center(
-          child: Text("Pet Charnel Screen"),
-        ),
+      backgroundColor: const Color(0xFF121824),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Back button
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context),
+              color: Colors.white,
+            ),
+          ),
+          // Image and text
+          Expanded(
+            flex: 4,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 281.0,
+                    height: 440.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment:
+                            MainAxisAlignment.center, // 중앙에 위치하도록 조정
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Image.asset(
+                              'assets/image/common-4.jpeg',
+                              width: 210.0,
+                              height: 247.0,
+                            ),
+                          ),
+                          const SizedBox(height: 10.0), // 간격을 위해 사용
+                          const Text(
+                            '햄찌',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 10.0), // 간격을 위해 사용
+                          const Text(
+                            '2023.01.01 ~ 2023.07.08',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Text positioned at the bottom
+          Expanded(
+            flex: 2,
+            child: Transform.translate(
+              offset: Offset(0, 0),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
+                child: Center(
+                  child: Text(
+                    '고마워, 햄찌.\n함께한 모든 순간들을 기억할게.',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

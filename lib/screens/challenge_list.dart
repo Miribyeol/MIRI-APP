@@ -1,17 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:miri_app/screens/challenge.dart';
-// import 'package:http/http.dart' as http;
-
-// class StartScreen extends StatefulWidget {
-//   @override
-//   _StartScreenState createState() => _StartScreenState();
-// }
-
-// void main() {
-//   runApp(const MaterialApp(
-//     home: ChallengeListScreen(),
-//   ));
-// }
 
 class ChallengeListScreen extends StatefulWidget {
   const ChallengeListScreen({super.key});
@@ -56,8 +44,6 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
   //챌린지 리스트 UI
   @override
   Widget build(BuildContext context) {
-    const TextStyle customStyle =
-        TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
     return Scaffold(
       backgroundColor: const Color(0xFF3D4353),
       body: SingleChildScrollView(
@@ -72,20 +58,23 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                   Navigator.pop(context);
                 },
               ),
+              const SizedBox(
+                height: 10,
+              ),
               const Text(
-                '챌린지',
+                '  미리별 챌린지',
                 style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 10),
               const Text(
-                '14일동안 미션을 수행해보아요',
+                '     14일동안 미션을 수행해보아요',
                 style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 20),
               ...List.generate(14, (index) {

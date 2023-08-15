@@ -59,6 +59,40 @@ class InformationScreenState extends State<InformationScreen> {
               ],
             ),
           ),
+          const Positioned(
+            child: Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                /*children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/challenge_list');
+                    },
+                    child: const Text('챌린지'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/ai_onboarding');
+                    },
+                    child: const Text('별이와 대화하기'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/pet_charnel');
+                    },
+                    child: const Text('영원한 발자국'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '//mypage_my_info');
+                    },
+                    child: const Text('마이페이지'),
+                  ),
+                ],*/
+              ),
+            ),
+          ),
           Positioned(
             bottom: 40.0,
             left: 20.0,
@@ -70,19 +104,48 @@ class InformationScreenState extends State<InformationScreen> {
                   builder: (BuildContext con) {
                     return AlertDialog(
                       //title: const Text("수정이 완료되었습니다:)"),
+
                       content: SingleChildScrollView(
                         child: Container(
+                          width: 335,
+                          height: 100,
                           child: const Center(
-                            child: Text("수정이 완료되었습니다:)"),
+                            child: Text(
+                              "수정이 완료되었습니다 :)",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              //style: TextStyle(color:Colors.black),
+                            ),
                           ),
                         ),
                       ),
+                      backgroundColor: Colors.white,
 
                       actions: [
-                        TextButton(
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color(0xFF6B42F8), //Color(0xFF6B42F8)
+                            minimumSize: const Size(double.infinity,
+                                50), // Set the width and height of the button
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Set the border radius here
+                            ),
+                          ),
                           onPressed: () => Navigator.of(context).pop(),
                           child: const Center(
-                            child: Text("닫기"),
+                            child: Text(
+                              "닫기",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ],

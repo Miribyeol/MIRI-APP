@@ -8,95 +8,67 @@ class ChallengPage extends StatelessWidget {
   const ChallengPage({Key? key, required this.day}) : super(key: key);
 //챌린지 윗부분 내용
   List<Widget> _challengeStory(int day) {
+    const TextStyle customStyle =
+        TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
     switch (day) {
       case 1:
         return [
-          const Icon(Icons.star),
-          const SizedBox(height: 20),
-          const Text('친구나 가족과의 만남'),
+          const Text('친구나 가족과의 만남', style: customStyle),
         ];
       case 2:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('물 마시기'),
+          const Text('물 마시기', style: customStyle),
         ];
       case 3:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('명상 및 호흡 운동'),
+          const Text('명상 및 호흡 운동', style: customStyle),
         ];
       case 4:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('음악 감상'),
+          const Text('음악 감상', style: customStyle),
         ];
       case 5:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('자기 사랑 연습'),
+          const Text('자기 사랑 연습', style: customStyle),
         ];
       case 6:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('긍정적인 인용구 모으기'),
+          const Text('긍정적인 인용구 모으기', style: customStyle),
         ];
       case 7:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('자기 선물'),
+          const Text('자기 선물', style: customStyle),
         ];
       case 8:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('봉사 활동'),
+          const Text('봉사 활동', style: customStyle),
         ];
       case 9:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('웃음 요법'),
+          const Text('웃음 요법', style: customStyle),
         ];
       case 10:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('사진 도전'),
+          const Text('사진 도전', style: customStyle),
         ];
       case 11:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('자연 치유'),
+          const Text('자연 치유', style: customStyle),
         ];
       case 12:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('일기 쓰기'),
+          const Text('일기 쓰기', style: customStyle),
         ];
       case 13:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('책 읽기'),
+          const Text('책 읽기', style: customStyle),
         ];
       case 14:
         return [
-          const Icon(Icons.android),
-          const SizedBox(height: 20),
-          const Text('새로운 취미 시작'),
+          const Text('새로운 취미 시작', style: customStyle),
         ];
       default:
         return [
-          const Icon(Icons.arrow_back_ios_new_sharp),
-          const SizedBox(height: 20),
           const Text('그 외 내용'),
         ];
     }
@@ -138,6 +110,16 @@ class ChallengPage extends StatelessWidget {
     }
   }
 
+  Widget _challengeImage(int day) {
+    assert(day >= 1 && day <= 14, 'Day should be between 1 and 14');
+
+    return Image.asset(
+      'assets/image/challenge_day_$day.png',
+      width: 500,
+      height: 500,
+    );
+  }
+
 // 챌린지 화면 UI
   @override
   Widget build(BuildContext context) {
@@ -153,14 +135,28 @@ class ChallengPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 15.0),
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
                       height: 20,
                     ),
-                    const SizedBox(height: 90),
                     Expanded(
                       flex: 1,
                       child: Text(
                         'Day $day',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 30.0, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -172,8 +168,9 @@ class ChallengPage extends StatelessWidget {
                             fontSize: 20.0, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
+                    Expanded(
+                      flex: 5,
+                      child: _challengeImage(day),
                     ),
                     for (var widget in _challengeStory(day))
                       Expanded(flex: 1, child: widget),
@@ -197,7 +194,7 @@ class ChallengPage extends StatelessWidget {
                     child: Center(
                       child: Text(
                         _challengeEnd(day),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -217,8 +214,16 @@ class ChallengPage extends StatelessWidget {
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
                                 const Color(0xff3a3b50)),
+                            fixedSize:
+                                MaterialStateProperty.all(const Size(163, 50)),
                           ),
-                          child: const Text('목록으로'),
+                          child: const Text(
+                            '목록으로',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 10),
                         ElevatedButton(
@@ -235,8 +240,16 @@ class ChallengPage extends StatelessWidget {
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
                                 const Color(0xFF6B42F8)),
+                            fixedSize:
+                                MaterialStateProperty.all(const Size(163, 50)),
                           ),
-                          child: const Text('완료'),
+                          child: const Text(
+                            '완료',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -323,7 +336,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           ),
           child: Text(
             '# ${buttonTexts[index]}',
-            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -350,9 +363,11 @@ class ChallengPopUpState extends State<ChallengPopUp> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: Text(
         '${widget.day}일차 수고했어요!',
-        style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+        style: const TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black),
         textAlign: TextAlign.center,
       ),
       content: Column(
@@ -360,9 +375,12 @@ class ChallengPopUpState extends State<ChallengPopUp> {
         children: [
           const Text(
             '방금 챌린지를 마친 기분이 어떤지 알려줄래요?',
-            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 19.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Column(
@@ -371,41 +389,41 @@ class ChallengPopUpState extends State<ChallengPopUp> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    createButton(0),
-                    createButton(1),
-                    createButton(2),
-                    createButton(13),
+                    createButton(0, width: 120, height: 40),
+                    createButton(1, width: 100, height: 40),
+                    createButton(2, width: 100, height: 40),
+                    createButton(13, width: 100, height: 40),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    createButton(3),
-                    createButton(4),
-                    createButton(5),
+                    createButton(3, width: 100, height: 40),
+                    createButton(4, width: 200, height: 40),
+                    createButton(5, width: 80, height: 40),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    createButton(6, width: 300, height: 25),
-                    createButton(7, width: 300, height: 25),
+                    createButton(6, width: 200, height: 40),
+                    createButton(7, width: 120, height: 40),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    createButton(8),
-                    createButton(9),
-                    createButton(10),
+                    createButton(8, width: 160, height: 40),
+                    createButton(9, width: 100, height: 40),
+                    createButton(10, width: 160, height: 40),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    createButton(11),
-                    createButton(12),
-                    createButton(13),
+                    createButton(11, width: 160, height: 40),
+                    createButton(12, width: 100, height: 40),
+                    createButton(13, width: 100, height: 40),
                   ],
                 ),
               ],
@@ -417,19 +435,25 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               Navigator.pushNamed(context, '/challenge.dart');
             },
             style: ButtonStyle(
-              fixedSize: MaterialStateProperty.all(const Size(520, 20)),
+              fixedSize: MaterialStateProperty.all(const Size(520, 40)),
               backgroundColor:
                   MaterialStateProperty.all(const Color(0xFF6B42F8)),
             ),
             child: const Text(
               '완료',
-              style:
-                  const TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 10),
           TextButton(
-            child: const Text('안할래요'),
+            child: const Text(
+              '안할래요',
+              style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.underline,
+              ),
+            ),
             onPressed: () {
               Navigator.of(context).pop();
             },

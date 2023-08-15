@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
@@ -15,7 +16,7 @@ class StartScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.41,
+              height: MediaQuery.of(context).size.height * 0.45,
               color: const Color(0xFF6B42F8),
               child: Stack(
                 children: [
@@ -64,7 +65,7 @@ class StartScreen extends StatelessWidget {
                     top: 230,
                     left: 15,
                     child: Text(
-                      '다른 사람들은 어떤 감정을 갖고 있을까요?',
+                      '  다른 사람들은 어떤 감정을 갖고 있을까요?',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -74,32 +75,31 @@ class StartScreen extends StatelessWidget {
                   ),
                   Positioned(
                     top: 270,
-                    left: 15,
-                    right: 0,
-                    height: 40,
-                    child: ListView(
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      children: [
-                        buildEmotionTextBox('#기분전환'),
-                        buildEmotionTextBox('#희망찬'),
-                        buildEmotionTextBox('#보람찬'),
-                        buildEmotionTextBox('#우울한'),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    top: 320,
-                    left: 10,
-                    right: 0,
-                    height: 40,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        buildEmotionTextBox('#떠나고 싶은'),
-                        buildEmotionTextBox('#후회스러운'),
-                        buildEmotionTextBox('#두려운'),
-                        buildEmotionTextBox('#불면증'),
-                      ],
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              createButton('#기분전환', width: 120, height: 40),
+                              createButton('#희망찬', width: 100, height: 40),
+                              createButton('#보람찬', width: 100, height: 40),
+                              createButton('#우울한', width: 100, height: 40),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              createButton('#떠나고 싶은', width: 140, height: 40),
+                              createButton('#후회스러운', width: 140, height: 40),
+                              createButton('#두려운', width: 100, height: 40),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -230,23 +230,140 @@ class StartScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 111,
+                    child: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween, // 왼쪽과 오른쪽에 위젯을 배치
+                      children: [
+                        const Text(
+                          '   이런 글이\n   당신에게 위로가 될까요?',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 35.0),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                              '더보기',
+                              style: TextStyle(
+                                color: Color(0xFFBBBBBB),
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 111,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1F2839),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                            color: const Color(0xFF1F2839), width: 2.0),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '여백',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 111,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1F2839),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                            color: const Color(0xFF1F2839), width: 2.0),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '여백',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: 120,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          '이 앱을 통해 팻로스 증후군을 극복하시 분의 소중한 경험을 공유해 주세요.\n여러분의 소중한 이야기는 다른 사용자들에게 희망과 위로를 전달하고,\n함께 힘을 나눌 수 있는 소중한 자산이 될 것입니다.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xff7d8086),
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            const mailtoLink = 'mailto:hnvvely@gmail.com';
+                            if (await canLaunch(mailtoLink)) {
+                              await launch(mailtoLink);
+                            } else {
+                              throw 'Could not launch $mailtoLink';
+                            }
+                          },
+                          child: const Text(
+                            'hnvvely@gmail.com',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                onPressed: () {
-                  // Add your action for the "더보기" button here
-                },
-                icon: const Icon(
-                  Icons.more_vert,
-                  color: Colors.black,
-                ),
-              ),
-            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget createButton(String label, {double? width, double? height}) {
+    return Container(
+      width: width,
+      height: height,
+      margin: const EdgeInsets.symmetric(horizontal: 5.0), // 간격을 주기 위한 마진
+      decoration: BoxDecoration(
+        color: const Color(0xFF3D4353), // 배경색
+        borderRadius: BorderRadius.circular(8.0), // 버튼 모서리 둥글게
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2), // 그림자의 색상
+            spreadRadius: 0,
+            blurRadius: 5, // 그림자의 블러량
+            offset: const Offset(0, 5), // 그림자의 위치
+          ),
+        ],
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

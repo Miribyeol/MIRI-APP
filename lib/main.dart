@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/start.dart';
 import 'screens/challenge_list.dart';
 import 'screens/ai_onboarding.dart';
@@ -39,6 +40,14 @@ class MyApp extends StatelessWidget {
         '/mypage_pet_info': (context) => const AnimalScreen(),
         '/mypage': (context) => const MypageScreen(),
       },
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('ko', ''),
+      ],
     );
   }
 }
