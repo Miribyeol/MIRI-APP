@@ -2,39 +2,45 @@ PODS:
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
-  - kakao_flutter_sdk (0.6.4):
+  - flutter_secure_storage (6.0.0):
     - Flutter
-  - package_info (0.0.1):
+  - kakao_flutter_sdk_common (1.5.0):
     - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - webview_flutter_wkwebview (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
-  - kakao_flutter_sdk (from `.symlinks/plugins/kakao_flutter_sdk/ios`)
-  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - kakao_flutter_sdk_common (from `.symlinks/plugins/kakao_flutter_sdk_common/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
-  kakao_flutter_sdk:
-    :path: ".symlinks/plugins/kakao_flutter_sdk/ios"
-  package_info:
-    :path: ".symlinks/plugins/package_info/ios"
+  flutter_secure_storage:
+    :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  kakao_flutter_sdk_common:
+    :path: ".symlinks/plugins/kakao_flutter_sdk_common/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  webview_flutter_wkwebview:
+    :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
-  kakao_flutter_sdk: 90f18c09513cfaaa6af63214617ceb696878fc09
-  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
+  kakao_flutter_sdk_common: ceb36a134b53ae973da184f67f39993142377af4
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
 
 PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 

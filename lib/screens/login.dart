@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import '../services/kakao_login.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final KakaoLoginService kakaoLoginService;
+
+  const LoginScreen({Key? key, required this.kakaoLoginService})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // 자동 로그인 로직 실행
+    kakaoLoginService.autoLogin(context);
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       body: Stack(
@@ -50,8 +56,27 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/pet_info_input');
+                  onTap: () async {
+                    try {
+                      final success =
+                          await kakaoLoginService.kakaoLogin(context);
+                      if (success) {
+                        Navigator.pushReplacementNamed(context, '/story');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('카카오 로그인에 실패하였습니다.'),
+                          ),
+                        );
+                      }
+                    } catch (error) {
+                      print("Kakao login error: $error");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('카카오 로그인 중 오류가 발생하였습니다.'),
+                        ),
+                      );
+                    }
                   },
                   child: Image.asset(
                     'assets/image/kakao_login_large_wide.png',
