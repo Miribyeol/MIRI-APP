@@ -25,7 +25,7 @@ class InformationScreenState extends State<InformationScreen> {
     try {
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
-        var url = Uri.parse('http://192.168.200.192:3000/user');
+        var url = Uri.parse('http://192.168.200.192:3000/user/nickname');
         var response = await http.get(url, headers: {
           'Authorization': 'Bearer $storedToken',
         });
@@ -182,11 +182,11 @@ class InformationScreenState extends State<InformationScreen> {
                     return AlertDialog(
                       //title: const Text("수정이 완료되었습니다:)"),
 
-                      content: SingleChildScrollView(
-                        child: Container(
+                      content: const SingleChildScrollView(
+                        child: SizedBox(
                           width: 335,
                           height: 100,
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               "수정이 완료되었습니다 :)",
                               style: TextStyle(

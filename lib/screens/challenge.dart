@@ -140,7 +140,7 @@ class ChallengPage extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: 15.0),
+                        padding: const EdgeInsets.only(left: 15.0),
                         child: IconButton(
                           icon: const Icon(Icons.arrow_back_ios),
                           onPressed: () {

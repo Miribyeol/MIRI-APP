@@ -78,7 +78,7 @@ class PetCharnelScreen extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Transform.translate(
-              offset: Offset(0, 0),
+              offset: const Offset(0, 0),
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
                 child: Center(

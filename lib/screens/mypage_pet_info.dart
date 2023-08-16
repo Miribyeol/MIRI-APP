@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 
 class AnimalScreen extends StatefulWidget {
@@ -9,8 +12,51 @@ class AnimalScreen extends StatefulWidget {
 }
 
 class AnimalScreenState extends State<AnimalScreen> {
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   DateTime? _pickedBirthDate;
   DateTime? _pickedDeathDate;
+
+  String? petName = '';
+  String? petSpecies = '';
+  String? petBirthDate = '';
+  String? petDeathDate = '';
+  // String? petImage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _pickedBirthDate = DateTime.now();
+    _pickedDeathDate = DateTime.now();
+    fetchPetInfo();
+  }
+
+  Future<void> fetchPetInfo() async {
+    try {
+      String? storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        var url = Uri.parse('http://203.250.32.29:3000/pet');
+        var response = await http.get(url, headers: {
+          'Authorization': 'Bearer $storedToken', // Include the token
+        });
+
+        if (response.statusCode == 200) {
+          var jsonResponse = jsonDecode(response.body);
+          print(response.body);
+          setState(() {
+            petName = jsonResponse['petInfo']['name'];
+            petSpecies = jsonResponse['petInfo']['type'];
+            petBirthDate = jsonResponse['petInfo']['birthday'];
+            petDeathDate = jsonResponse['petInfo']['deathday'];
+            // petImage = jsonResponse['image'];
+          });
+        } else {
+          print('Failed to fetch pet info: ${response.statusCode}');
+        }
+      }
+    } catch (error) {
+      print('Error fetching pet info: $error');
+    }
+  }
 
   Future<DateTime?> _showCustomModal(
       BuildContext context, bool isBirthDate) async {
@@ -121,11 +167,17 @@ class AnimalScreenState extends State<AnimalScreen> {
       ),
       backgroundColor: Color(0xFF121824),
       body: SingleChildScrollView(
-        //padding()
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            _buildSectionTitle('반려동물 정보'),
+            const SizedBox(height: 10.0),
+            Text('이름: $petName'),
+            Text('종류: $petSpecies'),
+            Text('출생일: $petBirthDate'),
+            Text('사망일: $petDeathDate'),
+            // Text('이미지: $petImage'),
             const SizedBox(height: 10.0),
             _buildSectionTitle('닉네임'),
             const SizedBox(height: 10.0),
@@ -134,9 +186,8 @@ class AnimalScreenState extends State<AnimalScreen> {
                 filled: true,
                 fillColor: Color(0xFF1F2839),
                 border: OutlineInputBorder(
-                  // OutlineInputBorder 사용
-                  borderRadius: BorderRadius.circular(10.0), // 둥글기 10 설정
-                  borderSide: BorderSide.none, // 테두리 선을 없애기 위해 사용
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
                 ),
               ),
               onChanged: (value) {
@@ -184,77 +235,70 @@ class AnimalScreenState extends State<AnimalScreen> {
             const SizedBox(
               height: 20,
             ),
-            Positioned(
-              bottom: 40.0,
-              left: 20.0,
-              right: 20.0,
-              child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: SingleChildScrollView(
-                          child: Container(
-                            width: 335,
-                            height: 100,
-                            child: const Center(
-                              child: Text(
-                                "수정이 완료되었습니다 :)",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                //style: TextStyle(color:Colors.black),
+            ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: SingleChildScrollView(
+                        child: Container(
+                          width: 335,
+                          height: 100,
+                          child: const Center(
+                            child: Text(
+                              "수정이 완료되었습니다 :)",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                         ),
-                        backgroundColor: Colors.white,
-                        actions: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color(0xFF6B42F8), //Color(0xFF6B42F8)
-                              minimumSize: const Size(double.infinity,
-                                  50), // Set the width and height of the button
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Set the border radius here
-                              ),
-                            ),
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Center(
-                              child: Text(
-                                "닫기",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      ),
+                      backgroundColor: Colors.white,
+                      actions: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF6B42F8),
+                            minimumSize: const Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                10.0,
                               ),
                             ),
                           ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF6B42F8),
-                  minimumSize: Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Center(
+                            child: Text(
+                              "닫기",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF6B42F8),
+                minimumSize: Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Text(
-                  '변경하기',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              child: Text(
+                '변경하기',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -275,12 +319,11 @@ class CustomDropdownFormField extends StatelessWidget {
     this.initialValue,
   }) : super(key: key);
 
-  // itemBuilder 메서드를 클래스 내부에 정의
   DropdownMenuItem<String> itemBuilder(String value, String label) {
     return DropdownMenuItem(
       value: value,
       child: Container(
-        width: double.infinity, // 넓이를 DropdownButtonFormField에 맞게 확장
+        width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           color: Colors.transparent,
