@@ -18,8 +18,8 @@ import 'services/kakao_login.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
-  KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
+  // await dotenv.load(fileName: "assets/.env");
+  // KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
   runApp(const MyApp());
 }
 
@@ -50,13 +50,13 @@ class MyApp extends StatelessWidget {
         '/mypage_pet_info': (context) => const AnimalScreen(),
         '/mypage': (context) => const MypageScreen(),
       },
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('ko', ''),
+      supportedLocales: const [
+        Locale('ko', ''),
       ],
     );
   }

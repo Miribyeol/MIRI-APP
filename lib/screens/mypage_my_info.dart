@@ -96,7 +96,7 @@ class InformationScreenState extends State<InformationScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -182,11 +182,11 @@ class InformationScreenState extends State<InformationScreen> {
                     return AlertDialog(
                       //title: const Text("수정이 완료되었습니다:)"),
 
-                      content: SingleChildScrollView(
-                        child: Container(
+                      content: const SingleChildScrollView(
+                        child: SizedBox(
                           width: 335,
                           height: 100,
-                          child: const Center(
+                          child: Center(
                             child: Text(
                               "수정이 완료되었습니다 :)",
                               style: TextStyle(

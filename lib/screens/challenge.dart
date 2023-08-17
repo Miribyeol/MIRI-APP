@@ -9,7 +9,7 @@ class ChallengPage extends StatelessWidget {
 //챌린지 윗부분 내용
   List<Widget> _challengeStory(int day) {
     const TextStyle customStyle =
-        TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+        TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
     switch (day) {
       case 1:
         return [
@@ -124,6 +124,19 @@ class ChallengPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0),
+        child: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          backgroundColor: Color(0xff6b42f8),
+          elevation: 0,
+        ),
+      ),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -134,38 +147,41 @@ class ChallengPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 15.0),
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_back_ios),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    // const SizedBox(
+                    //   height: 30,
+                    // ),
+                    // Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.only(left: 15.0),
+                    //     child: IconButton(
+                    //       icon: const Icon(Icons.arrow_back_ios),
+                    //       onPressed: () {
+                    //         Navigator.pop(context);
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
                     Expanded(
                       flex: 1,
                       child: Text(
                         'Day $day',
                         style: const TextStyle(
-                            fontSize: 30.0, fontWeight: FontWeight.bold),
+                            fontSize: 36.0, fontWeight: FontWeight.bold),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 20,
                     ),
                     const Expanded(
                       flex: 1,
                       child: Text(
                         '오늘 하루는 어떠셨나요?',
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                            fontSize: 16.0, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Expanded(
@@ -183,7 +199,7 @@ class ChallengPage extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Container(
-              color: const Color(0xff3a3b50),
+              color: const Color(0xff121824),
               child: Center(
                 child: Column(children: [
                   const SizedBox(
@@ -195,7 +211,7 @@ class ChallengPage extends StatelessWidget {
                       child: Text(
                         _challengeEnd(day),
                         style: const TextStyle(
-                          fontSize: 18.0,
+                          fontSize: 15.0,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -213,14 +229,20 @@ class ChallengPage extends StatelessWidget {
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                                const Color(0xff3a3b50)),
+                                const Color(0xff3A3B50)),
                             fixedSize:
                                 MaterialStateProperty.all(const Size(163, 50)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            elevation: MaterialStateProperty.all(5.0),
                           ),
                           child: const Text(
                             '목록으로',
                             style: TextStyle(
-                              fontSize: 18.0,
+                              fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -242,11 +264,17 @@ class ChallengPage extends StatelessWidget {
                                 const Color(0xFF6B42F8)),
                             fixedSize:
                                 MaterialStateProperty.all(const Size(163, 50)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            elevation: MaterialStateProperty.all(5.0),
                           ),
                           child: const Text(
                             '완료',
                             style: TextStyle(
-                              fontSize: 18.0,
+                              fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -331,12 +359,18 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
-              isSelected ? const Color(0xff6b42f8) : const Color(0xff3d4353),
+              isSelected ? const Color(0xff6b42f8) : const Color(0xff3D4353),
             ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            elevation: MaterialStateProperty.all(5.0),
           ),
           child: Text(
             '# ${buttonTexts[index]}',
-            style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -364,10 +398,14 @@ class ChallengPopUpState extends State<ChallengPopUp> {
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      elevation: 5.0,
       title: Text(
         '${widget.day}일차 수고했어요!',
         style: const TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black),
+            fontSize: 18.0, fontWeight: FontWeight.bold, color: Colors.black),
         textAlign: TextAlign.center,
       ),
       content: Column(
@@ -376,57 +414,60 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           const Text(
             '방금 챌린지를 마친 기분이 어떤지 알려줄래요?',
             style: TextStyle(
-                fontSize: 19.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.black),
           ),
           const SizedBox(height: 20),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    createButton(0, width: 120, height: 40),
-                    createButton(1, width: 100, height: 40),
-                    createButton(2, width: 100, height: 40),
-                    createButton(13, width: 100, height: 40),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    createButton(3, width: 100, height: 40),
-                    createButton(4, width: 200, height: 40),
-                    createButton(5, width: 80, height: 40),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    createButton(6, width: 200, height: 40),
-                    createButton(7, width: 120, height: 40),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    createButton(8, width: 160, height: 40),
-                    createButton(9, width: 100, height: 40),
-                    createButton(10, width: 160, height: 40),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    createButton(11, width: 160, height: 40),
-                    createButton(12, width: 100, height: 40),
-                    createButton(13, width: 100, height: 40),
-                  ],
-                ),
-              ],
+            padding: EdgeInsets.zero,
+            child: Container(
+              width: 383,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      createButton(0, width: 100, height: 34),
+                      createButton(1, width: 85, height: 34),
+                      createButton(2, width: 85, height: 34),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      createButton(3, width: 85, height: 34),
+                      createButton(4, width: 160, height: 34),
+                      createButton(5, width: 70, height: 34),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      createButton(6, width: 160, height: 34),
+                      createButton(7, width: 100, height: 34),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      createButton(8, width: 130, height: 34),
+                      createButton(9, width: 85, height: 34),
+                      createButton(10, width: 120, height: 34),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      createButton(11, width: 120, height: 34),
+                      createButton(12, width: 85, height: 34),
+                      createButton(13, width: 85, height: 34),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 15),
@@ -435,13 +476,19 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               Navigator.pushNamed(context, '/challenge.dart');
             },
             style: ButtonStyle(
-              fixedSize: MaterialStateProperty.all(const Size(520, 40)),
+              fixedSize: MaterialStateProperty.all(const Size(308, 35)),
               backgroundColor:
                   MaterialStateProperty.all(const Color(0xFF6B42F8)),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              elevation: MaterialStateProperty.all(5.0),
             ),
             child: const Text(
               '완료',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 10),
@@ -449,7 +496,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
             child: const Text(
               '안할래요',
               style: TextStyle(
-                fontSize: 15.0,
+                fontSize: 12.0,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
               ),
