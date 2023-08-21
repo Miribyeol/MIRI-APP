@@ -107,6 +107,7 @@ class _StartScreenState extends State<StartScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
                           const SizedBox(height: 10),
                           SizedBox(
                             height: 15,
@@ -473,4 +474,5 @@ class _StartScreenState extends State<StartScreen> {
       ),
     );
   }
+}
 }

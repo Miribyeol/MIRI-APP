@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/start.dart';
 // import 'screens/challenge.dart';
@@ -16,11 +16,11 @@ import 'screens/mypage_pet_info.dart';
 import 'screens/mypage.dart';
 import 'services/kakao_login.dart';
 // import 'services/check_token.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+// import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
-  KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
+  // await dotenv.load(fileName: "assets/.env");
+  // KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
   runApp(const MyApp());
 }
 
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home: OnboardingScreen(),
+      home: StartScreen(),
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
         '/start': (context) => const StartScreen(),
