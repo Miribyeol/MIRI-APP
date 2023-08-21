@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/start.dart';
 import 'screens/challenge_list.dart';
@@ -15,7 +15,7 @@ import 'screens/mypage_pet_info.dart';
 import 'screens/mypage.dart';
 import 'services/kakao_login.dart';
 // import 'services/check_token.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+// import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() async {
   // await dotenv.load(fileName: "assets/.env");
@@ -34,10 +34,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home: const StartScreen(),
+      home: StartScreen(),
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
-        '/start': (context) => const StartScreen(),
+        '/start': (context) => StartScreen(),
         '/challenge_list': (context) => const ChallengeListScreen(),
         '/ai_onboarding': (context) => const AIOnboardingScreen(),
         '/pet_charnel': (context) =>

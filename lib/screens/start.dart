@@ -1,8 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class StartScreen extends StatelessWidget {
-  const StartScreen({super.key});
+class StartScreen extends StatefulWidget {
+  @override
+  _StartScreenState createState() => _StartScreenState();
+}
+
+class _StartScreenState extends State<StartScreen> {
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  double progressValue = 0.1;
+
+  List<String> emotion = [];
+  List<Map<String, dynamic>> contentData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      String? storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        var url = Uri.parse('http://203.250.32.29:3000/main');
+        var response = await http.get(url, headers: {
+          'Authorization': 'Bearer $storedToken', // Include the token
+        });
+
+        if (response.statusCode == 200) {
+          var jsonResponse = jsonDecode(response.body);
+          print(response.body);
+          setState(() {
+            emotion = (jsonResponse['result']['emotion'] as List)
+                .map((item) => item['emotion'].toString())
+                .toList();
+
+            contentData = List<Map<String, dynamic>>.from(
+                jsonResponse['result']['posts']);
+          });
+        } else {
+          print('Failed to fetch pet info: ${response.statusCode}');
+        }
+      }
+    } catch (error) {
+      print('Error fetching pet info: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,30 +145,24 @@ class StartScreen extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                createButton('#기분전환', width: 100, height: 31),
-                                createButton('#희망찬', width: 80, height: 31),
-                                createButton('#보람찬', width: 80, height: 31),
-                                createButton('#우울한', width: 80, height: 31),
-                                createButton('#떠나고 싶은', width: 120, height: 31),
-                                createButton('#후회스러운', width: 110, height: 31),
-                                createButton('#두려운', width: 80, height: 31),
-                              ],
-                            ),
                             const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                createButton('#떠나고 싶은', width: 120, height: 31),
-                                createButton('#후회스러운', width: 110, height: 31),
-                                createButton('#두려운', width: 80, height: 31),
-                                createButton('#기분전환', width: 100, height: 31),
-                                createButton('#희망찬', width: 80, height: 31),
-                                createButton('#보람찬', width: 80, height: 31),
-                                createButton('#우울한', width: 80, height: 31),
-                              ],
+                              children: emotion
+                                  .sublist(0, (emotion.length / 2).floor())
+                                  .map((emotionItem) {
+                                return createButton(emotionItem,
+                                    width: emotionItem.length * 10, height: 31);
+                              }).toList(),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: emotion
+                                  .sublist((emotion.length / 2).floor())
+                                  .map((emotionItem) {
+                                return createButton(emotionItem,
+                                    width: emotionItem.length * 10, height: 40);
+                              }).toList(),
                             ),
                           ],
                         ),
@@ -296,40 +337,48 @@ class StartScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  SizedBox(
-                    height: 111,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1F2839),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                            color: const Color(0xFF1F2839), width: 2.0),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '여백',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 111,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1F2839),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                            color: const Color(0xFF1F2839), width: 2.0),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '여백',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
+                  Column(
+                    children: contentData.map((item) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 111,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1F2839),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: const Color(0xFF1F2839),
+                                  width: 2.0,
+                                ),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      item['title'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      item['content'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'Author: ${item['author']}',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20), // Adjust spacing here
+                        ],
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 20),
                   SizedBox(

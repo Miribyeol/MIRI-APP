@@ -141,32 +141,6 @@ class InformationScreenState extends State<InformationScreen> {
               alignment: Alignment.center,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                /*children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/challenge_list');
-                    },
-                    child: const Text('챌린지'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/ai_onboarding');
-                    },
-                    child: const Text('별이와 대화하기'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/pet_charnel');
-                    },
-                    child: const Text('영원한 발자국'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '//mypage_my_info');
-                    },
-                    child: const Text('마이페이지'),
-                  ),
-                ],*/
               ),
             ),
           ),
