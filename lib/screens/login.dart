@@ -8,7 +8,7 @@ class LoginScreen extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     // 자동 로그인 로직 실행
     kakaoLoginService.autoLogin(context);
     return Scaffold(
@@ -61,7 +61,8 @@ class LoginScreen extends StatelessWidget {
                       final success =
                           await kakaoLoginService.kakaoLogin(context);
                       if (success) {
-                        Navigator.pushReplacementNamed(context, '/story');
+                        Navigator.pushReplacementNamed(
+                            context, '/pet_info_input');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(

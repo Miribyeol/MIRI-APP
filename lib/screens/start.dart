@@ -1,8 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:url_launcher/url_launcher.dart';
+
+class StartScreen extends StatefulWidget {
+  @override
+  _StartScreenState createState() => _StartScreenState();
+}
+
+class _StartScreenState extends State<StartScreen> {
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  double progressValue = 0.1;
+
+  List<String> emotion = [];
+  List<Map<String, dynamic>> contentData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      String? storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        var url = Uri.parse('http://203.250.32.29:3000/main');
+        var response = await http.get(url, headers: {
+          'Authorization': 'Bearer $storedToken', // Include the token
+        });
+
+        if (response.statusCode == 200) {
+          var jsonResponse = jsonDecode(response.body);
+          print(response.body);
+          setState(() {
+            emotion = (jsonResponse['result']['emotion'] as List)
+                .map((item) => item['emotion'].toString())
+                .toList();
+          },
+          );
+        }
+        }
+    }
+  }
 
 class StartScreen extends StatefulWidget {
   @override
@@ -104,6 +146,14 @@ class _StartScreenState extends State<StartScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: emotion.map((emotion) {
+                              return createButton(emotion,
+                                  width: 120, height: 40);
+                            }).toList(),),
                           SizedBox(
                             height: 15,
                             child: LinearProgressIndicator(
@@ -119,6 +169,7 @@ class _StartScreenState extends State<StartScreen> {
                             "DAY 1",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
+
                           ),
                         ],
                       ),
@@ -229,7 +280,7 @@ class _StartScreenState extends State<StartScreen> {
                     height: 111,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/ai_onboarding');
+                        Navigator.pushNamed(context, '/challenge_list');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1F2839),
@@ -308,8 +359,7 @@ class _StartScreenState extends State<StartScreen> {
                   SizedBox(
                     height: 111,
                     child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween, // 왼쪽과 오른쪽에 위젯을 배치
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           '   이런 글이\n   당신에게 위로가 될까요?',
@@ -336,7 +386,6 @@ class _StartScreenState extends State<StartScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
                   Column(
                     children: contentData.map((item) {
                       return Column(
@@ -470,4 +519,5 @@ class _StartScreenState extends State<StartScreen> {
       ),
     );
   }
+}
 }

@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class InformationScreen extends StatefulWidget {
-  const InformationScreen({super.key});
+  const InformationScreen({Key? key}) : super(key: key);
 
   @override
   InformationScreenState createState() => InformationScreenState();
@@ -13,6 +13,7 @@ class InformationScreen extends StatefulWidget {
 class InformationScreenState extends State<InformationScreen> {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   late TextEditingController _nicknameController;
+  String? userNickname; // 사용자 닉네임 상태 변수
 
   @override
   void initState() {
@@ -25,16 +26,15 @@ class InformationScreenState extends State<InformationScreen> {
     try {
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
-        var url = Uri.parse('http://192.168.200.192:3000/user');
+        var url = Uri.parse('http://203.250.32.29:3000/user/nickname');
         var response = await http.get(url, headers: {
           'Authorization': 'Bearer $storedToken',
         });
 
         if (response.statusCode == 200) {
           var jsonResponse = jsonDecode(response.body);
-          var userNickname = jsonResponse['nickname'];
-          print('User nickname: $userNickname');
-          setState(() {});
+          userNickname = jsonResponse['nickname']; // 닉네임 상태 변수에 저장
+          _nicknameController.text = userNickname!; // TextFormField에 표시
         } else {
           print('Failed to fetch user nickname: ${response.statusCode}');
         }
@@ -49,8 +49,8 @@ class InformationScreenState extends State<InformationScreen> {
       var newNickname = _nicknameController.text;
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
-        var url = Uri.parse('http://192.168.200.192:3000/user/nickname');
-        var response = await http.put(
+        var url = Uri.parse('http://203.250.32.29:3000/user/nickname');
+        var response = await http.patch(
           url,
           headers: {
             'Authorization': 'Bearer $storedToken',
@@ -64,14 +64,47 @@ class InformationScreenState extends State<InformationScreen> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                content: const Text("수정이 완료되었습니다:)"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "수정이 완료되었습니다 :)",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
                 actions: [
-                  TextButton(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF6B42F8),
+                      minimumSize: const Size(
+                        double.infinity,
+                        50,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      fetchUserNickname(); // Refresh the user nickname after updating
+                      fetchUserNickname();
                     },
-                    child: const Text("닫기"),
+                    child: const Text(
+                      "닫기",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -130,9 +163,9 @@ class InformationScreenState extends State<InformationScreen> {
                     filled: true,
                   ),
                   onChanged: (value) {
-                    // Handle the nickname input
+                    setState(() {});
                   },
-                ),
+                )
               ],
             ),
           ),
@@ -150,6 +183,9 @@ class InformationScreenState extends State<InformationScreen> {
             right: 20.0,
             child: ElevatedButton(
               onPressed: () {
+
+                updateUserNickname();
+=======
                 showDialog(
                   context: context,
                   builder: (BuildContext con) {
@@ -203,6 +239,7 @@ class InformationScreenState extends State<InformationScreen> {
                     );
                   },
                 );
+
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6B42F8),
