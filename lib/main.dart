@@ -18,8 +18,8 @@ import 'services/kakao_login.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
-  KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
+  // await dotenv.load(fileName: "assets/.env");
+  // KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
   runApp(const MyApp());
 }
 

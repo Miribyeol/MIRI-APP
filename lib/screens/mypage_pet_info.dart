@@ -65,7 +65,7 @@ class AnimalScreenState extends State<AnimalScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          child: Container(
+          child: SizedBox(
             width: 300,
             height: 350,
             child: Column(
@@ -85,9 +85,9 @@ class AnimalScreenState extends State<AnimalScreen> {
                   onPressed: () {
                     Navigator.of(context).pop(selectedDate);
                   },
-                  child: Text("OK"),
+                  child: const Text("OK"),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -112,20 +112,22 @@ class AnimalScreenState extends State<AnimalScreen> {
           });
         }
       },
-      child: InputDecorator(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Color(0xFF1F2839),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide.none,
-          ),
+      child: Container(
+        height: 60.0,
+        decoration: BoxDecoration(
+          color: const Color(0xFF1F2839),
+          borderRadius: BorderRadius.circular(10.0),
         ),
+        alignment: Alignment.centerLeft,
         child: Text(
           pickedDate != null
               ? "${pickedDate.year}년 ${pickedDate.month}월 ${pickedDate.day}일"
-              : "선택하세요",
-          style: TextStyle(color: Colors.white),
+              : "    선택하세요",
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -138,7 +140,7 @@ class AnimalScreenState extends State<AnimalScreen> {
         padding: const EdgeInsets.only(bottom: 8.0),
         child: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
@@ -152,17 +154,17 @@ class AnimalScreenState extends State<AnimalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('반려동물 정보 관리'),
+        title: const Text('반려동물 정보 관리'),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: Color(0xFF6B42F8),
+        backgroundColor: const Color(0xFF6B42F8),
       ),
-      backgroundColor: Color(0xFF121824),
+      backgroundColor: const Color(0xFF121824),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         child: Column(
@@ -172,7 +174,7 @@ class AnimalScreenState extends State<AnimalScreen> {
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color(0xFF1F2839),
+                fillColor: const Color(0xFF1F2839),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide.none,
@@ -185,8 +187,9 @@ class AnimalScreenState extends State<AnimalScreen> {
               },
               initialValue: petName,
             ),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 10.0),
             _buildSectionTitle('반려동물 종류'),
+
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
@@ -196,6 +199,10 @@ class AnimalScreenState extends State<AnimalScreen> {
                   borderSide: BorderSide.none,
                 ),
               ),
+=======
+            const SizedBox(height: 10.0),
+            PetListDropdown(
+
               onChanged: (value) {
                 setState(() {
                   petSpecies = value;
@@ -203,8 +210,9 @@ class AnimalScreenState extends State<AnimalScreen> {
               },
               initialValue: petSpecies,
             ),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 10.0),
             _buildSectionTitle('반려동물 출생일'),
+
                         TextFormField(
               decoration: InputDecoration(
                 filled: true,
@@ -222,24 +230,27 @@ class AnimalScreenState extends State<AnimalScreen> {
               initialValue: petBirthDate,
             ),
             const SizedBox(height: 20.0),
+=======
+            const SizedBox(height: 10.0),
+
             _buildDateSelector(true),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 10.0),
             _buildSectionTitle('반려동물 사망일'),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 10.0),
             _buildDateSelector(false),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 10.0),
             _buildSectionTitle('반려동물 사진 업로드'),
-            const SizedBox(height: 20.0),
+            const SizedBox(height: 10.0),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color(0xFF1F2839),
+                fillColor: const Color(0xFF1F2839),
                 border: InputBorder.none,
                 suffixIcon: IconButton(
                   onPressed: () {
                     // Implement photo upload functionality here
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.add,
                     color: Colors.white,
                   ),
@@ -252,6 +263,7 @@ class AnimalScreenState extends State<AnimalScreen> {
             const SizedBox(
               height: 20,
             ),
+
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () async {
@@ -343,6 +355,74 @@ class AnimalScreenState extends State<AnimalScreen> {
               child: const Center(
                 child: Text(
                   "닫기",
+=======
+            Positioned(
+              bottom: 40.0,
+              left: 20.0,
+              right: 20.0,
+              child: ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: const SingleChildScrollView(
+                          child: SizedBox(
+                            width: 335,
+                            height: 100,
+                            child: Center(
+                              child: Text(
+                                "수정이 완료되었습니다 :)",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                //style: TextStyle(color:Colors.black),
+                              ),
+                            ),
+                          ),
+                        ),
+                        backgroundColor: Colors.white,
+                        actions: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color(0xFF6B42F8), //Color(0xFF6B42F8)
+                              minimumSize: const Size(double.infinity,
+                                  50), // Set the width and height of the button
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    10.0), // Set the border radius here
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Center(
+                              child: Text(
+                                "닫기",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF6B42F8),
+                  minimumSize: const Size(double.infinity, 60),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: const Text(
+                  '변경하기',
+
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
@@ -358,11 +438,11 @@ class AnimalScreenState extends State<AnimalScreen> {
   }
 }
 
-class CustomDropdownFormField extends StatelessWidget {
+class PetListDropdown extends StatelessWidget {
   final ValueChanged<String?>? onChanged;
   final String? initialValue;
 
-  CustomDropdownFormField({
+  const PetListDropdown({
     Key? key,
     this.onChanged,
     this.initialValue,
@@ -399,7 +479,7 @@ class CustomDropdownFormField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide.none,
         ),
-        fillColor: Color(0xFF1F2839),
+        fillColor: const Color(0xFF1F2839),
         filled: true,
       ),
     );

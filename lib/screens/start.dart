@@ -59,75 +59,53 @@ class _StartScreenState extends State<StartScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.45,
-              color: const Color(0xFF6B42F8),
-              child: Stack(
-                children: [
-                  const Positioned(
-                    top: 85,
-                    left: 35,
-                    child: Text(
-                      '오늘 챌린지\n완료 하셨나요 ?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 50,
-                    right: 16,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/mypage');
-                      },
-                      icon: const Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 165,
-                    left: 30,
-                    right: 30,
-                    child: SizedBox(
-                      height: 15,
-                      child: LinearProgressIndicator(
-                        value: progressValue,
-                        backgroundColor: Colors.white,
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                          Color(0xFF492E9D),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.39),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.39,
+          color: const Color(0xff6B42F8),
+          child: Stack(
+            children: [
+              Container(
+                // height: MediaQuery.of(context).size.height * 0.45,
+                color: const Color(0xFF6B42F8),
+                child: Stack(
+                  children: [
+                    const Positioned(
+                      top: 45,
+                      left: 35,
+                      child: Text(
+                        '오늘 챌린지\n완료 하셨나요 ?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ),
-                  const Positioned(
-                    top: 230,
-                    left: 15,
-                    child: Text(
-                      '  다른 사람들은 어떤 감정을 갖고 있을까요?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    Positioned(
+                      top: 10,
+                      right: 16,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/mypage');
+                        },
+                        icon: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 270,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                    Positioned(
+                      top: 125,
+                      left: 30,
+                      right: 30,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
                           const SizedBox(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -135,14 +113,89 @@ class _StartScreenState extends State<StartScreen> {
                               return createButton(emotion,
                                   width: 120, height: 40);
                             }).toList(),
+=======
+                          SizedBox(
+                            height: 15,
+                            child: LinearProgressIndicator(
+                              value: progressValue,
+                              backgroundColor: Colors.white,
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                Color(0xFF492E9D),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          const Text(
+                            "DAY 1",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    const Positioned(
+                      top: 180,
+                      left: 15,
+                      child: Text(
+                        '  다른 사람들은 어떤 감정을 갖고 있을까요?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 210,
+                      right: 10,
+                      left: 10,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.zero,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                createButton('#기분전환', width: 100, height: 31),
+                                createButton('#희망찬', width: 80, height: 31),
+                                createButton('#보람찬', width: 80, height: 31),
+                                createButton('#우울한', width: 80, height: 31),
+                                createButton('#떠나고 싶은', width: 120, height: 31),
+                                createButton('#후회스러운', width: 110, height: 31),
+                                createButton('#두려운', width: 80, height: 31),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                createButton('#떠나고 싶은', width: 120, height: 31),
+                                createButton('#후회스러운', width: 110, height: 31),
+                                createButton('#두려운', width: 80, height: 31),
+                                createButton('#기분전환', width: 100, height: 31),
+                                createButton('#희망찬', width: 80, height: 31),
+                                createButton('#보람찬', width: 80, height: 31),
+                                createButton('#우울한', width: 80, height: 31),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: Column(
@@ -405,7 +458,7 @@ class _StartScreenState extends State<StartScreen> {
           label,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 16.0,
+            fontSize: 13.0,
             fontWeight: FontWeight.bold,
           ),
         ),
