@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class StartScreen extends StatefulWidget {
+  const StartScreen({super.key});
+
   @override
   _StartScreenState createState() => _StartScreenState();
 }
@@ -36,9 +37,10 @@ class _StartScreenState extends State<StartScreen> {
           var jsonResponse = jsonDecode(response.body);
           print(response.body);
           setState(() {
-            emotion = (jsonResponse['result']['emotion'] as List)
+            emotion = (jsonResponse['result']['emotions'] as List)
                 .map((item) => item['emotion'].toString())
-                .toList();
+                .toSet() // Convert to set to remove duplicates
+                .toList(); // Convert back to list
 
             contentData = List<Map<String, dynamic>>.from(
                 jsonResponse['result']['posts']);
@@ -59,90 +61,120 @@ class _StartScreenState extends State<StartScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.45,
-              color: const Color(0xFF6B42F8),
-              child: Stack(
-                children: [
-                  const Positioned(
-                    top: 85,
-                    left: 35,
-                    child: Text(
-                      '오늘 챌린지\n완료 하셨나요 ?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 50,
-                    right: 16,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/mypage');
-                      },
-                      icon: const Icon(
-                        Icons.person,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 165,
-                    left: 30,
-                    right: 30,
-                    child: SizedBox(
-                      height: 15,
-                      child: LinearProgressIndicator(
-                        value: progressValue,
-                        backgroundColor: Colors.white,
-                        valueColor: const AlwaysStoppedAnimation<Color>(
-                          Color(0xFF492E9D),
+      appBar: PreferredSize(
+        preferredSize:
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.39),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.39,
+          color: const Color(0xff6B42F8),
+          child: Stack(
+            children: [
+              Container(
+                // height: MediaQuery.of(context).size.height * 0.45,
+                color: const Color(0xFF6B42F8),
+                child: Stack(
+                  children: [
+                    const Positioned(
+                      top: 45,
+                      left: 35,
+                      child: Text(
+                        '오늘 챌린지\n완료 하셨나요 ?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                  ),
-                  const Positioned(
-                    top: 230,
-                    left: 15,
-                    child: Text(
-                      '  다른 사람들은 어떤 감정을 갖고 있을까요?',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    Positioned(
+                      top: 10,
+                      right: 16,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/mypage');
+                        },
+                        icon: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 270,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+                    Positioned(
+                      top: 125,
+                      left: 30,
+                      right: 30,
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: emotion.map((emotion) {
-                              return createButton(emotion,
-                                  width: 120, height: 40);
-                            }).toList(),
+                          SizedBox(
+                            height: 15,
+                            child: LinearProgressIndicator(
+                              value: progressValue,
+                              backgroundColor: Colors.white,
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                Color(0xFF492E9D),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          const Text(
+                            "DAY 1",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    const Positioned(
+                      top: 180,
+                      left: 15,
+                      child: Text(
+                        '  다른 사람들은 어떤 감정을 갖고 있을까요?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 210,
+                      right: 10,
+                      left: 10,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.zero,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 10),
+                            Wrap(
+                              spacing: 10, // 버튼 사이의 간격 조절
+                              runSpacing: 10, // 줄 간의 간격 조절
+                              alignment: WrapAlignment.start,
+                              children: emotion.map((emotion) {
+                                return createButton(emotion,
+                                    width: 120, height: 40);
+                              }).toList(),
+                            ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
               child: Column(
@@ -320,24 +352,33 @@ class _StartScreenState extends State<StartScreen> {
                                   children: [
                                     Text(
                                       item['title'],
-                                      style: TextStyle(color: Colors.white),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       item['content'],
-                                      style: TextStyle(color: Colors.white),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       'Author: ${item['author']}',
-                                      style: TextStyle(color: Colors.white),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 20), // Adjust spacing here
+                          const SizedBox(height: 20), // Adjust spacing here
                         ],
                       );
                     }).toList(),
@@ -405,7 +446,7 @@ class _StartScreenState extends State<StartScreen> {
           label,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 16.0,
+            fontSize: 13.0,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -103,7 +103,7 @@ class KakaoLoginService {
 
         if (response.statusCode == 200) {
           var responseData = jsonDecode(response.body);
-          if (responseData['registered'] == 'true') {
+          if (responseData['success'] == true) {
             print('반려동물 정보가 등록되어 있습니다.');
             Navigator.pushReplacementNamed(context, '/start');
           } else {

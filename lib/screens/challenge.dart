@@ -1,11 +1,41 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 //챌린지 시작부분
 class ChallengPage extends StatelessWidget {
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final int day;
 
+  Future<void> sendChallengeStatusToServer(int day, int challengeStep) async {
+    try {
+      final storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        final url = Uri.parse('http://203.250.32.29:3000/challenge/status');
+
+        final response = await http.patch(
+          url,
+          headers: {
+            'Authorization': 'Bearer $storedToken',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            'day': day.toString(),
+            'challengeStep': challengeStep.toString(),
+          }),
+        );
+
+        print('Response status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } catch (e) {
+      print('Error sending challenge status: $e');
+    }
+  }
+
   const ChallengPage({Key? key, required this.day}) : super(key: key);
+
 //챌린지 윗부분 내용
   List<Widget> _challengeStory(int day) {
     const TextStyle customStyle =
@@ -147,24 +177,6 @@ class ChallengPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // const SizedBox(
-                    //   height: 30,
-                    // ),
-                    // Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.only(left: 15.0),
-                    //     child: IconButton(
-                    //       icon: const Icon(Icons.arrow_back_ios),
-                    //       onPressed: () {
-                    //         Navigator.pop(context);
-                    //       },
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
                     Expanded(
                       flex: 1,
                       child: Text(
@@ -303,8 +315,10 @@ class ChallengPopUp extends StatefulWidget {
 }
 
 class ChallengPopUpState extends State<ChallengPopUp> {
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
+
+  int selectedDay = 1;
   Set<int> selectedButtons = {};
-  //버튼 내용
   List<String> buttonTexts = [
     '기분전환',
     '희망찬',
@@ -321,6 +335,54 @@ class ChallengPopUpState extends State<ChallengPopUp> {
     '두려운',
     '불면증',
   ];
+
+  Future<void> sendChallengeFeedbackToServer(
+      int day, List<String> emotions) async {
+    try {
+      final storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        final url = Uri.parse('http://203.250.32.29:3000/emotion');
+
+        final response = await http.patch(
+          url,
+          headers: {
+            'Authorization': 'Bearer $storedToken',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            'day': day.toString(),
+            'emotions': emotions, // Pass the list of emotions here
+          }),
+        );
+
+        print('Response status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        if (response.statusCode == 201) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('완료되었습니다'),
+              content: const Text('챌린지가 성공적으로 완료되었습니다!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 성공 대화 상자 닫기
+                    Navigator.of(context).pop(); // 도전 팝업 닫기
+                    Navigator.of(context).pushReplacementNamed('/start');
+                  },
+                  child: const Text('확인'),
+                ),
+              ],
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error sending challenge feedback: $e');
+    }
+  }
+
 //팝업창에서 최대 3개의 버튼을 선택하게하기
   Widget createButton(int index, {double width = 100.0, double height = 30.0}) {
     bool isSelected = selectedButtons.contains(index);
@@ -375,22 +437,6 @@ class ChallengPopUpState extends State<ChallengPopUp> {
         ),
       ),
     );
-  }
-
-// 팝업창에서 선택된 버튼을 DB에 저장
-  Future<void> saveSelectedButtonsToDB() async {
-    const url = 'https://your-server.com/challenges';
-    final response = await http.post(
-      Uri.parse(url),
-      body: {
-        'day': widget.day.toString(),
-        'selected_buttons': selectedButtons.toList().join(','),
-      },
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to save the selected buttons');
-    }
   }
 
 // 완료시 팝업창 UI
@@ -473,7 +519,10 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           const SizedBox(height: 15),
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/challenge.dart');
+              List<String> selectedEmotions = selectedButtons.map((int index) {
+                return buttonTexts[index];
+              }).toList();
+              sendChallengeFeedbackToServer(widget.day, selectedEmotions);
             },
             style: ButtonStyle(
               fixedSize: MaterialStateProperty.all(const Size(308, 35)),

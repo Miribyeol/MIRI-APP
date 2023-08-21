@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/start.dart';
+// import 'screens/challenge.dart';
 import 'screens/challenge_list.dart';
 import 'screens/ai_onboarding.dart';
 import 'screens/pet_charnel.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       home: OnboardingScreen(),
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
-        '/start': (context) => StartScreen(),
+        '/start': (context) => const StartScreen(),
         '/challenge_list': (context) => const ChallengeListScreen(),
         '/ai_onboarding': (context) => const AIOnboardingScreen(),
         '/pet_charnel': (context) =>
@@ -49,6 +50,12 @@ class MyApp extends StatelessWidget {
         '/mypage_my_info': (context) => const InformationScreen(),
         '/mypage_pet_info': (context) => const AnimalScreen(),
         '/mypage': (context) => MypageScreen(),
+        // '/challenge': (context) {
+        //   final Map<String, dynamic> args = ModalRoute.of(context)!
+        //       .settings
+        //       .arguments as Map<String, dynamic>;
+        //   return ChallengPage(day: args['day']);
+        // },
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
