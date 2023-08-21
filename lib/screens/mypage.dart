@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // 추가
 
 class MypageScreen extends StatelessWidget {
-  const MypageScreen({super.key});
+  final FlutterSecureStorage _storage = const FlutterSecureStorage(); // 추가
+
+  Future<void> _logout(context) async {
+    await _storage.delete(key: 'jwt_token'); // jwt_token 토큰값 삭제
+    Navigator.pushReplacementNamed(context, '/onboarding'); // 로그인 화면으로 이동
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +46,7 @@ class MypageScreen extends StatelessWidget {
                 padding: EdgeInsets.zero, // 버튼 내부 패딩 제거
               ),
               child: const Padding(
-                padding:
-                    EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
+                padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
                 child: Align(
                   alignment: Alignment.centerLeft, // 텍스트를 왼쪽으로 정렬
                   child: Text(
@@ -69,8 +74,7 @@ class MypageScreen extends StatelessWidget {
                 padding: EdgeInsets.zero, // 버튼 내부 패딩 제거
               ),
               child: const Padding(
-                padding:
-                    EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
+                padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
                 child: Align(
                   alignment: Alignment.centerLeft, // 텍스트를 왼쪽으로 정렬
                   child: Text(
@@ -87,7 +91,7 @@ class MypageScreen extends StatelessWidget {
             const SizedBox(height: 430),
             ElevatedButton(
               onPressed: () {
-                // 로그아웃 버튼 눌렀을 때의 동작 추가
+                _logout(context); // 로그아웃 버튼을 눌렀을 때 로그아웃 처리
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3a3b50),
@@ -97,7 +101,7 @@ class MypageScreen extends StatelessWidget {
                 ),
               ),
               child: const Align(
-                alignment: Alignment.center, // 텍스트를 왼쪽으로 정렬
+                alignment: Alignment.center,
                 child: Text(
                   '로그아웃',
                   style: TextStyle(

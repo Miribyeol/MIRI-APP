@@ -20,7 +20,6 @@ class AnimalScreenState extends State<AnimalScreen> {
   String? petSpecies = '';
   String? petBirthDate = '';
   String? petDeathDate = '';
-  // String? petImage = '';
 
   @override
   void initState() {
@@ -36,18 +35,16 @@ class AnimalScreenState extends State<AnimalScreen> {
       if (storedToken != null) {
         var url = Uri.parse('http://203.250.32.29:3000/pet');
         var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken', // Include the token
+          'Authorization': 'Bearer $storedToken',
         });
 
         if (response.statusCode == 200) {
           var jsonResponse = jsonDecode(response.body);
-          print(response.body);
           setState(() {
             petName = jsonResponse['petInfo']['name'];
-            petSpecies = jsonResponse['petInfo']['type'];
+            petSpecies = jsonResponse['petInfo']['species'];
             petBirthDate = jsonResponse['petInfo']['birthday'];
             petDeathDate = jsonResponse['petInfo']['deathday'];
-            // petImage = jsonResponse['image'];
           });
         } else {
           print('Failed to fetch pet info: ${response.statusCode}');
@@ -138,7 +135,7 @@ class AnimalScreenState extends State<AnimalScreen> {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0), // 여백 추가
+        padding: const EdgeInsets.only(bottom: 8.0),
         child: Text(
           title,
           style: TextStyle(
@@ -171,16 +168,7 @@ class AnimalScreenState extends State<AnimalScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildSectionTitle('반려동물 정보'),
-            const SizedBox(height: 10.0),
-            Text('이름: $petName'),
-            Text('종류: $petSpecies'),
-            Text('출생일: $petBirthDate'),
-            Text('사망일: $petDeathDate'),
-            // Text('이미지: $petImage'),
-            const SizedBox(height: 10.0),
             _buildSectionTitle('닉네임'),
-            const SizedBox(height: 10.0),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
@@ -191,19 +179,48 @@ class AnimalScreenState extends State<AnimalScreen> {
                 ),
               ),
               onChanged: (value) {
-                // Handle the pet name input
+                setState(() {
+                  petName = value;
+                });
               },
+              initialValue: petName,
             ),
             const SizedBox(height: 20.0),
             _buildSectionTitle('반려동물 종류'),
-            const SizedBox(height: 20.0),
-            CustomDropdownFormField(
+            TextFormField(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Color(0xFF1F2839),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
+              ),
               onChanged: (value) {
-                // Handle the selected pet type
+                setState(() {
+                  petSpecies = value;
+                });
               },
+              initialValue: petSpecies,
             ),
             const SizedBox(height: 20.0),
             _buildSectionTitle('반려동물 출생일'),
+                        TextFormField(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Color(0xFF1F2839),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  petBirthDate = value;
+                });
+              },
+              initialValue: petBirthDate,
+            ),
             const SizedBox(height: 20.0),
             _buildDateSelector(true),
             const SizedBox(height: 20.0),
@@ -235,56 +252,11 @@ class AnimalScreenState extends State<AnimalScreen> {
             const SizedBox(
               height: 20,
             ),
+            const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: SingleChildScrollView(
-                        child: Container(
-                          width: 335,
-                          height: 100,
-                          child: const Center(
-                            child: Text(
-                              "수정이 완료되었습니다 :)",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      backgroundColor: Colors.white,
-                      actions: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6B42F8),
-                            minimumSize: const Size(double.infinity, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                10.0,
-                              ),
-                            ),
-                          ),
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Center(
-                            child: Text(
-                              "닫기",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                );
+              onPressed: () async {
+                await updatePetInfo();
+                showUpdateDialog(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF6B42F8),
@@ -305,6 +277,83 @@ class AnimalScreenState extends State<AnimalScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> updatePetInfo() async {
+    try {
+      String? storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        var url = Uri.parse('http://203.250.32.29:3000/pet');
+        var response = await http.put(
+          url,
+          headers: {
+            'Authorization': 'Bearer $storedToken',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            'name': petName,
+            'species': petSpecies,
+            'birthday': petBirthDate,
+            'deathday': petDeathDate,
+          }),
+        );
+
+        if (response.statusCode != 200) {
+          print('Failed to update pet info: ${response.statusCode}');
+        }
+      }
+    } catch (error) {
+      print('Error updating pet info: $error');
+    }
+  }
+
+  void showUpdateDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Container(
+              width: 335,
+              height: 100,
+              child: const Center(
+                child: Text(
+                  "수정이 완료되었습니다 :)",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          backgroundColor: Colors.white,
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6B42F8),
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Center(
+                child: Text(
+                  "닫기",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
