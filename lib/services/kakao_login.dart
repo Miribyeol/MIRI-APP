@@ -12,7 +12,7 @@ class KakaoLoginService {
     try {
       print('사용자 토큰 요청 성공\n토큰: $token');
 
-      var url = Uri.parse('http://192.168.200.192:3000/auth/login');
+      var url = Uri.parse('http://203.250.32.29:3000/auth/login');
       var body = jsonEncode(token);
       var response = await http.post(url,
           headers: {
@@ -47,12 +47,12 @@ class KakaoLoginService {
     }
   }
 
-  Future<bool> kakaoLogin(BuildContext context) async {
+  Future<bool> kakaoLogin(context) async {
     OAuthToken? token = await performKakaoLogin();
     if (token != null) {
       print('카카오 로그인 성공');
       sendToken(token);
-      Navigator.pushReplacementNamed(context, '/start');
+      Navigator.pushReplacementNamed(context, '/pet_info_input');
       return true;
     }
     return false;
@@ -72,20 +72,49 @@ class KakaoLoginService {
     if (storedToken != null) {
       print('저장된 토큰으로 자동 로그인 시도');
       try {
-        var url = Uri.parse('http://192.168.200.192:3000/auth/check');
+        var url = Uri.parse('http://203.250.32.29:3000/auth/check');
         var response = await http.get(url, headers: {
           'Authorization': 'Bearer $storedToken',
         });
 
         if (response.statusCode == 200) {
           print('토큰 검증 성공');
-          Navigator.pushReplacementNamed(context, '/start');
+
+          // 반려동물 정보 확인
+          await checkPetRegistration(context);
         } else {
           print('토큰 검증 실패: ${response.statusCode}');
           print('응답 내용: ${response.body}');
         }
       } catch (error) {
         print('토큰 검증 실패 $error');
+      }
+    }
+  }
+
+  Future<void> checkPetRegistration(BuildContext context) async {
+    final storedToken = await _storage.read(key: 'jwt_token');
+    if (storedToken != null) {
+      try {
+        var url = Uri.parse('http://203.250.32.29:3000/pet/check');
+        var response = await http.get(url, headers: {
+          'Authorization': 'Bearer $storedToken',
+        });
+
+        if (response.statusCode == 200) {
+          var responseData = jsonDecode(response.body);
+          if (responseData['registered'] == 'true') {
+            print('반려동물 정보가 등록되어 있습니다.');
+            Navigator.pushReplacementNamed(context, '/start');
+          } else {
+            print('반려동물 정보가 등록되어 있지 않습니다.');
+            Navigator.pushReplacementNamed(context, '/pet_info_input');
+          }
+        } else {
+          print('반려동물 정보 등록 확인 실패: ${response.statusCode}');
+        }
+      } catch (error) {
+        print('반려동물 정보 등록 확인 실패: $error');
       }
     }
   }

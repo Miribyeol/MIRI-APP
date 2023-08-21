@@ -34,10 +34,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home: const StartScreen(),
+      home: OnboardingScreen(),
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
-        '/start': (context) => const StartScreen(),
+        '/start': (context) => StartScreen(),
         '/challenge_list': (context) => const ChallengeListScreen(),
         '/ai_onboarding': (context) => const AIOnboardingScreen(),
         '/pet_charnel': (context) =>
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const OnboardingScreen(),
         '/mypage_my_info': (context) => const InformationScreen(),
         '/mypage_pet_info': (context) => const AnimalScreen(),
-        '/mypage': (context) => const MypageScreen(),
+        '/mypage': (context) => MypageScreen(),
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

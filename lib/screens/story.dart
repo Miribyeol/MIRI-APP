@@ -35,7 +35,7 @@ class StoryScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const StartScreen()),
+                  MaterialPageRoute(builder: (context) => StartScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
