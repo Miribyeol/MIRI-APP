@@ -371,7 +371,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           },
           body: jsonEncode({
             // 'day': day.toString(),
-            'challengeStep': day, // Add this line
+            'challengeStep': day.toString(), // Add this line
             // 'emotions': emotions,
           }),
         );
