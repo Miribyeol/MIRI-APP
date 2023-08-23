@@ -56,8 +56,11 @@ class _StartScreenState extends State<StartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Replace this variable with the actual progress value (0 to 1) of ChallengPage 1~14단계
-    double progressValue = 0.1;
+    // Replace this variable with the actual challenge step value (1 to 14)
+    int challengeStep = 1;
+
+    // Calculate progress value based on challenge step
+    double progressValue = challengeStep / 14.0;
 
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
@@ -75,7 +78,7 @@ class _StartScreenState extends State<StartScreen> {
                 child: Stack(
                   children: [
                     const Positioned(
-                      top: 45,
+                      top: 55,
                       left: 35,
                       child: Text(
                         '오늘 챌린지\n완료 하셨나요 ?',
@@ -87,7 +90,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                     Positioned(
-                      top: 10,
+                      top: 50,
                       right: 16,
                       child: IconButton(
                         onPressed: () {

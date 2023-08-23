@@ -79,9 +79,12 @@ class KakaoLoginService {
 
         if (response.statusCode == 200) {
           print('토큰 검증 성공');
-
           // 반려동물 정보 확인
           await checkPetRegistration(context);
+        } else if (response.statusCode == 401) {
+          print('토큰 만료, 새로운 토큰 요청 및 저장 시도');
+          // 토큰 만료 시, 새로운 토큰 요청 및 저장 로직 추가
+          await refreshAndStoreToken(context);
         } else {
           print('토큰 검증 실패: ${response.statusCode}');
           print('응답 내용: ${response.body}');
@@ -89,6 +92,38 @@ class KakaoLoginService {
       } catch (error) {
         print('토큰 검증 실패 $error');
       }
+    }
+  }
+
+  Future<void> refreshAndStoreToken(BuildContext context) async {
+    try {
+      final refreshToken = await _storage.read(key: 'refresh_token');
+      if (refreshToken != null) {
+        var url = Uri.parse('http://203.250.32.29:3000/auth/refresh');
+        var response = await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({'refreshToken': refreshToken}),
+        );
+
+        if (response.statusCode == 200) {
+          print('새로운 토큰 받아오기 성공');
+          var data = jsonDecode(response.body)["token"];
+          await _storage.write(key: 'jwt_token', value: data);
+
+          // 새로운 토큰으로 반려동물 정보 확인
+          await checkPetRegistration(context);
+        } else {
+          print('새로운 토큰 받아오기 실패: ${response.statusCode}');
+        }
+      } else {
+        print('리프레시 토큰이 없습니다.');
+        // 로그아웃 또는 다른 처리를 수행할 수 있음
+      }
+    } catch (error) {
+      print('새로운 토큰 받아오기 실패: $error');
     }
   }
 

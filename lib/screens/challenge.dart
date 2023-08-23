@@ -150,6 +150,15 @@ class ChallengPage extends StatelessWidget {
     );
   }
 
+  void _completeChallenge(BuildContext context, int day) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ChallengPopUp(day: day, challengeStep: day);
+      },
+    );
+  }
+
 // 챌린지 화면 UI
   @override
   Widget build(BuildContext context) {
@@ -262,14 +271,7 @@ class ChallengPage extends StatelessWidget {
                         const SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return ChallengPopUp(
-                                  day: day,
-                                );
-                              },
-                            );
+                            _completeChallenge(context, day);
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
@@ -307,15 +309,18 @@ class ChallengPage extends StatelessWidget {
 //팝업창 시작 부분
 class ChallengPopUp extends StatefulWidget {
   final int day;
+  final int challengeStep; // Add this line
 
-  const ChallengPopUp({super.key, required this.day});
+  const ChallengPopUp(
+      {Key? key, required this.day, required this.challengeStep})
+      : super(key: key);
 
   @override
   ChallengPopUpState createState() => ChallengPopUpState();
 }
 
 class ChallengPopUpState extends State<ChallengPopUp> {
-  final FlutterSecureStorage _storage = FlutterSecureStorage();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   int selectedDay = 1;
   Set<int> selectedButtons = {};
@@ -337,11 +342,13 @@ class ChallengPopUpState extends State<ChallengPopUp> {
   ];
 
   Future<void> sendChallengeFeedbackToServer(
-      int day, List<String> emotions) async {
+      int day, int challengeStep, List<String> emotions) async {
     try {
+      print(day);
       final storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
         final url = Uri.parse('http://203.250.32.29:3000/emotion');
+        final url2 = Uri.parse('http://203.250.32.29:3000/challenge/status');
 
         final response = await http.patch(
           url,
@@ -350,15 +357,32 @@ class ChallengPopUpState extends State<ChallengPopUp> {
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
-            'day': day.toString(),
-            'emotions': emotions, // Pass the list of emotions here
+            //'day': day.toString(),
+            // 'challengeStep': challengeStep.toString(), // Add this line
+            'emotions': emotions,
+          }),
+        );
+
+        final response2 = await http.patch(
+          url2,
+          headers: {
+            'Authorization': 'Bearer $storedToken',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            // 'day': day.toString(),
+            'challengeStep': day, // Add this line
+            // 'emotions': emotions,
           }),
         );
 
         print('Response status code: ${response.statusCode}');
         print('Response body: ${response.body}');
 
-        if (response.statusCode == 201) {
+        print('Response2 status code: ${response2.statusCode}');
+        print('Response2 body: ${response2.body}');
+
+        if (response.statusCode == 201 && response2.statusCode == 201) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -369,7 +393,8 @@ class ChallengPopUpState extends State<ChallengPopUp> {
                   onPressed: () {
                     Navigator.of(context).pop(); // 성공 대화 상자 닫기
                     Navigator.of(context).pop(); // 도전 팝업 닫기
-                    Navigator.of(context).pushReplacementNamed('/start');
+                    Navigator.of(context)
+                        .pushReplacementNamed('/start'); // StartScreen으로 이동
                   },
                   child: const Text('확인'),
                 ),
@@ -522,7 +547,11 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               List<String> selectedEmotions = selectedButtons.map((int index) {
                 return buttonTexts[index];
               }).toList();
-              sendChallengeFeedbackToServer(widget.day, selectedEmotions);
+              sendChallengeFeedbackToServer(
+                widget.day,
+                widget.challengeStep,
+                selectedEmotions,
+              );
             },
             style: ButtonStyle(
               fixedSize: MaterialStateProperty.all(const Size(308, 35)),
