@@ -164,7 +164,7 @@ class ChallengPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
+        preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -172,7 +172,7 @@ class ChallengPage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          backgroundColor: Color(0xff6b42f8),
+          backgroundColor: const Color(0xff6b42f8),
           elevation: 0,
         ),
       ),
@@ -493,7 +493,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.zero,
-            child: Container(
+            child: SizedBox(
               width: 383,
               child: Column(
                 mainAxisSize: MainAxisSize.min,

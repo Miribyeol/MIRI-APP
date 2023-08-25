@@ -47,7 +47,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xff121824),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(110.0),
+        preferredSize: const Size.fromHeight(110.0),
         child: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -80,7 +80,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
               ],
             ),
           ),
-          backgroundColor: Color(0xFF121824),
+          backgroundColor: const Color(0xFF121824),
           elevation: 0,
         ),
       ),
