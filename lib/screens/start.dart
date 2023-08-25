@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class StartScreen extends StatefulWidget {
+  const StartScreen({super.key});
+
   @override
   _StartScreenState createState() => _StartScreenState();
 }
@@ -36,50 +37,10 @@ class _StartScreenState extends State<StartScreen> {
           var jsonResponse = jsonDecode(response.body);
           print(response.body);
           setState(() {
-            emotion = (jsonResponse['result']['emotion'] as List)
+            emotion = (jsonResponse['result']['emotions'] as List)
                 .map((item) => item['emotion'].toString())
-                .toList();
-          },
-          );
-        }
-        }
-    }
-  }
-
-class StartScreen extends StatefulWidget {
-  @override
-  _StartScreenState createState() => _StartScreenState();
-}
-
-class _StartScreenState extends State<StartScreen> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  double progressValue = 0.1;
-
-  List<String> emotion = [];
-  List<Map<String, dynamic>> contentData = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/main');
-        var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken', // Include the token
-        });
-
-        if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-          print(response.body);
-          setState(() {
-            emotion = (jsonResponse['result']['emotion'] as List)
-                .map((item) => item['emotion'].toString())
-                .toList();
+                .toSet() // Convert to set to remove duplicates
+                .toList(); // Convert back to list
 
             contentData = List<Map<String, dynamic>>.from(
                 jsonResponse['result']['posts']);
@@ -146,14 +107,7 @@ class _StartScreenState extends State<StartScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: emotion.map((emotion) {
-                              return createButton(emotion,
-                                  width: 120, height: 40);
-                            }).toList(),),
                           SizedBox(
                             height: 15,
                             child: LinearProgressIndicator(
@@ -169,7 +123,6 @@ class _StartScreenState extends State<StartScreen> {
                             "DAY 1",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
-
                           ),
                         ],
                       ),
@@ -197,24 +150,16 @@ class _StartScreenState extends State<StartScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: emotion
-                                  .sublist(0, (emotion.length / 2).floor())
-                                  .map((emotionItem) {
-                                return createButton(emotionItem,
-                                    width: emotionItem.length * 10, height: 31);
+                            Wrap(
+                              spacing: 10, // 버튼 사이의 간격 조절
+                              runSpacing: 10, // 줄 간의 간격 조절
+                              alignment: WrapAlignment.start,
+                              children: emotion.map((emotion) {
+                                return createButton(emotion,
+                                    width: 120, height: 40);
                               }).toList(),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: emotion
-                                  .sublist((emotion.length / 2).floor())
-                                  .map((emotionItem) {
-                                return createButton(emotionItem,
-                                    width: emotionItem.length * 10, height: 40);
-                              }).toList(),
-                            ),
+                            const SizedBox(height: 10),
                           ],
                         ),
                       ),
@@ -241,7 +186,6 @@ class _StartScreenState extends State<StartScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, '/challenge_list');
                       },
-                      //onPressed 실행시 이동이 안되면 이렇게 수정해야함!
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1F2839),
                         shape: RoundedRectangleBorder(
@@ -407,24 +351,33 @@ class _StartScreenState extends State<StartScreen> {
                                   children: [
                                     Text(
                                       item['title'],
-                                      style: TextStyle(color: Colors.white),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       item['content'],
-                                      style: TextStyle(color: Colors.white),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       'Author: ${item['author']}',
-                                      style: TextStyle(color: Colors.white),
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: 20), // Adjust spacing here
+                          const SizedBox(height: 20), // Adjust spacing here
                         ],
                       );
                     }).toList(),
@@ -519,5 +472,4 @@ class _StartScreenState extends State<StartScreen> {
       ),
     );
   }
-}
 }

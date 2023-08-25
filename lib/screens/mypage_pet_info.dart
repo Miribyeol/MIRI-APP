@@ -121,7 +121,7 @@ class AnimalScreenState extends State<AnimalScreen> {
         alignment: Alignment.centerLeft,
         child: Text(
           pickedDate != null
-              ? "${pickedDate.year}년 ${pickedDate.month}월 ${pickedDate.day}일"
+              ? "    ${pickedDate.year}년 ${pickedDate.month}월 ${pickedDate.day}일"
               : "    선택하세요",
           style: const TextStyle(
             color: Colors.white,
@@ -145,6 +145,25 @@ class AnimalScreenState extends State<AnimalScreen> {
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showPetSelector(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        content: PetListDropdown(
+          onChanged: (value) {
+            setState(() {
+              petSpecies = value;
+            });
+            Navigator.pop(context);
+          },
+          initialValue: petSpecies,
         ),
       ),
     );
@@ -189,34 +208,35 @@ class AnimalScreenState extends State<AnimalScreen> {
             ),
             const SizedBox(height: 10.0),
             _buildSectionTitle('반려동물 종류'),
-
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color(0xFF1F2839),
+                fillColor: const Color(0xFF1F2839),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide.none,
                 ),
               ),
-=======
-            const SizedBox(height: 10.0),
-            PetListDropdown(
-
-              onChanged: (value) {
-                setState(() {
-                  petSpecies = value;
-                });
+              readOnly: true,
+              onTap: () {
+                _showPetSelector(context);
               },
-              initialValue: petSpecies,
             ),
             const SizedBox(height: 10.0),
+            // PetListDropdown(
+            //   onChanged: (value) {
+            //     setState(() {
+            //       petSpecies = value;
+            //     });
+            //   },
+            //   initialValue: petSpecies,
+            // ),
+            const SizedBox(height: 10.0),
             _buildSectionTitle('반려동물 출생일'),
-
-                        TextFormField(
+            TextFormField(
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color(0xFF1F2839),
+                fillColor: const Color(0xFF1F2839),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                   borderSide: BorderSide.none,
@@ -228,11 +248,9 @@ class AnimalScreenState extends State<AnimalScreen> {
                 });
               },
               initialValue: petBirthDate,
+              readOnly: true,
             ),
-            const SizedBox(height: 20.0),
-=======
             const SizedBox(height: 10.0),
-
             _buildDateSelector(true),
             const SizedBox(height: 10.0),
             _buildSectionTitle('반려동물 사망일'),
@@ -263,7 +281,6 @@ class AnimalScreenState extends State<AnimalScreen> {
             const SizedBox(
               height: 20,
             ),
-
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () async {
@@ -271,13 +288,13 @@ class AnimalScreenState extends State<AnimalScreen> {
                 showUpdateDialog(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF6B42F8),
-                minimumSize: Size(double.infinity, 50),
+                backgroundColor: const Color(0xFF6B42F8),
+                minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 '변경하기',
                 style: TextStyle(
                   color: Colors.white,
@@ -325,11 +342,11 @@ class AnimalScreenState extends State<AnimalScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: SingleChildScrollView(
-            child: Container(
+          content: const SingleChildScrollView(
+            child: SizedBox(
               width: 335,
               height: 100,
-              child: const Center(
+              child: Center(
                 child: Text(
                   "수정이 완료되었습니다 :)",
                   style: TextStyle(
@@ -355,7 +372,9 @@ class AnimalScreenState extends State<AnimalScreen> {
               child: const Center(
                 child: Text(
                   "닫기",
-=======
+                ),
+              ),
+            ),
             Positioned(
               bottom: 40.0,
               left: 20.0,
@@ -422,7 +441,6 @@ class AnimalScreenState extends State<AnimalScreen> {
                 ),
                 child: const Text(
                   '변경하기',
-
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
@@ -448,13 +466,13 @@ class PetListDropdown extends StatelessWidget {
     this.initialValue,
   }) : super(key: key);
 
-  DropdownMenuItem<String> itemBuilder(String value, String label) {
+  DropdownMenuItem<String?> itemBuilder(String? value, String label) {
     return DropdownMenuItem(
       value: value,
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(0.0),
           color: Colors.transparent,
         ),
         child: Text(label),
@@ -464,23 +482,34 @@ class PetListDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      value: initialValue,
-      isExpanded: true,
-      items: [
-        itemBuilder('Dog', '강아지'),
-        itemBuilder('Cat', '고양이'),
-        itemBuilder('Hamster', '햄찌'),
-        itemBuilder('Meerkat', '미어캣'),
-      ],
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide.none,
+    String? validInitialValue;
+    List<String?> possibleValues = [null, 'Dog', 'Cat', 'Hamster', 'Meerkat'];
+    if (possibleValues.contains(initialValue)) {
+      validInitialValue = initialValue;
+    } else {
+      validInitialValue = null;
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: const Color(0xFF1F2839),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String?>(
+          value: validInitialValue,
+          isExpanded: true,
+          dropdownColor: const Color(0xFF1F2839),
+          items: [
+            itemBuilder(null, '펫을 선택해주세요'),
+            itemBuilder('Dog', '강아지'),
+            itemBuilder('Cat', '고양이'),
+            itemBuilder('Hamster', '햄찌'),
+            itemBuilder('Meerkat', '미어캣'),
+          ],
+          onChanged: onChanged,
         ),
-        fillColor: const Color(0xFF1F2839),
-        filled: true,
       ),
     );
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/start.dart';
+// import 'screens/challenge.dart';
 import 'screens/challenge_list.dart';
 import 'screens/ai_onboarding.dart';
 import 'screens/pet_charnel.dart';
@@ -15,11 +16,11 @@ import 'screens/mypage_pet_info.dart';
 import 'screens/mypage.dart';
 import 'services/kakao_login.dart';
 // import 'services/check_token.dart';
-// import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() async {
-  // await dotenv.load(fileName: "assets/.env");
-  // KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
+  await dotenv.load(fileName: ".env");
+  KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
   runApp(const MyApp());
 }
 
@@ -34,10 +35,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home: StartScreen(),
+      home: const OnboardingScreen(),
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
-        '/start': (context) => StartScreen(),
+        '/start': (context) => const StartScreen(),
         '/challenge_list': (context) => const ChallengeListScreen(),
         '/ai_onboarding': (context) => const AIOnboardingScreen(),
         '/pet_charnel': (context) =>
@@ -48,7 +49,13 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const OnboardingScreen(),
         '/mypage_my_info': (context) => const InformationScreen(),
         '/mypage_pet_info': (context) => const AnimalScreen(),
-        '/mypage': (context) => MypageScreen(),
+        '/mypage': (context) => const MypageScreen(),
+        // '/challenge': (context) {
+        //   final Map<String, dynamic> args = ModalRoute.of(context)!
+        //       .settings
+        //       .arguments as Map<String, dynamic>;
+        //   return ChallengPage(day: args['day']);
+        // },
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

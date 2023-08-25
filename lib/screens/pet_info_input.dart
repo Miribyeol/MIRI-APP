@@ -84,14 +84,14 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text('반려동물 정보 등록 실패'),
-                content: Text('반려동물 정보 등록에 실패하였습니다.'),
+                title: const Text('반려동물 정보 등록 실패'),
+                content: const Text('반려동물 정보 등록에 실패하였습니다.'),
                 actions: [
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('확인'),
+                    child: const Text('확인'),
                   ),
                 ],
               );

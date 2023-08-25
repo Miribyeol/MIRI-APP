@@ -10,70 +10,71 @@ class OnboardingScreen extends StatelessWidget {
       body: Center(
         child: Stack(
           children: [
+            //positioned-> top에 100px씩 감소
             Positioned(
-              top: 150,
+              top: 50,
               left: 20,
               child: _buildCircle(143, const Color(0xFFFFA0A0)),
             ),
             Positioned(
-              top: 170,
+              top: 70,
               left: 190,
               child: _buildCircleWithText(
                   106.62, const Color(0xFF4F4867), "우울감", 20),
             ),
             Positioned(
-              top: 240,
+              top: 140,
               left: 300,
               child: _buildCircleWithImage(
                   134, 'assets/image/onboarding_m_cat.jpeg'),
             ),
             Positioned(
-              top: 315,
+              top: 215,
               left: -40,
               child:
                   _buildCircleWithText(133, const Color(0xFF9F8DDC), "외로움", 24),
             ),
             Positioned(
-              top: 300,
+              top: 200,
               left: 107,
               child: _buildCircleWithImage(
                   209, 'assets/image/onboarding_dog.jpeg'),
             ),
             Positioned(
-              top: 420,
+              top: 320,
               left: 310,
               child: _buildCircleWithText(
                   152, const Color(0xFF6B42F8), "펫로스 증후군", 23),
             ),
             Positioned(
-              top: 480,
+              top: 380,
               left: 20,
               child: _buildCircleWithText(
                   112, const Color(0xFFB36EBE), "반려동물", 20),
             ),
             Positioned(
-              top: 530,
+              top: 430,
               left: 160,
               child: _buildCircleWithImage(
                   139, 'assets/image/onboarding_cat.jpeg'),
             ),
             Positioned(
-              top: 600,
+              top: 500,
               left: -50,
               child: _buildCircle(95, const Color(0xFF646A6B)),
             ),
             Positioned(
-              top: 650,
+              top: 550,
               left: 50,
               child: _buildCircle(137, const Color(0xFF8FC2DD)),
             ),
             Positioned(
-              top: 690,
+              top: 590,
               left: 210,
               child: _buildArrowCircle(114, const Color(0xFF0A85A1), context),
             ),
             Positioned(
-              top: 600,
+              top: 500,
               left: 320,
               child: _buildCircle(111, const Color(0xFFE4E3E3)),
             ),

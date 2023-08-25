@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // 추가
 
 class MypageScreen extends StatelessWidget {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage(); // 추가
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  const MypageScreen({super.key}); // 추가
 
   Future<void> _logout(context) async {
     await _storage.delete(key: 'jwt_token'); // jwt_token 토큰값 삭제
@@ -20,7 +22,7 @@ class MypageScreen extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },

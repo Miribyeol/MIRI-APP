@@ -64,10 +64,10 @@ class InformationScreenState extends State<InformationScreen> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                content: Column(
+                content: const Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
+                    Text(
                       "수정이 완료되었습니다 :)",
                       style: TextStyle(
                         color: Colors.black,
@@ -183,9 +183,7 @@ class InformationScreenState extends State<InformationScreen> {
             right: 20.0,
             child: ElevatedButton(
               onPressed: () {
-
                 updateUserNickname();
-=======
                 showDialog(
                   context: context,
                   builder: (BuildContext con) {
@@ -239,7 +237,6 @@ class InformationScreenState extends State<InformationScreen> {
                     );
                   },
                 );
-
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6B42F8),

@@ -16,30 +16,6 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
     super.initState();
     //loadDays();
   }
-//저장된Day를 불러오기
-  //loadDays() async {
-  // try {
-  //   final response = await http.get(Uri.parse('https://your-server.com/api/days'));
-
-  //   if (response.statusCode == 200) {
-  //     final List<dynamic> daysData = json.decode(response.body);
-
-  //     // 응답에서 일자별 완료 여부를 가져와 daysCompleted 리스트에 저장
-  //     for (int i = 0; i < daysData.length; i++) {
-  //       daysCompleted[i] = daysData[i]['completed']; // 서버 응답에 맞게 조정
-  //     }
-
-  //     // UI 업데이트
-  //     setState(() {});
-  //   } else {
-  //     // 서버 응답 오류 처리
-  //     print('Failed to load days.');
-  //   }
-  // } catch (e) {
-  //   // 예외 처리
-  //   print('An error occurred while fetching days: $e');
-  // }
-  // }
 
   //챌린지 리스트 UI
   @override
@@ -47,7 +23,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xff121824),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(110.0),
+        preferredSize: const Size.fromHeight(110.0),
         child: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -80,7 +56,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
               ],
             ),
           ),
-          backgroundColor: Color(0xFF121824),
+          backgroundColor: const Color(0xFF121824),
           elevation: 0,
         ),
       ),
