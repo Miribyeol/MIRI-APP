@@ -17,12 +17,13 @@ class AnimalScreenState extends State<AnimalScreen> {
   DateTime? _pickedDeathDate;
 
   String? petName = '';
-  String? petSpecies = 'Dog';
+  String?
+      petSpecies; //String? petSpecies = '강아지'; // 또는 다른 초기값 설정을 해야 에러가 안뜬다티비
   String? petBirthDate = '';
   String? petDeathDate = '';
 
   List<String> petSpeciesOptions = [
-    'Dog',
+    '강아지',
     '고양이',
     '햄스터',
     '앵무새',
