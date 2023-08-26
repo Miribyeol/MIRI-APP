@@ -11,6 +11,7 @@ class PetInfo {
     required this.deathday,
   });
 
+  // Add a factory method to create an instance from JSON
   factory PetInfo.fromJson(Map<String, dynamic> json) {
     return PetInfo(
       name: json['name'],
@@ -18,5 +19,15 @@ class PetInfo {
       birthday: json['birthday'],
       deathday: json['deathday'],
     );
+  }
+
+  // Add a method to convert the instance to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'species': species,
+      'birthday': birthday,
+      'deathday': deathday,
+    };
   }
 }

@@ -4,6 +4,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 
+import '../models/pet_info_model.dart';
+
 class AnimalScreen extends StatefulWidget {
   const AnimalScreen({Key? key}) : super(key: key);
 
@@ -76,6 +78,50 @@ class AnimalScreenState extends State<AnimalScreen> {
       }
     } catch (error) {
       print('Error fetching pet info: $error');
+    }
+  }
+
+  Future<void> _updatePetInfo() async {
+    try {
+      String? storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        var url = Uri.parse('http://203.250.32.29:3000/pet');
+        var response = await http.put(
+          url,
+          headers: {
+            'Authorization': 'Bearer $storedToken',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(
+            PetInfo(
+              name: petName ?? '',
+              species: petSpecies ?? '',
+              birthday: petBirthDate ?? '',
+              deathday: petDeathDate ?? '',
+            ).toJson(),
+          ),
+        );
+
+        if (response.statusCode == 201) {
+          var jsonResponse = jsonDecode(response.body);
+          print('Update Response: $jsonResponse');
+          setState(() {
+            // Update the pet information in the UI
+            var updatedPetInfo = jsonResponse['result']['petInfo'];
+            petName = updatedPetInfo['name'];
+            petSpecies = updatedPetInfo['species'];
+            petBirthDate = updatedPetInfo['birthday'];
+            petDeathDate = updatedPetInfo['deathday'];
+          });
+          showUpdateDialog(true);
+        } else {
+          print('Failed to update pet info: ${response.statusCode}');
+          showUpdateDialog(false);
+        }
+      }
+    } catch (error) {
+      print('Error updating pet info: $error');
+      showUpdateDialog(false);
     }
   }
 
@@ -159,9 +205,10 @@ class AnimalScreenState extends State<AnimalScreen> {
             const SizedBox(height: 20.0),
             _buildSectionTitle('반려동물 종류'),
             DropdownFormField(
-              onChanged: (initialValue) {
+              onChanged: (String? newValue) {
+                // Provide the correct type for onChanged callback
                 setState(() {
-                  petSpecies = initialValue;
+                  petSpecies = newValue;
                 });
               },
               initialValue: petSpecies,
@@ -203,8 +250,7 @@ class AnimalScreenState extends State<AnimalScreen> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () async {
-                // await updatePetInfo();
-                // showUpdateDialog(context);
+                await _updatePetInfo();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6B42F8),
@@ -284,48 +330,20 @@ class AnimalScreenState extends State<AnimalScreen> {
     );
   }
 
-  // Future<void> updatePetInfo() async {
-  //   try {
-  //     String? storedToken = await _storage.read(key: 'jwt_token');
-  //     if (storedToken != null) {
-  //       var url = Uri.parse('http://203.250.32.29:3000/pet');
-  //       var response = await http.put(
-  //         url,
-  //         headers: {
-  //           'Authorization': 'Bearer $storedToken',
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: jsonEncode({
-  //           'name': petName,
-  //           'species': petSpecies,
-  //           'birthday': petBirthDate,
-  //           'deathday': petDeathDate,
-  //         }),
-  //       );
-
-  //       if (response.statusCode != 200) {
-  //         print('Failed to update pet info: ${response.statusCode}');
-  //       }
-  //     }
-  //   } catch (error) {
-  //     print('Error updating pet info: $error');
-  //   }
-  // }
-
-  void showUpdateDialog(BuildContext context) {
+  void showUpdateDialog(bool isSuccess) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const SingleChildScrollView(
+          content: SingleChildScrollView(
             child: SizedBox(
               width: 335,
               height: 100,
               child: Center(
                 child: Text(
-                  "수정이 완료되었습니다 :)",
+                  isSuccess ? "수정이 완료되었습니다 :)" : "수정에 실패했습니다 :(",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: isSuccess ? Colors.black : Colors.red,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -343,7 +361,14 @@ class AnimalScreenState extends State<AnimalScreen> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                if (true) {
+                  // Navigate to the main screen
+                  Navigator.of(context)
+                      .pushReplacementNamed('/start'); // Replace current route
+                }
+              },
               child: const Center(
                 child: Text(
                   "닫기",
