@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/user_info_model.dart';
+
 class InformationScreen extends StatefulWidget {
   const InformationScreen({Key? key}) : super(key: key);
 
@@ -33,8 +35,9 @@ class InformationScreenState extends State<InformationScreen> {
 
         if (response.statusCode == 200) {
           var jsonResponse = jsonDecode(response.body);
-          userNickname = jsonResponse['nickname']; // 닉네임 상태 변수에 저장
-          _nicknameController.text = userNickname!; // TextFormField에 표시
+          var userNicknameData = UserNickname.fromJson(jsonResponse);
+          userNickname = userNicknameData.result?.nickname; // 닉네임 상태 변수에 저장
+          _nicknameController.text = userNickname ?? ''; // TextFormField에 표시
         } else {
           print('Failed to fetch user nickname: ${response.statusCode}');
         }
@@ -68,7 +71,7 @@ class InformationScreenState extends State<InformationScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "수정이 완료되었습니다 :)",
+                      "닉네임이 변경되었습니다 :)",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,

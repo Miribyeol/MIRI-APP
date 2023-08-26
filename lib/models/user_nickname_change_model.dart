@@ -5,9 +5,9 @@ class UserNicknameChange {
     required this.nickname,
   });
 
-  factory UserNicknameChange.fromJson(Map<String, dynamic> json) {
-    return UserNicknameChange(
-      nickname: json['nickname'],
-    );
+  Map<String, dynamic> toJson() {
+    return {
+      'nickname': nickname,
+    };
   }
 }

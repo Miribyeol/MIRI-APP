@@ -16,14 +16,14 @@ class KakaoLoginService {
       var body = jsonEncode(token);
       var response = await http.post(url,
           headers: {
-            //'Authorization': 'Bearer $token',
+            // 'Authorization': 'Bearer $token',
             'Content-Type': 'application/json'
           },
           body: body);
 
       if (response.statusCode == 200) {
         print('서버 응답 성공: ${response.body}');
-        var data = jsonDecode(response.body)["token"];
+        var data = jsonDecode(response.body)["result"]["token"];
         await _storage.write(key: 'jwt_token', value: data);
         print('JWT 토큰 저장 완료');
       } else {
@@ -81,10 +81,10 @@ class KakaoLoginService {
           print('토큰 검증 성공');
           // 반려동물 정보 확인
           await checkPetRegistration(context);
-        } else if (response.statusCode == 401) {
+        } else if (response.statusCode == 403) {
           print('토큰 만료, 새로운 토큰 요청 및 저장 시도');
           // 토큰 만료 시, 새로운 토큰 요청 및 저장 로직 추가
-          await refreshAndStoreToken(context);
+          // await refreshAndStoreToken(context);
         } else {
           print('토큰 검증 실패: ${response.statusCode}');
           print('응답 내용: ${response.body}');

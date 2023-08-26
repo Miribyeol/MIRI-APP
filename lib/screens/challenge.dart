@@ -10,20 +10,6 @@ class ChallengPage extends StatelessWidget {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   final int day;
 
-  const ChallengPage({Key? key, required this.day}) : super(key: key);
-
-//챌린지 윗부분
-  List<Widget> challengeWidgets(int day) {
-    return challengeStart(day);
-  }
-
-//챌린지 아랫부분
-  void someFunction() {
-    String todayChallenge = challengeEnd(1);
-    print(todayChallenge);
-  }
-
-//DAY완료 여부 서버에 전달
   Future<void> sendChallengeStatusToServer(int day, int challengeStep) async {
     try {
       final storedToken = await _storage.read(key: 'jwt_token');
@@ -50,6 +36,46 @@ class ChallengPage extends StatelessWidget {
     }
   }
 
+  const ChallengPage({Key? key, required this.day}) : super(key: key);
+
+//챌린지 윗부분
+  List<Widget> challengeWidgets(int day) {
+    return challengeStart(day);
+  }
+
+//챌린지 아랫부분
+  void someFunction() {
+    String todayChallenge = challengeEnd(1);
+    print(todayChallenge);
+  }
+
+// //DAY완료 여부 서버에 전달
+//   Future<void> sendChallengeStatusToServer(int day, int challengeStep) async {
+//     try {
+//       final storedToken = await _storage.read(key: 'jwt_token');
+//       if (storedToken != null) {
+//         final url = Uri.parse('http://203.250.32.29:3000/challenge/status');
+
+//         final response = await http.patch(
+//           url,
+//           headers: {
+//             'Authorization': 'Bearer $storedToken',
+//             'Content-Type': 'application/json',
+//           },
+//           body: jsonEncode({
+//             'day': day.toString(),
+//             'challengeStep': challengeStep.toString(),
+//           }),
+//         );
+
+//         print('Response status code: ${response.statusCode}');
+//         print('Response body: ${response.body}');
+//       }
+//     } catch (e) {
+//       print('Error sending challenge status: $e');
+//     }
+//   }
+
 //챌린지 이미지관련
   Widget _challengeImage(int day) {
     assert(day >= 1 && day <= 14, 'Day should be between 1 and 14');
@@ -60,6 +86,15 @@ class ChallengPage extends StatelessWidget {
       height: 500,
     );
   }
+
+  // void _completeChallenge(BuildContext context, int day) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return ChallengPopUp(day: day, challengeStep: day);
+  //     },
+  //   );
+  // }
 
 // 챌린지 화면 UI
   @override
@@ -173,14 +208,7 @@ class ChallengPage extends StatelessWidget {
                         const SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return ChallengPopUp(
-                                  day: day,
-                                );
-                              },
-                            );
+                            _completeChallenge(context, day);
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(

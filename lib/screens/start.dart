@@ -56,8 +56,11 @@ class _StartScreenState extends State<StartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Replace this variable with the actual progress value (0 to 1) of ChallengPage 1~14단계
-    double progressValue = 0.1;
+    // Replace this variable with the actual challenge step value (1 to 14)
+    int challengeStep = 1;
+
+    // Calculate progress value based on challenge step
+    double progressValue = challengeStep / 14.0;
 
     return Scaffold(
       backgroundColor: const Color(0xFF121824),

@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 
+//import 'package:image picker/image.picker.dart';
 class AnimalScreen extends StatefulWidget {
   const AnimalScreen({super.key});
 
@@ -13,6 +14,8 @@ class AnimalScreen extends StatefulWidget {
 
 class AnimalScreenState extends State<AnimalScreen> {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  late TextEditingController _petNameController; //23.08.22 수정
+  late TextEditingController _petSpeciesController; //23.08.22 수정
   DateTime? _pickedBirthDate;
   DateTime? _pickedDeathDate;
 
@@ -24,6 +27,8 @@ class AnimalScreenState extends State<AnimalScreen> {
   @override
   void initState() {
     super.initState();
+    _petNameController = TextEditingController(); //23.08.22 수정
+    _petSpeciesController = TextEditingController();
     _pickedBirthDate = DateTime.now();
     _pickedDeathDate = DateTime.now();
     fetchPetInfo();
@@ -46,6 +51,8 @@ class AnimalScreenState extends State<AnimalScreen> {
             petBirthDate = jsonResponse['petInfo']['birthday'];
             petDeathDate = jsonResponse['petInfo']['deathday'];
           });
+          _petNameController.text = petName!; //23.08.22 수정
+          _petSpeciesController.text = petSpecies!;
         } else {
           print('Failed to fetch pet info: ${response.statusCode}');
         }
@@ -176,7 +183,7 @@ class AnimalScreenState extends State<AnimalScreen> {
         title: const Text('반려동물 정보 관리'),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -191,6 +198,7 @@ class AnimalScreenState extends State<AnimalScreen> {
           children: [
             _buildSectionTitle('닉네임'),
             TextFormField(
+              //controller: _petNameController , // 23.08.22 수정
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color(0xFF1F2839),
@@ -204,7 +212,7 @@ class AnimalScreenState extends State<AnimalScreen> {
                   petName = value;
                 });
               },
-              initialValue: petName,
+              initialValue: petName, // 23.08.22 수정
             ),
             const SizedBox(height: 10.0),
             _buildSectionTitle('반려동물 종류'),
@@ -266,7 +274,7 @@ class AnimalScreenState extends State<AnimalScreen> {
                 border: InputBorder.none,
                 suffixIcon: IconButton(
                   onPressed: () {
-                    // Implement photo upload functionality here
+                    //Implement photo upload functionality here
                   },
                   icon: const Icon(
                     Icons.add,
@@ -311,6 +319,7 @@ class AnimalScreenState extends State<AnimalScreen> {
 
   Future<void> updatePetInfo() async {
     try {
+      var petName = _petNameController.text; //23.08.22 수정
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
         var url = Uri.parse('http://203.250.32.29:3000/pet');
