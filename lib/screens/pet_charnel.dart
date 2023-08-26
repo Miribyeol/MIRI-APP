@@ -1,7 +1,52 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
-class PetCharnelScreen extends StatelessWidget {
+class PetCharnelScreen extends StatefulWidget {
   const PetCharnelScreen({Key? key}) : super(key: key);
+
+  @override
+  _PetCharnelScreenState createState() => _PetCharnelScreenState();
+}
+
+class _PetCharnelScreenState extends State<PetCharnelScreen> {
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  String? petName = '';
+  String? petBirthDate = '';
+  String? petDeathDate = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPetInfo();
+  }
+
+  Future<void> fetchPetInfo() async {
+    try {
+      String? storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        var url = Uri.parse('http://203.250.32.29:3000/pet'); // API URL 수정
+        var response = await http.get(url, headers: {
+          'Authorization': 'Bearer $storedToken',
+        });
+
+        if (response.statusCode == 200) {
+          var jsonResponse = jsonDecode(response.body);
+          print('JSON Response: $jsonResponse');
+          setState(() {
+            petName = jsonResponse['result']['petInfo']['name'];
+            petBirthDate = jsonResponse['result']['petInfo']['birthday'];
+            petDeathDate = jsonResponse['result']['petInfo']['deathday'];
+          });
+        } else {
+          print('Failed to fetch pet info: ${response.statusCode}');
+        }
+      }
+    } catch (error) {
+      print('Error fetching pet info: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +80,7 @@ class PetCharnelScreen extends StatelessWidget {
                     ),
                     child: Center(
                       child: Column(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center, // 중앙에 위치하도록 조정
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
@@ -46,9 +90,9 @@ class PetCharnelScreen extends StatelessWidget {
                               height: 247.0,
                             ),
                           ),
-                          const SizedBox(height: 10.0), // 간격을 위해 사용
-                          const Text(
-                            '햄찌',
+                          const SizedBox(height: 10.0),
+                          Text(
+                            petName ?? '',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 30.0,
@@ -56,9 +100,9 @@ class PetCharnelScreen extends StatelessWidget {
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 10.0), // 간격을 위해 사용
-                          const Text(
-                            '2023.01.01 ~ 2023.07.08',
+                          const SizedBox(height: 10.0),
+                          Text(
+                            '$petBirthDate ~ $petDeathDate',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 18.0,
