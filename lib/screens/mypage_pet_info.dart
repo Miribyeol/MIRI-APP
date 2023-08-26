@@ -16,9 +16,11 @@ class AnimalScreenState extends State<AnimalScreen> {
   DateTime? _pickedBirthDate;
   DateTime? _pickedDeathDate;
 
+  final TextEditingController _nameController =
+      TextEditingController(); // TextEditingController 추가
+
   String? petName = '';
-  String?
-      petSpecies; //String? petSpecies = '강아지'; // 또는 다른 초기값 설정을 해야 에러가 안뜬다티비
+  String? petSpecies;
   String? petBirthDate = '';
   String? petDeathDate = '';
 
@@ -37,9 +39,13 @@ class AnimalScreenState extends State<AnimalScreen> {
   @override
   void initState() {
     super.initState();
-    _pickedBirthDate = DateTime.now();
-    _pickedDeathDate = DateTime.now();
-    fetchPetInfo(); // 서버에서 데이터를 가져와서 초기값 설정
+    fetchPetInfo();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose(); // 사용이 끝나면 Controller를 dispose 해야합니다.
+    super.dispose();
   }
 
   Future<void> fetchPetInfo() async {
@@ -59,6 +65,10 @@ class AnimalScreenState extends State<AnimalScreen> {
             petSpecies = jsonResponse['result']['petInfo']['species'];
             petBirthDate = jsonResponse['result']['petInfo']['birthday'];
             petDeathDate = jsonResponse['result']['petInfo']['deathday'];
+            _pickedBirthDate = DateTime.parse(petBirthDate!);
+            _pickedDeathDate = DateTime.parse(petDeathDate!);
+
+            _nameController.text = petName ?? ''; // 닉네임 초기화
           });
         } else {
           print('Failed to fetch pet info: ${response.statusCode}');
@@ -110,23 +120,6 @@ class AnimalScreenState extends State<AnimalScreen> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,6 +142,7 @@ class AnimalScreenState extends State<AnimalScreen> {
           children: [
             _buildSectionTitle('닉네임'),
             TextFormField(
+              controller: _nameController, // 컨트롤러 연결
               decoration: InputDecoration(
                 filled: true,
                 fillColor: const Color(0xFF1F2839),
@@ -158,11 +152,8 @@ class AnimalScreenState extends State<AnimalScreen> {
                 ),
               ),
               onChanged: (value) {
-                setState(() {
-                  petName = value;
-                });
+                petName = value;
               },
-              initialValue: petName,
               style: const TextStyle(color: Colors.white),
             ),
             const SizedBox(height: 20.0),
@@ -212,8 +203,8 @@ class AnimalScreenState extends State<AnimalScreen> {
             const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () async {
-                await updatePetInfo();
-                showUpdateDialog(context);
+                // await updatePetInfo();
+                // showUpdateDialog(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6B42F8),
@@ -276,33 +267,50 @@ class AnimalScreenState extends State<AnimalScreen> {
     );
   }
 
-  Future<void> updatePetInfo() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/pet');
-        var response = await http.put(
-          url,
-          headers: {
-            'Authorization': 'Bearer $storedToken',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'name': petName,
-            'species': petSpecies,
-            'birthday': petBirthDate,
-            'deathday': petDeathDate,
-          }),
-        );
-
-        if (response.statusCode != 200) {
-          print('Failed to update pet info: ${response.statusCode}');
-        }
-      }
-    } catch (error) {
-      print('Error updating pet info: $error');
-    }
+  Widget _buildSectionTitle(String title) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
   }
+
+  // Future<void> updatePetInfo() async {
+  //   try {
+  //     String? storedToken = await _storage.read(key: 'jwt_token');
+  //     if (storedToken != null) {
+  //       var url = Uri.parse('http://203.250.32.29:3000/pet');
+  //       var response = await http.put(
+  //         url,
+  //         headers: {
+  //           'Authorization': 'Bearer $storedToken',
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: jsonEncode({
+  //           'name': petName,
+  //           'species': petSpecies,
+  //           'birthday': petBirthDate,
+  //           'deathday': petDeathDate,
+  //         }),
+  //       );
+
+  //       if (response.statusCode != 200) {
+  //         print('Failed to update pet info: ${response.statusCode}');
+  //       }
+  //     }
+  //   } catch (error) {
+  //     print('Error updating pet info: $error');
+  //   }
+  // }
 
   void showUpdateDialog(BuildContext context) {
     showDialog(
