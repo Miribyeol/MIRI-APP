@@ -23,20 +23,6 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
   @override
   void initState() {
     super.initState();
-    // 저장된 반려동물 정보를 불러와서 화면에 표시
-    loadPetInfo();
-  }
-
-  Future<void> loadPetInfo() async {
-    try {
-      species = await _storage.read(key: 'species');
-      name = await _storage.read(key: 'name');
-      birthday = await _storage.read(key: 'birthday');
-      deathday = await _storage.read(key: 'deathday');
-      setState(() {}); // 화면 갱신
-    } catch (error) {
-      print('반려동물 정보 불러오기 오류: $error');
-    }
   }
 
   Future<void> registerPetInfo() async {
@@ -62,7 +48,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
         var response = await http.post(
           url,
           headers: {
-            'Authorization': 'Bearer $storedToken',
+            'Authorization': 'Bearer $storedToken', // 토큰값을 헤더에 넣어서 전송
             'Content-Type': 'application/json',
           },
           body: jsonEncode(petInfo.toJson()),
@@ -70,12 +56,6 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
 
         if (response.statusCode == 201) {
           print('반려동물 정보 등록 성공');
-
-          // 반려동물 정보 저장
-          await _storage.write(key: 'species', value: species!);
-          await _storage.write(key: 'name', value: name!);
-          await _storage.write(key: 'birthday', value: birthday!);
-          await _storage.write(key: 'deathday', value: deathday!);
 
           Navigator.pushReplacementNamed(context, '/start');
         } else {
@@ -146,10 +126,15 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                 DropdownButtonFormField<String>(
                   value: species,
                   items: const [
-                    DropdownMenuItem(value: 'Dog', child: Text('강아지')),
-                    DropdownMenuItem(value: 'Cat', child: Text('고양이')),
-                    DropdownMenuItem(value: 'Hamster', child: Text('햄찌')),
-                    DropdownMenuItem(value: 'Meerkat', child: Text('미어캣')),
+                    DropdownMenuItem(value: '강아지', child: Text('강아지')),
+                    DropdownMenuItem(value: '고양이', child: Text('고양이')),
+                    DropdownMenuItem(value: '햄스터', child: Text('햄찌')),
+                    DropdownMenuItem(value: '앵무새', child: Text('앵무새')),
+                    DropdownMenuItem(value: '고슴도치', child: Text('고슴도치')),
+                    DropdownMenuItem(value: '물고기', child: Text('물고기')),
+                    DropdownMenuItem(value: '조류', child: Text('조류')),
+                    DropdownMenuItem(value: '파충류', child: Text('파충류')),
+                    DropdownMenuItem(value: '그 외', child: Text('그 외')),
                   ],
                   onChanged: (value) {
                     setState(() {

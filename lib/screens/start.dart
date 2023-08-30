@@ -131,7 +131,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                     const Positioned(
-                      top: 180,
+                      top: 200,
                       left: 15,
                       child: Text(
                         '  다른 사람들은 어떤 감정을 갖고 있을까요?',
@@ -143,7 +143,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                     Positioned(
-                      top: 210,
+                      top: 220,
                       right: 10,
                       left: 10,
                       child: SingleChildScrollView(
@@ -153,14 +153,24 @@ class _StartScreenState extends State<StartScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(height: 10),
-                            Wrap(
-                              spacing: 10, // 버튼 사이의 간격 조절
-                              runSpacing: 10, // 줄 간의 간격 조절
-                              alignment: WrapAlignment.start,
-                              children: emotion.map((emotion) {
-                                return createButton(emotion,
-                                    width: 120, height: 40);
-                              }).toList(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: List.generate(emotion.length, (index) {
+                                if (index < 5) {
+                                  return createButton(emotion[index]);
+                                }
+                                return const SizedBox.shrink(); // 5개 이후의 아이템은 감춤
+                              }),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: List.generate(emotion.length, (index) {
+                                if (index >= 5 && index < 10) {
+                                  return createButton(emotion[index]);
+                                }
+                                return const SizedBox.shrink(); // 10개 이후의 아이템은 감춤
+                              }),
                             ),
                             const SizedBox(height: 10),
                           ],
@@ -227,7 +237,7 @@ class _StartScreenState extends State<StartScreen> {
                     height: 111,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/challenge_list');
+                        Navigator.pushNamed(context, '/ai_onboarding');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1F2839),
@@ -335,53 +345,56 @@ class _StartScreenState extends State<StartScreen> {
                   ),
                   Column(
                     children: contentData.map((item) {
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: 111,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1F2839),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 111,
+                              child: Container(
+                                decoration: BoxDecoration(
                                   color: const Color(0xFF1F2839),
-                                  width: 2.0,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: const Color(0xFF1F2839),
+                                    width: 2.0,
+                                  ),
                                 ),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      item['title'],
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      item['content'],
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'Author: ${item['author']}',
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        item['title'],
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        item['content'],
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Text(
+                                        'Author: ${item['author']}',
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 20), // Adjust spacing here
-                        ],
+                            const SizedBox(height: 20), // Adjust spacing here
+                          ],
+                        ),
                       );
                     }).toList(),
                   ),
@@ -426,11 +439,18 @@ class _StartScreenState extends State<StartScreen> {
     );
   }
 
-  Widget createButton(String label, {double? width, double? height}) {
+  Widget createButton(String label) {
+    double paddingFactor = 1.0; // Adjust the factor as needed
+    double minWidth = 130.0; // Minimum width for the button
+    double paddingHorizontal = label.length * paddingFactor;
+
+    double width = minWidth + paddingHorizontal;
+    double height = 40.0; // You can adjust the height as needed
+
     return Container(
       width: width,
       height: height,
-      margin: const EdgeInsets.symmetric(horizontal: 5.0), // 간격을 주기 위한 마진
+      margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
       decoration: BoxDecoration(
         color: const Color(0xFF3D4353), // 배경색
         borderRadius: BorderRadius.circular(8.0), // 버튼 모서리 둥글게
@@ -444,12 +464,15 @@ class _StartScreenState extends State<StartScreen> {
         ],
       ),
       child: Center(
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 13.0,
-            fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: paddingHorizontal),
+          child: Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
