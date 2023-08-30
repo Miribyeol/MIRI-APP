@@ -21,9 +21,13 @@ class ChallengPopUpState extends State<ChallengPopUp> {
   Set<int> selectedButtons = {};
 
 //감정 선택후 전송기능
-  Future<void> sendChallengeFeedbackToServer(
-      int day, List<String> emotions) async {
+  Future<void> sendChallengeFeedbackToServer(List<String> emotions) async {
     try {
+      if (emotions.isEmpty || emotions.length > 4) {
+        print('최대 3개까지 선택하세요');
+        return;
+      }
+
       final storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
         final url = Uri.parse('http://203.250.32.29:3000/emotion');
@@ -35,8 +39,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
             'Content-Type': 'application/json',
           },
           body: jsonEncode({
-            'day': day.toString(),
-            'emotions': emotions, // Pass the list of emotions here
+            'emotions': emotions, // Only the list of emotions is sent
           }),
         );
 
@@ -207,7 +210,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               List<String> selectedEmotions = selectedButtons.map((int index) {
                 return buttonTexts[index];
               }).toList();
-              sendChallengeFeedbackToServer(widget.day, selectedEmotions);
+              sendChallengeFeedbackToServer(selectedEmotions);
             },
             style: ButtonStyle(
               fixedSize: MaterialStateProperty.all(const Size(308, 35)),

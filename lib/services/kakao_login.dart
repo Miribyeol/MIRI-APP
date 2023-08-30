@@ -95,38 +95,6 @@ class KakaoLoginService {
     }
   }
 
-  Future<void> refreshAndStoreToken(BuildContext context) async {
-    try {
-      final refreshToken = await _storage.read(key: 'refresh_token');
-      if (refreshToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/auth/refresh');
-        var response = await http.post(
-          url,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({'refreshToken': refreshToken}),
-        );
-
-        if (response.statusCode == 200) {
-          print('새로운 토큰 받아오기 성공');
-          var data = jsonDecode(response.body)["token"];
-          await _storage.write(key: 'jwt_token', value: data);
-
-          // 새로운 토큰으로 반려동물 정보 확인
-          await checkPetRegistration(context);
-        } else {
-          print('새로운 토큰 받아오기 실패: ${response.statusCode}');
-        }
-      } else {
-        print('리프레시 토큰이 없습니다.');
-        // 로그아웃 또는 다른 처리를 수행할 수 있음
-      }
-    } catch (error) {
-      print('새로운 토큰 받아오기 실패: $error');
-    }
-  }
-
   Future<void> checkPetRegistration(BuildContext context) async {
     final storedToken = await _storage.read(key: 'jwt_token');
     if (storedToken != null) {

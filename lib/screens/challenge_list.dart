@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:miri_app/screens/challenge.dart';
 
 class ChallengeListScreen extends StatefulWidget {
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   const ChallengeListScreen({super.key});
 
   @override
@@ -10,11 +14,52 @@ class ChallengeListScreen extends StatefulWidget {
 
 class ChallengeListScreenState extends State<ChallengeListScreen> {
   List<bool> daysCompleted = List.filled(14, false);
+  List<int> challengeStep = [];
 
   @override
   void initState() {
     super.initState();
+    loadChallengeStatusFromServer();
     //loadDays();
+  }
+
+  Future<void> loadChallengeStatusFromServer() async {
+    try {
+      final storedToken = await widget._storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        final url = Uri.parse('http://203.250.32.29:3000/main');
+
+        final response = await http.get(
+          url,
+          headers: {
+            'Authorization': 'Bearer $storedToken',
+            'Content-Type': 'application/json',
+          },
+        );
+        print('Response status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+
+          // challengerStep 값을 가져옵니다.
+          int stepValue = data['result']['challengerStep'];
+
+          // 가져온 challengerStep 값을 로그로 출력합니다.
+          print('challengeStep from server: $stepValue');
+
+          // stepValue를 원하는 방식으로 사용합니다. 예를 들어, List를 생성하려면:
+          setState(() {
+            challengeStep = List.generate(stepValue, (index) => index + 1);
+          });
+        } else {
+          print(
+              'Server returned an error: ${response.statusCode} - ${response.body}');
+        }
+      }
+    } catch (e) {
+      print('Error getting challenge status: $e');
+    }
   }
 
   //챌린지 리스트 UI
@@ -83,17 +128,69 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ChallengPage(day: index + 1),
-                            ),
-                          );
+                          if (challengeStep.contains(index + 1)) {
+                            // 버튼이 회색일 경우 (챌린지 완료한 경우)
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text("알림"),
+                                  content: const Text("이미 완료한 챌린지 입니다"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text("확인"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          } else if (index + 1 >
+                              (challengeStep.isNotEmpty
+                                  ? challengeStep.last + 1
+                                  : 1)) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text("알림"),
+                                  content: const Text("이전 챌린지를 완료하지 않았습니다"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text("확인"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ChallengPage(day: index + 1),
+                              ),
+                            );
+                          }
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              const Color(0xff6B42F8)),
+                              // 챌린지를 완료한 경우 회색
+                              challengeStep.contains(index + 1)
+                                  ? const Color(0xff1F2839)
+                                  // 이전 챌린지를 완료하지 않은 경우 빨간색
+                                  : (index + 1 >
+                                          (challengeStep.isNotEmpty
+                                              ? challengeStep.last + 1
+                                              : 1))
+                                      ? const Color(0xff1F2839)
+                                      // 그 외의 경우 기본 색상
+                                      : const Color(0xff6B42F8)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(

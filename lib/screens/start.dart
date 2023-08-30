@@ -14,6 +14,7 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   double progressValue = 0.1;
+  int challengerStep = 0;
 
   List<String> emotion = [];
   List<Map<String, dynamic>> contentData = [];
@@ -21,54 +22,60 @@ class _StartScreenState extends State<StartScreen> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    fetchDataFromServer();
   }
 
-  Future<void> fetchData() async {
+  Future<void> fetchDataFromServer() async {
     try {
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
         var url = Uri.parse('http://203.250.32.29:3000/main');
         var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken', // Include the token
+          'Authorization': 'Bearer $storedToken',
         });
 
         if (response.statusCode == 200) {
           var jsonResponse = jsonDecode(response.body);
           print(response.body);
-          setState(() {
-            emotion = (jsonResponse['result']['emotions'] as List)
-                .map((item) => item['emotion'].toString())
-                .toSet() // Convert to set to remove duplicates
-                .toList(); // Convert back to list
 
-            contentData = List<Map<String, dynamic>>.from(
-                jsonResponse['result']['posts']);
-          });
+          if (jsonResponse['result'].containsKey('challengerStep')) {
+            setState(() {
+              // Emotion & Content Data
+              emotion = (jsonResponse['result']['emotions'] as List)
+                  .map((item) => item['emotion'].toString())
+                  .toSet()
+                  .toList();
+              contentData = List<Map<String, dynamic>>.from(
+                  jsonResponse['result']['posts']);
+
+              // Day Data
+              challengerStep = jsonResponse['result']['challengerStep'] ?? 0;
+              print("Updated challengerStep: $challengerStep");
+            });
+          } else {
+            print(
+                "The key 'challengerStep' was not found in the jsonResponse.");
+          }
         } else {
-          print('Failed to fetch pet info: ${response.statusCode}');
+          print('Failed to fetch data from server: ${response.statusCode}');
         }
       }
     } catch (error) {
-      print('Error fetching pet info: $error');
+      print('Error fetching data from server: $error');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Replace this variable with the actual challenge step value (1 to 14)
-    int challengeStep = 1;
-
-    // Calculate progress value based on challenge step
-    double progressValue = challengeStep / 14.0;
+    // int challengerStep = 0;
 
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       appBar: PreferredSize(
         preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.39),
+            Size.fromHeight(MediaQuery.of(context).size.height * 0.40),
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.39,
+          height: MediaQuery.of(context).size.height * 0.41,
           color: const Color(0xff6B42F8),
           child: Stack(
             children: [
@@ -78,7 +85,7 @@ class _StartScreenState extends State<StartScreen> {
                 child: Stack(
                   children: [
                     const Positioned(
-                      top: 45,
+                      top: 55,
                       left: 35,
                       child: Text(
                         '오늘 챌린지\n완료 하셨나요 ?',
@@ -90,7 +97,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                     Positioned(
-                      top: 10,
+                      top: 50,
                       right: 16,
                       child: IconButton(
                         onPressed: () {
@@ -111,27 +118,18 @@ class _StartScreenState extends State<StartScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 10),
-                          SizedBox(
-                            height: 15,
-                            child: LinearProgressIndicator(
-                              value: progressValue,
-                              backgroundColor: Colors.white,
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                Color(0xFF492E9D),
-                              ),
-                            ),
-                          ),
+                          DayProgressIndicator(challengerStep: challengerStep),
                           const SizedBox(height: 5),
-                          const Text(
-                            "DAY 1",
-                            style: TextStyle(
+                          Text(
+                            "DAY $challengerStep",
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                     ),
                     const Positioned(
-                      top: 200,
+                      top: 180,
                       left: 15,
                       child: Text(
                         '  다른 사람들은 어떤 감정을 갖고 있을까요?',
@@ -143,7 +141,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                     Positioned(
-                      top: 220,
+                      top: 200,
                       right: 10,
                       left: 10,
                       child: SingleChildScrollView(
@@ -159,17 +157,18 @@ class _StartScreenState extends State<StartScreen> {
                                 if (index < 5) {
                                   return createButton(emotion[index]);
                                 }
-                                return const SizedBox.shrink(); // 5개 이후의 아이템은 감춤
+                                return const SizedBox
+                                    .shrink(); // 5개 이후의 아이템은 감춤
                               }),
                             ),
-                            const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: List.generate(emotion.length, (index) {
                                 if (index >= 5 && index < 10) {
                                   return createButton(emotion[index]);
                                 }
-                                return const SizedBox.shrink(); // 10개 이후의 아이템은 감춤
+                                return const SizedBox
+                                    .shrink(); // 10개 이후의 아이템은 감춤
                               }),
                             ),
                             const SizedBox(height: 10),
@@ -199,6 +198,7 @@ class _StartScreenState extends State<StartScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, '/challenge_list');
                       },
+                      //onPressed 실행시 이동이 안되면 이렇게 수정해야함!
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1F2839),
                         shape: RoundedRectangleBorder(
@@ -392,7 +392,7 @@ class _StartScreenState extends State<StartScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20), // Adjust spacing here
+                            const SizedBox(height: 20),
                           ],
                         ),
                       );
@@ -467,7 +467,7 @@ class _StartScreenState extends State<StartScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: paddingHorizontal),
           child: Text(
-            label,
+            '# $label',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 13.0,
@@ -494,6 +494,32 @@ class _StartScreenState extends State<StartScreen> {
           color: Colors.white,
           fontSize: 15,
           fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+//day표시바
+class DayProgressIndicator extends StatelessWidget {
+  final int challengerStep;
+
+  const DayProgressIndicator({super.key, this.challengerStep = 0});
+
+  @override
+  Widget build(BuildContext context) {
+    double value = challengerStep / 14.0;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: SizedBox(
+        height: 15,
+        child: LinearProgressIndicator(
+          value: value,
+          backgroundColor: Colors.white,
+          valueColor: const AlwaysStoppedAnimation<Color>(
+            Color(0xFF492E9D),
+          ),
         ),
       ),
     );
