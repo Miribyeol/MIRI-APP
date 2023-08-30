@@ -4,9 +4,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 
-//import 'package:image picker/image.picker.dart';
+import '../models/pet_info_model.dart';
+
 class AnimalScreen extends StatefulWidget {
-  const AnimalScreen({super.key});
+  const AnimalScreen({Key? key}) : super(key: key);
 
   @override
   AnimalScreenState createState() => AnimalScreenState();
@@ -14,24 +15,39 @@ class AnimalScreen extends StatefulWidget {
 
 class AnimalScreenState extends State<AnimalScreen> {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
-  late TextEditingController _petNameController; //23.08.22 수정
-  late TextEditingController _petSpeciesController; //23.08.22 수정
   DateTime? _pickedBirthDate;
   DateTime? _pickedDeathDate;
 
+  final TextEditingController _nameController =
+      TextEditingController(); // TextEditingController 추가
+
   String? petName = '';
-  String? petSpecies = '';
+  String? petSpecies;
   String? petBirthDate = '';
   String? petDeathDate = '';
+
+  List<String> petSpeciesOptions = [
+    '강아지',
+    '고양이',
+    '햄스터',
+    '앵무새',
+    '고슴도치',
+    '물고기',
+    '조류',
+    '파충류',
+    '그 외',
+  ];
 
   @override
   void initState() {
     super.initState();
-    _petNameController = TextEditingController(); //23.08.22 수정
-    _petSpeciesController = TextEditingController();
-    _pickedBirthDate = DateTime.now();
-    _pickedDeathDate = DateTime.now();
     fetchPetInfo();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose(); // 사용이 끝나면 Controller를 dispose 해야합니다.
+    super.dispose();
   }
 
   Future<void> fetchPetInfo() async {
@@ -45,20 +61,67 @@ class AnimalScreenState extends State<AnimalScreen> {
 
         if (response.statusCode == 200) {
           var jsonResponse = jsonDecode(response.body);
+          print('JSON Response: $jsonResponse');
           setState(() {
-            petName = jsonResponse['petInfo']['name'];
-            petSpecies = jsonResponse['petInfo']['species'];
-            petBirthDate = jsonResponse['petInfo']['birthday'];
-            petDeathDate = jsonResponse['petInfo']['deathday'];
+            petName = jsonResponse['result']['petInfo']['name'];
+            petSpecies = jsonResponse['result']['petInfo']['species'];
+            petBirthDate = jsonResponse['result']['petInfo']['birthday'];
+            petDeathDate = jsonResponse['result']['petInfo']['deathday'];
+            _pickedBirthDate = DateTime.parse(petBirthDate!);
+            _pickedDeathDate = DateTime.parse(petDeathDate!);
+
+            _nameController.text = petName ?? ''; // 닉네임 초기화
           });
-          _petNameController.text = petName!; //23.08.22 수정
-          _petSpeciesController.text = petSpecies!;
         } else {
           print('Failed to fetch pet info: ${response.statusCode}');
         }
       }
     } catch (error) {
       print('Error fetching pet info: $error');
+    }
+  }
+
+  Future<void> _updatePetInfo() async {
+    try {
+      String? storedToken = await _storage.read(key: 'jwt_token');
+      if (storedToken != null) {
+        var url = Uri.parse('http://203.250.32.29:3000/pet');
+        var response = await http.put(
+          url,
+          headers: {
+            'Authorization': 'Bearer $storedToken',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(
+            PetInfo(
+              name: petName ?? '',
+              species: petSpecies ?? '',
+              birthday: petBirthDate ?? '',
+              deathday: petDeathDate ?? '',
+            ).toJson(),
+          ),
+        );
+
+        if (response.statusCode == 201) {
+          var jsonResponse = jsonDecode(response.body);
+          print('Update Response: $jsonResponse');
+          setState(() {
+            // Update the pet information in the UI
+            var updatedPetInfo = jsonResponse['result']['petInfo'];
+            petName = updatedPetInfo['name'];
+            petSpecies = updatedPetInfo['species'];
+            petBirthDate = updatedPetInfo['birthday'];
+            petDeathDate = updatedPetInfo['deathday'];
+          });
+          showUpdateDialog(true);
+        } else {
+          print('Failed to update pet info: ${response.statusCode}');
+          showUpdateDialog(false);
+        }
+      }
+    } catch (error) {
+      print('Error updating pet info: $error');
+      showUpdateDialog(false);
     }
   }
 
@@ -103,6 +166,114 @@ class AnimalScreenState extends State<AnimalScreen> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('반려동물 정보 관리'),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: const Color(0xFF6B42F8),
+      ),
+      backgroundColor: const Color(0xFF121824),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildSectionTitle('닉네임'),
+            TextFormField(
+              controller: _nameController, // 컨트롤러 연결
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color(0xFF1F2839),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              onChanged: (value) {
+                petName = value;
+              },
+              style: const TextStyle(color: Colors.white),
+            ),
+            const SizedBox(height: 20.0),
+            _buildSectionTitle('반려동물 종류'),
+            DropdownFormField(
+              onChanged: (String? newValue) {
+                // Provide the correct type for onChanged callback
+                setState(() {
+                  petSpecies = newValue;
+                });
+              },
+              initialValue: petSpecies,
+              options: petSpeciesOptions,
+            ),
+            const SizedBox(height: 20.0),
+            _buildSectionTitle('반려동물 출생일'),
+            const SizedBox(height: 20.0),
+            _buildDateSelector(true),
+            const SizedBox(height: 20.0),
+            _buildSectionTitle('반려동물 사망일'),
+            const SizedBox(height: 20.0),
+            _buildDateSelector(false),
+            const SizedBox(height: 20.0),
+            _buildSectionTitle('반려동물 사진 업로드'),
+            const SizedBox(height: 20.0),
+            TextFormField(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: const Color(0xFF1F2839),
+                border: InputBorder.none,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    // Implement photo upload functionality here
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              onChanged: (value) {
+                // Handle the pet photo input
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () async {
+                await _updatePetInfo();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF6B42F8),
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: const Text(
+                '변경하기',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildDateSelector(bool isBirthDate) {
     final pickedDate = isBirthDate ? _pickedBirthDate : _pickedDeathDate;
 
@@ -113,8 +284,12 @@ class AnimalScreenState extends State<AnimalScreen> {
           setState(() {
             if (isBirthDate) {
               _pickedBirthDate = selectedDate;
+              petBirthDate =
+                  "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
             } else {
               _pickedDeathDate = selectedDate;
+              petDeathDate =
+                  "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}";
             }
           });
         }
@@ -155,185 +330,20 @@ class AnimalScreenState extends State<AnimalScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('반려동물 정보 관리'),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        backgroundColor: const Color(0xFF6B42F8),
-      ),
-      backgroundColor: const Color(0xFF121824),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildSectionTitle('닉네임'),
-            TextFormField(
-              //controller: _petNameController , // 23.08.22 수정
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFF1F2839),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  petName = value;
-                });
-              },
-              initialValue: petName, // 23.08.22 수정
-            ),
-            const SizedBox(height: 20.0),
-            _buildSectionTitle('반려동물 종류'),
-            TextFormField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFF1F2839),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            CustomDropdownFormField(
-              onChanged: (value) {
-                setState(() {
-                  petSpecies = value;
-                });
-              },
-              initialValue: petSpecies,
-            ),
-            const SizedBox(height: 20.0),
-            _buildSectionTitle('반려동물 출생일'),
-            TextFormField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFF1F2839),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (value) {
-                setState(() {
-                  petBirthDate = value;
-                });
-              },
-              initialValue: petBirthDate,
-            ),
-            const SizedBox(height: 20.0),
-            _buildDateSelector(true),
-            const SizedBox(height: 20.0),
-            _buildSectionTitle('반려동물 사망일'),
-            const SizedBox(height: 20.0),
-            _buildDateSelector(false),
-            const SizedBox(height: 20.0),
-            _buildSectionTitle('반려동물 사진 업로드'),
-            const SizedBox(height: 20.0),
-            TextFormField(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFF1F2839),
-                border: InputBorder.none,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    //Implement photo upload functionality here
-                  },
-                  icon: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              onChanged: (value) {
-                // Handle the pet photo input
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () async {
-                await updatePetInfo();
-                showUpdateDialog(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF6B42F8),
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: const Text(
-                '변경하기',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> updatePetInfo() async {
-    try {
-      var petName = _petNameController.text; //23.08.22 수정
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/pet');
-        var response = await http.put(
-          url,
-          headers: {
-            'Authorization': 'Bearer $storedToken',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'name': petName,
-            'species': petSpecies,
-            'birthday': petBirthDate,
-            'deathday': petDeathDate,
-          }),
-        );
-
-        if (response.statusCode != 200) {
-          print('Failed to update pet info: ${response.statusCode}');
-        }
-      }
-    } catch (error) {
-      print('Error updating pet info: $error');
-    }
-  }
-
-  void showUpdateDialog(BuildContext context) {
+  void showUpdateDialog(bool isSuccess) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const SingleChildScrollView(
+          content: SingleChildScrollView(
             child: SizedBox(
               width: 335,
               height: 100,
               child: Center(
                 child: Text(
-                  "수정이 완료되었습니다 :)",
+                  isSuccess ? "수정이 완료되었습니다 :)" : "수정에 실패했습니다 :(",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: isSuccess ? Colors.black : Colors.red,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -351,7 +361,14 @@ class AnimalScreenState extends State<AnimalScreen> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                if (true) {
+                  // Navigate to the main screen
+                  Navigator.of(context)
+                      .pushReplacementNamed('/start'); // Replace current route
+                }
+              },
               child: const Center(
                 child: Text(
                   "닫기",
@@ -370,17 +387,20 @@ class AnimalScreenState extends State<AnimalScreen> {
   }
 }
 
-class CustomDropdownFormField extends StatelessWidget {
+// ignore: must_be_immutable
+class DropdownFormField extends StatelessWidget {
   final ValueChanged<String?>? onChanged;
-  final String? initialValue;
+  String? initialValue; // 초기 값 설정
+  final List<String> options;
 
-  const CustomDropdownFormField({
+  DropdownFormField({
     Key? key,
     this.onChanged,
     this.initialValue,
+    required this.options,
   }) : super(key: key);
 
-  DropdownMenuItem<String?> itemBuilder(String? value, String label) {
+  DropdownMenuItem<String> itemBuilder(String value, String label) {
     return DropdownMenuItem(
       value: value,
       child: Container(
@@ -396,24 +416,10 @@ class CustomDropdownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? validInitialValue;
-    List<String?> possibleValues = [null, 'Dog', 'Cat', 'Hamster', 'Meerkat'];
-    if (possibleValues.contains(initialValue)) {
-      validInitialValue = initialValue;
-    } else {
-      validInitialValue = null;
-    }
-
-    return DropdownButtonFormField<String?>(
-      value: validInitialValue,
+    return DropdownButtonFormField<String>(
+      value: initialValue,
       isExpanded: true,
-      items: [
-        itemBuilder(null, '펫을 선택해주세요'),
-        itemBuilder('Dog', '강아지'),
-        itemBuilder('Cat', '고양이'),
-        itemBuilder('Hamster', '햄찌'),
-        itemBuilder('Meerkat', '미어캣'),
-      ],
+      items: options.map((value) => itemBuilder(value, value)).toList(),
       onChanged: onChanged,
       decoration: InputDecoration(
         border: OutlineInputBorder(

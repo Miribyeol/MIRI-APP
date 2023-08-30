@@ -69,14 +69,14 @@ class ChallengPage extends StatelessWidget {
         return ChallengPopUp(day: day);
       },
     );
-  }
+}
 
 // 챌린지 화면 UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60.0),
+        preferredSize: Size.fromHeight(60.0),
         child: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -84,7 +84,7 @@ class ChallengPage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          backgroundColor: const Color(0xff6b42f8),
+          backgroundColor: Color(0xff6b42f8),
           elevation: 0,
         ),
       ),
@@ -184,9 +184,8 @@ class ChallengPage extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () async {
                             int challengeStep = day;
-
-                            await sendChallengeStatusToServer(
-                                day, challengeStep);
+                            
+                            await sendChallengeStatusToServer(day, challengeStep);
 
                             _completeChallenge(context, day);
                           },

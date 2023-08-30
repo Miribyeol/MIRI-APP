@@ -35,7 +35,7 @@ class AIOnboardingScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 90.0),
+                  // const SizedBox(height: 90.0),
                   const Text(
                     '별이와 대화하기',
                     style: TextStyle(

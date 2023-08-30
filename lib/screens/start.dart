@@ -86,7 +86,7 @@ class _StartScreenState extends State<StartScreen> {
                   children: [
                     const Positioned(
                       top: 55,
-                      left: 35,
+                      left: 20,
                       child: Text(
                         '오늘 챌린지\n완료 하셨나요 ?',
                         style: TextStyle(
@@ -112,8 +112,8 @@ class _StartScreenState extends State<StartScreen> {
                     ),
                     Positioned(
                       top: 125,
-                      left: 30,
-                      right: 30,
+                      left: 20,
+                      right: 20,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -151,25 +151,39 @@ class _StartScreenState extends State<StartScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: List.generate(emotion.length, (index) {
-                                if (index < 5) {
-                                  return createButton(emotion[index]);
-                                }
-                                return const SizedBox
-                                    .shrink(); // 5개 이후의 아이템은 감춤
-                              }),
+                            Container(
+                              width: calculateTotalWidth(emotion.length >= 5
+                                  ? emotion.sublist(0, 5)
+                                  : emotion), // 첫 5개 버튼의 총 너비
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                children:
+                                    List.generate(emotion.length, (index) {
+                                  if (index < 5) {
+                                    return createButton(emotion[index]);
+                                  }
+                                  return const SizedBox
+                                      .shrink(); // 5개 이후의 아이템은 감춤
+                                }),
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: List.generate(emotion.length, (index) {
-                                if (index >= 5 && index < 10) {
-                                  return createButton(emotion[index]);
-                                }
-                                return const SizedBox
-                                    .shrink(); // 10개 이후의 아이템은 감춤
-                              }),
+                            Container(
+                              width: calculateTotalWidth(emotion.length >= 10
+                                  ? emotion.sublist(5, 10)
+                                  : emotion.length > 5
+                                      ? emotion.sublist(5)
+                                      : []), // 다음 5개 버튼의 총 너비
+                              child: Wrap(
+                                alignment: WrapAlignment.start,
+                                children:
+                                    List.generate(emotion.length, (index) {
+                                  if (index >= 5 && index < 10) {
+                                    return createButton(emotion[index]);
+                                  }
+                                  return const SizedBox
+                                      .shrink(); // 10개 이후의 아이템은 감춤
+                                }),
+                              ),
                             ),
                             const SizedBox(height: 10),
                           ],
@@ -400,7 +414,7 @@ class _StartScreenState extends State<StartScreen> {
                   ),
                   const SizedBox(height: 20),
                   SizedBox(
-                    height: 120,
+                    height: 145,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -439,13 +453,22 @@ class _StartScreenState extends State<StartScreen> {
     );
   }
 
-  Widget createButton(String label) {
-    double paddingFactor = 1.0; // Adjust the factor as needed
-    double minWidth = 130.0; // Minimum width for the button
-    double paddingHorizontal = label.length * paddingFactor;
+  double calculateTotalWidth(List<String> emotions) {
+    double totalWidth = 0.0;
+    for (var emotion in emotions) {
+      // 예상되는 버튼의 너비 계산
+      double buttonWidth = 100.0 + (emotion.length + 10) * 1.0;
+      totalWidth += buttonWidth;
+    }
+    return totalWidth;
+  }
 
-    double width = minWidth + paddingHorizontal;
-    double height = 40.0; // You can adjust the height as needed
+  Widget createButton(String label) {
+    double fontSize = 15.0;
+    double widthPerChar = fontSize;
+
+    double width = (label.length * widthPerChar) + 30.0;
+    double height = 40.0;
 
     return Container(
       width: width,
@@ -464,15 +487,12 @@ class _StartScreenState extends State<StartScreen> {
         ],
       ),
       child: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: paddingHorizontal),
-          child: Text(
-            '# $label',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13.0,
-              fontWeight: FontWeight.bold,
-            ),
+        child: Text(
+          '# $label',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: fontSize,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -504,7 +524,7 @@ class _StartScreenState extends State<StartScreen> {
 class DayProgressIndicator extends StatelessWidget {
   final int challengerStep;
 
-  const DayProgressIndicator({super.key, this.challengerStep = 0});
+  const DayProgressIndicator({this.challengerStep = 0});
 
   @override
   Widget build(BuildContext context) {

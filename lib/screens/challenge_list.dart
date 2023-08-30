@@ -68,7 +68,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xff121824),
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(110.0),
+        preferredSize: Size.fromHeight(110.0),
         child: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
@@ -101,7 +101,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
               ],
             ),
           ),
-          backgroundColor: const Color(0xFF121824),
+          backgroundColor: Color(0xFF121824),
           elevation: 0,
         ),
       ),
@@ -134,11 +134,11 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: const Text("알림"),
-                                  content: const Text("이미 완료한 챌린지 입니다"),
+                                  title: Text("알림"),
+                                  content: Text("이미 완료한 챌린지 입니다"),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: const Text("확인"),
+                                      child: Text("확인"),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
@@ -147,19 +147,16 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                 );
                               },
                             );
-                          } else if (index + 1 >
-                              (challengeStep.isNotEmpty
-                                  ? challengeStep.last + 1
-                                  : 1)) {
+                          } else if (index + 1 > (challengeStep.isNotEmpty ? challengeStep.last + 1 : 1)) {
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: const Text("알림"),
-                                  content: const Text("이전 챌린지를 완료하지 않았습니다"),
+                                  title: Text("알림"),
+                                  content: Text("이전 챌린지를 완료하지 않았습니다"),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: const Text("확인"),
+                                      child: Text("확인"),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
@@ -168,7 +165,8 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                 );
                               },
                             );
-                          } else {
+                          }
+                          else {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -178,19 +176,17 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                             );
                           }
                         },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              // 챌린지를 완료한 경우 회색
-                              challengeStep.contains(index + 1)
-                                  ? const Color(0xff1F2839)
-                                  // 이전 챌린지를 완료하지 않은 경우 빨간색
-                                  : (index + 1 >
-                                          (challengeStep.isNotEmpty
-                                              ? challengeStep.last + 1
-                                              : 1))
-                                      ? const Color(0xff1F2839)
-                                      // 그 외의 경우 기본 색상
-                                      : const Color(0xff6B42F8)),
+                       style: ButtonStyle(
+  backgroundColor: MaterialStateProperty.all<Color>(
+    // 챌린지를 완료한 경우 회색
+    challengeStep.contains(index + 1)
+        ? Color(0xff1F2839)
+        // 이전 챌린지를 완료하지 않은 경우 빨간색
+        : (index + 1 > (challengeStep.isNotEmpty ? challengeStep.last + 1 : 1))
+            ? Color(0xff1F2839)
+            // 그 외의 경우 기본 색상
+            : const Color(0xff6B42F8)
+  ),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
