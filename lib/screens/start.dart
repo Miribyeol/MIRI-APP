@@ -67,130 +67,119 @@ class _StartScreenState extends State<StartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // int challengerStep = 0;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
 
+    var children2 = [
+      Positioned(
+        top: screenHeight * 0.10,
+        left: screenWidth * 0.07,
+        child: Text(
+          '오늘 챌린지\n완료 하셨나요 ?',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Positioned(
+        top: screenHeight * 0.06,
+        right: screenWidth * 0.05,
+        child: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/mypage');
+          },
+          icon: Icon(
+            Icons.person,
+            color: Colors.white,
+            size: 30,
+          ),
+        ),
+      ),
+      Positioned(
+        top: screenHeight * 0.17,
+        left: screenWidth * 0.05,
+        right: screenWidth * 0.05,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: screenHeight * 0.01),
+            DayProgressIndicator(challengerStep: challengerStep),
+            SizedBox(height: screenHeight * 0.01),
+            Text(
+              "DAY $challengerStep",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Positioned(
+        top: screenHeight * 0.29,
+        left: screenWidth * 0.03,
+        child: Text(
+          '  다른 사람들은 어떤 감정을 갖고 있을까요?',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      Positioned(
+        top: screenHeight * 0.32,
+        right: screenWidth * 0.01,
+        left: screenWidth * 0.01,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            runSpacing: 10.0,
+            children: List.generate(emotion.length, (index) {
+              if (index < 5) {
+                return createButton(emotion[index]);
+              }
+              return SizedBox.shrink();
+            }),
+          ),
+        ),
+      ),
+      Positioned(
+        top: screenHeight * 0.32 +
+            50.0, // Adjust the top value for the second row
+        right: screenWidth * 0.01,
+        left: screenWidth * 0.01,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            runSpacing: 10.0,
+            children: List.generate(emotion.length, (index) {
+              if (index >= 5 && index < 10) {
+                return createButton(emotion[index]);
+              }
+              return SizedBox.shrink();
+            }),
+          ),
+        ),
+      ),
+    ];
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       appBar: PreferredSize(
-        preferredSize:
-            Size.fromHeight(MediaQuery.of(context).size.height * 0.40),
+        preferredSize: Size.fromHeight(screenHeight * 0.40),
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.41,
+          height: screenHeight * 0.44,
           color: const Color(0xff6B42F8),
           child: Stack(
             children: [
               Container(
-                // height: MediaQuery.of(context).size.height * 0.45,
                 color: const Color(0xFF6B42F8),
                 child: Stack(
-                  children: [
-                    const Positioned(
-                      top: 55,
-                      left: 20,
-                      child: Text(
-                        '오늘 챌린지\n완료 하셨나요 ?',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 50,
-                      right: 16,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/mypage');
-                        },
-                        icon: const Icon(
-                          Icons.person,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 125,
-                      left: 20,
-                      right: 20,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 10),
-                          DayProgressIndicator(challengerStep: challengerStep),
-                          const SizedBox(height: 5),
-                          Text(
-                            "DAY $challengerStep",
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Positioned(
-                      top: 180,
-                      left: 15,
-                      child: Text(
-                        '  다른 사람들은 어떤 감정을 갖고 있을까요?',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 200,
-                      right: 10,
-                      left: 10,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.zero,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 10),
-                            Container(
-                              width: calculateTotalWidth(emotion.length >= 5
-                                  ? emotion.sublist(0, 5)
-                                  : emotion), // 첫 5개 버튼의 총 너비
-                              child: Wrap(
-                                alignment: WrapAlignment.start,
-                                children:
-                                    List.generate(emotion.length, (index) {
-                                  if (index < 5) {
-                                    return createButton(emotion[index]);
-                                  }
-                                  return const SizedBox
-                                      .shrink(); // 5개 이후의 아이템은 감춤
-                                }),
-                              ),
-                            ),
-                            Container(
-                              width: calculateTotalWidth(emotion.length >= 10
-                                  ? emotion.sublist(5, 10)
-                                  : emotion.length > 5
-                                      ? emotion.sublist(5)
-                                      : []), // 다음 5개 버튼의 총 너비
-                              child: Wrap(
-                                alignment: WrapAlignment.start,
-                                children:
-                                    List.generate(emotion.length, (index) {
-                                  if (index >= 5 && index < 10) {
-                                    return createButton(emotion[index]);
-                                  }
-                                  return const SizedBox
-                                      .shrink(); // 10개 이후의 아이템은 감춤
-                                }),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                  children: children2,
                 ),
               ),
             ],
@@ -202,24 +191,26 @@ class _StartScreenState extends State<StartScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.05,
+                vertical: screenHeight * 0.03,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: 111,
+                    height: screenHeight * 0.12,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/challenge_list');
                       },
-                      //onPressed 실행시 이동이 안되면 이렇게 수정해야함!
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1F2839),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,7 +223,7 @@ class _StartScreenState extends State<StartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 7),
+                            SizedBox(height: screenHeight * 0.012),
                             Text(
                               ' 14일동안 미션을 수행해보아요',
                               style: TextStyle(
@@ -246,9 +237,9 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: screenHeight * 0.02),
                   SizedBox(
-                    height: 111,
+                    height: screenHeight * 0.12,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/ai_onboarding');
@@ -259,7 +250,7 @@ class _StartScreenState extends State<StartScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,7 +263,7 @@ class _StartScreenState extends State<StartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 7),
+                            SizedBox(height: screenHeight * 0.012),
                             Text(
                               ' 미리별 만의 AI 친구 별이에게 고민을 말해보세요 !',
                               style: TextStyle(
@@ -286,9 +277,9 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: screenHeight * 0.02),
                   SizedBox(
-                    height: 111,
+                    height: screenHeight * 0.12,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/pet_charnel');
@@ -299,7 +290,7 @@ class _StartScreenState extends State<StartScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Align(
+                      child: Align(
                         alignment: Alignment.centerLeft,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,7 +303,7 @@ class _StartScreenState extends State<StartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 7),
+                            SizedBox(height: screenHeight * 0.012),
                             Text(
                               ' 애완동물과 함께한 순간들을 기억하는 공간',
                               style: TextStyle(
@@ -326,13 +317,13 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: screenHeight * 0.015),
                   SizedBox(
-                    height: 111,
+                    height: screenHeight * 0.1,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           '   이런 글이\n   당신에게 위로가 될까요?',
                           style: TextStyle(
                             color: Colors.white,
@@ -341,10 +332,11 @@ class _StartScreenState extends State<StartScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 35.0),
+                          padding:
+                              EdgeInsets.only(bottom: screenHeight * 0.025),
                           child: TextButton(
                             onPressed: () {},
-                            child: const Text(
+                            child: Text(
                               '더보기',
                               style: TextStyle(
                                 color: Color(0xFFBBBBBB),
@@ -364,7 +356,7 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           children: [
                             SizedBox(
-                              height: 111,
+                              height: screenHeight * 0.12,
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: const Color(0xFF1F2839),
@@ -380,45 +372,48 @@ class _StartScreenState extends State<StartScreen> {
                                     children: [
                                       Text(
                                         item['title'],
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                      const SizedBox(height: 5),
+                                      SizedBox(height: screenHeight * 0.012),
                                       Text(
                                         item['content'],
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                      const SizedBox(height: 5),
+                                      SizedBox(height: screenHeight * 0.012),
                                       Text(
                                         'Author: ${item['author']}',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(height: screenHeight * 0.02),
                           ],
                         ),
                       );
                     }).toList(),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: screenHeight * 0.03),
                   SizedBox(
-                    height: 145,
+                    height: screenHeight * 0.145,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           '이 앱을 통해 팻로스 증후군을 극복하시 분의 소중한 경험을 공유해 주세요.\n여러분의 소중한 이야기는 다른 사용자들에게 희망과 위로를 전달하고,\n함께 힘을 나눌 수 있는 소중한 자산이 될 것입니다.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -436,7 +431,7 @@ class _StartScreenState extends State<StartScreen> {
                               throw 'Could not launch $mailtoLink';
                             }
                           },
-                          child: const Text(
+                          child: Text(
                             'hnvvely@gmail.com',
                             style: TextStyle(fontSize: 13),
                           ),
@@ -456,7 +451,6 @@ class _StartScreenState extends State<StartScreen> {
   double calculateTotalWidth(List<String> emotions) {
     double totalWidth = 0.0;
     for (var emotion in emotions) {
-      // 예상되는 버튼의 너비 계산
       double buttonWidth = 100.0 + (emotion.length + 10) * 1.0;
       totalWidth += buttonWidth;
     }
@@ -473,16 +467,16 @@ class _StartScreenState extends State<StartScreen> {
     return Container(
       width: width,
       height: height,
-      margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+      margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
       decoration: BoxDecoration(
-        color: const Color(0xFF3D4353), // 배경색
-        borderRadius: BorderRadius.circular(8.0), // 버튼 모서리 둥글게
+        color: const Color(0xFF3D4353),
+        borderRadius: BorderRadius.circular(8.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2), // 그림자의 색상
+            color: Colors.black.withOpacity(0.2),
             spreadRadius: 0,
-            blurRadius: 5, // 그림자의 블러량
-            offset: const Offset(0, 5), // 그림자의 위치
+            blurRadius: 5,
+            offset: Offset(0, 5),
           ),
         ],
       ),
@@ -498,29 +492,8 @@ class _StartScreenState extends State<StartScreen> {
       ),
     );
   }
-
-  // Helper method to build a textbox for each emotion
-  Widget buildEmotionTextBox(String emotionText) {
-    return Container(
-      margin: const EdgeInsets.only(right: 15),
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 11),
-      decoration: BoxDecoration(
-        color: const Color(0xFF3D4353),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Text(
-        emotionText,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
 }
 
-//day표시바
 class DayProgressIndicator extends StatelessWidget {
   final int challengerStep;
 
@@ -531,13 +504,13 @@ class DayProgressIndicator extends StatelessWidget {
     double value = challengerStep / 14.0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      padding: EdgeInsets.symmetric(vertical: 2.0),
       child: SizedBox(
         height: 15,
         child: LinearProgressIndicator(
           value: value,
           backgroundColor: Colors.white,
-          valueColor: const AlwaysStoppedAnimation<Color>(
+          valueColor: AlwaysStoppedAnimation<Color>(
             Color(0xFF492E9D),
           ),
         ),
