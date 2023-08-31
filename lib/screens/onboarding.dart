@@ -5,79 +5,78 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    var children2 = [
+      Positioned(
+        top: screenHeight * 0.18,
+        left: screenWidth * 0.03,
+        child: _buildCircle(147, const Color(0xFFFFA0A0)),
+      ),
+      Positioned(
+        top: screenHeight * 0.18,
+        left: screenWidth * 0.43,
+        child: _buildCircleWithText(110, const Color(0xFF4F4867), "우울감", 20),
+      ),
+      Positioned(
+        top: screenHeight * 0.26,
+        left: screenWidth * 0.7,
+        child: _buildCircleWithImage(138, 'assets/image/onboarding_m_cat.jpeg'),
+      ),
+      Positioned(
+        top: screenHeight * 0.36,
+        left: screenWidth * -0.14,
+        child: _buildCircleWithText(137, const Color(0xFF9F8DDC), "외로움", 24),
+      ),
+      Positioned(
+        top: screenHeight * 0.33,
+        left: screenWidth * 0.22,
+        child: _buildCircleWithImage(213, 'assets/image/onboarding_dog.jpeg'),
+      ),
+      Positioned(
+        top: screenHeight * 0.43,
+        left: screenWidth * 0.73,
+        child:
+            _buildCircleWithText(156, const Color(0xFF6B42F8), "펫로스 증후군", 23),
+      ),
+      Positioned(
+        top: screenHeight * 0.53,
+        left: screenWidth * 0.06,
+        child: _buildCircleWithText(116, const Color(0xFFB36EBE), "반려동물", 20),
+      ),
+      Positioned(
+        top: screenHeight * 0.58,
+        left: screenWidth * 0.40,
+        child: _buildCircleWithImage(143, 'assets/image/onboarding_cat.jpeg'),
+      ),
+      Positioned(
+        top: screenHeight * 0.66,
+        left: screenWidth * -0.12,
+        child: _buildCircle(100, const Color(0xFF646A6B)),
+      ),
+      Positioned(
+        top: screenHeight * 0.69,
+        left: screenWidth * 0.12,
+        child: _buildCircle(141, const Color(0xFF8FC2DD)),
+      ),
+      Positioned(
+        top: screenHeight * 0.75,
+        left: screenWidth * 0.48,
+        child: _buildArrowCircle(118, const Color(0xFF0A85A1), context),
+      ),
+      Positioned(
+        top: screenHeight * 0.65,
+        left: screenWidth * 0.77,
+        child: _buildCircle(115, const Color(0xFFE4E3E3)),
+      ),
+    ];
+
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       body: Center(
         child: Stack(
-          children: [
-            Positioned(
-              top: 150,
-              left: 20,
-              child: _buildCircle(143, const Color(0xFFFFA0A0)),
-            ),
-            Positioned(
-              top: 170,
-              left: 190,
-              child: _buildCircleWithText(
-                  106.62, const Color(0xFF4F4867), "우울감", 20),
-            ),
-            Positioned(
-              top: 240,
-              left: 300,
-              child: _buildCircleWithImage(
-                  134, 'assets/image/onboarding_m_cat.jpeg'),
-            ),
-            Positioned(
-              top: 315,
-              left: -40,
-              child:
-                  _buildCircleWithText(133, const Color(0xFF9F8DDC), "외로움", 24),
-            ),
-            Positioned(
-              top: 300,
-              left: 107,
-              child: _buildCircleWithImage(
-                  209, 'assets/image/onboarding_dog.jpeg'),
-            ),
-            Positioned(
-              top: 420,
-              left: 310,
-              child: _buildCircleWithText(
-                  152, const Color(0xFF6B42F8), "펫로스 증후군", 23),
-            ),
-            Positioned(
-              top: 480,
-              left: 20,
-              child: _buildCircleWithText(
-                  112, const Color(0xFFB36EBE), "반려동물", 20),
-            ),
-            Positioned(
-              top: 530,
-              left: 160,
-              child: _buildCircleWithImage(
-                  139, 'assets/image/onboarding_cat.jpeg'),
-            ),
-            Positioned(
-              top: 600,
-              left: -50,
-              child: _buildCircle(95, const Color(0xFF646A6B)),
-            ),
-            Positioned(
-              top: 650,
-              left: 50,
-              child: _buildCircle(137, const Color(0xFF8FC2DD)),
-            ),
-            Positioned(
-              top: 690,
-              left: 210,
-              child: _buildArrowCircle(114, const Color(0xFF0A85A1), context),
-            ),
-            Positioned(
-              top: 600,
-              left: 320,
-              child: _buildCircle(111, const Color(0xFFE4E3E3)),
-            ),
-          ],
+          children: children2,
         ),
       ),
     );

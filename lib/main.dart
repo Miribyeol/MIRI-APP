@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const OnboardingScreen(),
         '/mypage_my_info': (context) => const InformationScreen(),
         '/mypage_pet_info': (context) => const AnimalScreen(),
-        '/mypage': (context) => const MypageScreen(),
+        '/mypage': (context) => MypageScreen(),
         // '/challenge': (context) {
         //   final Map<String, dynamic> args = ModalRoute.of(context)!
         //       .settings
