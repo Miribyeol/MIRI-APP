@@ -21,12 +21,12 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 void main() async {
   await dotenv.load(fileName: ".env");
   KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_APP_KEY"));
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  MyApp({super.key});
+  final AuthHelper authHelper = AuthHelper(); 
   @override
   Widget build(BuildContext context) {
     final KakaoLoginService kakaoLogin = KakaoLoginService();
@@ -35,7 +35,20 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home: const OnboardingScreen(),
+      home:FutureBuilder(
+       future: authHelper.checkKakaoLoginStatus(), // AuthHelper의 함수 호출
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else {
+            if (snapshot.data == true) {
+              return LogoScreen();
+            } else {
+              return OnboardingScreen();
+            }
+          }
+        },
+      ), //home:OnboardingScreen();
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
         '/start': (context) => const StartScreen(),

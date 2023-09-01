@@ -122,3 +122,15 @@ class KakaoLoginService {
     }
   }
 }
+class AuthHelper {
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  Future<bool> checkKakaoLoginStatus() async {
+    final storedToken = await _storage.read(key: 'jwt_token');
+    if (storedToken != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
