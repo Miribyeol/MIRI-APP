@@ -15,6 +15,7 @@ import 'screens/mypage_my_info.dart';
 import 'screens/mypage_pet_info.dart';
 import 'screens/mypage.dart';
 import 'services/kakao_login.dart';
+import 'screens/miri_station.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() async {
@@ -25,7 +26,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-  final AuthHelper authHelper = AuthHelper(); 
+  final AuthHelper authHelper = AuthHelper();
   @override
   Widget build(BuildContext context) {
     final KakaoLoginService kakaoLogin = KakaoLoginService();
@@ -34,20 +35,20 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
-      home:FutureBuilder(
-       future: authHelper.checkKakaoLoginStatus(), // AuthHelper의 함수 호출
+      home: FutureBuilder(
+        future: authHelper.checkKakaoLoginStatus(), // AuthHelper의 함수 호출
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else {
             if (snapshot.data == true) {
-              return LogoScreen();
+              return const LogoScreen();
             } else {
-              return OnboardingScreen();
+              return const OnboardingScreen();
             }
           }
         },
-      ), 
+      ),
       // home:OnboardingScreen();
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
@@ -62,7 +63,8 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const OnboardingScreen(),
         '/mypage_my_info': (context) => const InformationScreen(),
         '/mypage_pet_info': (context) => const AnimalScreen(),
-        '/mypage': (context) => MypageScreen(),
+        '/mypage': (context) => const MypageScreen(),
+        '/miri_station': (context) => const MiriStationScreen(),
         // '/challenge': (context) {
         //   final Map<String, dynamic> args = ModalRoute.of(context)!
         //       .settings

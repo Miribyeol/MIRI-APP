@@ -24,7 +24,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
 //감정 선택후 전송기능
   Future<void> sendChallengeFeedbackToServer(List<String> emotions) async {
     try {
-      if (emotions.isEmpty || emotions.length > 3) {
+      if (emotions.isEmpty || emotions.length > 4) {
         print('최대 3개까지 선택하세요');
         return;
       }

@@ -95,7 +95,7 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                           const SizedBox(height: 10.0),
                           Text(
                             petName ?? '',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 30.0,
                               fontWeight: FontWeight.bold,
@@ -105,7 +105,7 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                           const SizedBox(height: 10.0),
                           Text(
                             '$petBirthDate ~ $petDeathDate',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,

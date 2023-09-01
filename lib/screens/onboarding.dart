@@ -164,6 +164,8 @@ class OnboardingScreen extends StatelessWidget {
 }
 
 class LogoScreen extends StatefulWidget {
+  const LogoScreen({super.key});
+
   @override
   _LogoScreenState createState() => _LogoScreenState();
 }
@@ -174,7 +176,7 @@ class _LogoScreenState extends State<LogoScreen> {
     super.initState();
 
     // 3초 동안 대기 후 start.dart 화면으로 이동
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       Navigator.of(context).pushReplacementNamed('/start');
     });
   }
