@@ -5,79 +5,90 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    var children2 = [
-      Positioned(
-        top: screenHeight * 0.18,
-        left: screenWidth * 0.03,
-        child: _buildCircle(147, const Color(0xFFFFA0A0)),
-      ),
-      Positioned(
-        top: screenHeight * 0.18,
-        left: screenWidth * 0.43,
-        child: _buildCircleWithText(110, const Color(0xFF4F4867), "우울감", 20),
-      ),
-      Positioned(
-        top: screenHeight * 0.26,
-        left: screenWidth * 0.7,
-        child: _buildCircleWithImage(138, 'assets/image/onboarding_m_cat.jpeg'),
-      ),
-      Positioned(
-        top: screenHeight * 0.36,
-        left: screenWidth * -0.14,
-        child: _buildCircleWithText(137, const Color(0xFF9F8DDC), "외로움", 24),
-      ),
-      Positioned(
-        top: screenHeight * 0.33,
-        left: screenWidth * 0.22,
-        child: _buildCircleWithImage(213, 'assets/image/onboarding_dog.jpeg'),
-      ),
-      Positioned(
-        top: screenHeight * 0.43,
-        left: screenWidth * 0.73,
-        child:
-            _buildCircleWithText(156, const Color(0xFF6B42F8), "펫로스 증후군", 23),
-      ),
-      Positioned(
-        top: screenHeight * 0.53,
-        left: screenWidth * 0.06,
-        child: _buildCircleWithText(116, const Color(0xFFB36EBE), "반려동물", 20),
-      ),
-      Positioned(
-        top: screenHeight * 0.58,
-        left: screenWidth * 0.40,
-        child: _buildCircleWithImage(143, 'assets/image/onboarding_cat.jpeg'),
-      ),
-      Positioned(
-        top: screenHeight * 0.66,
-        left: screenWidth * -0.12,
-        child: _buildCircle(100, const Color(0xFF646A6B)),
-      ),
-      Positioned(
-        top: screenHeight * 0.69,
-        left: screenWidth * 0.12,
-        child: _buildCircle(141, const Color(0xFF8FC2DD)),
-      ),
-      Positioned(
-        top: screenHeight * 0.75,
-        left: screenWidth * 0.48,
-        child: _buildArrowCircle(118, const Color(0xFF0A85A1), context),
-      ),
-      Positioned(
-        top: screenHeight * 0.65,
-        left: screenWidth * 0.77,
-        child: _buildCircle(115, const Color(0xFFE4E3E3)),
-      ),
-    ];
-
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
-      body: Center(
-        child: Stack(
-          children: children2,
-        ),
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          double screenHeight = constraints.maxHeight;
+          double screenWidth = constraints.maxWidth;
+
+          var children2 = [
+            Positioned(
+              top: screenHeight * 0.14,
+              left: screenWidth * 0.03,
+              child: _buildCircle(screenWidth * 0.35, const Color(0xFFFFA0A0)),
+            ),
+            Positioned(
+              top: screenHeight * 0.14,
+              left: screenWidth * 0.43,
+              child: _buildCircleWithText(
+                  screenWidth * 0.30, const Color(0xFF4F4867), "우울감", 20),
+            ),
+            Positioned(
+              top: screenHeight * 0.22,
+              left: screenWidth * 0.7,
+              child: _buildCircleWithImage(
+                  screenWidth * 0.35, 'assets/image/onboarding_m_cat.jpeg'),
+            ),
+            Positioned(
+              top: screenHeight * 0.32,
+              left: screenWidth * -0.2,
+              child: _buildCircleWithText(
+                  screenWidth * 0.35, const Color(0xFF9F8DDC), "외로움", 24),
+            ),
+            Positioned(
+              top: screenHeight * 0.29,
+              left: screenWidth * 0.17,
+              child: _buildCircleWithImage(
+                  screenWidth * 0.58, 'assets/image/onboarding_dog.jpeg'),
+            ),
+            Positioned(
+              top: screenHeight * 0.44,
+              left: screenWidth * 0.75,
+              child: _buildCircleWithText(
+                  screenWidth * 0.40, const Color(0xFF6B42F8), "펫로스 증후군", 23),
+            ),
+            Positioned(
+              top: screenHeight * 0.53,
+              left: screenWidth * 0.02,
+              child: _buildCircleWithText(
+                  screenWidth * 0.30, const Color(0xFFB36EBE), "반려동물", 20),
+            ),
+            Positioned(
+              top: screenHeight * 0.57,
+              left: screenWidth * 0.40,
+              child: _buildCircleWithImage(
+                  screenWidth * 0.35, 'assets/image/onboarding_cat.jpeg'),
+            ),
+            Positioned(
+              top: screenHeight * 0.68,
+              left: screenWidth * -0.15,
+              child: _buildCircle(screenWidth * 0.24, const Color(0xFF646A6B)),
+            ),
+            Positioned(
+              top: screenHeight * 0.70,
+              left: screenWidth * 0.11,
+              child: _buildCircle(screenWidth * 0.35, const Color(0xFF8FC2DD)),
+            ),
+            Positioned(
+              top: screenHeight * 0.76,
+              left: screenWidth * 0.50,
+              child: _buildArrowCircle(
+                  screenWidth * 0.30, const Color(0xFF0A85A1), context),
+            ),
+            Positioned(
+              top: screenHeight * 0.65,
+              left: screenWidth * 0.77,
+              child: _buildCircle(screenWidth * 0.30, const Color(0xFFE4E3E3)),
+            ),
+          ];
+
+          return Center(
+            child: Stack(
+              children: children2,
+            ),
+          );
+        },
       ),
     );
   }

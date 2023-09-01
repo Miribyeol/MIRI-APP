@@ -76,14 +76,15 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
               Navigator.pop(context);
             },
           ),
-          flexibleSpace: const FlexibleSpaceBar(
-            titlePadding: EdgeInsets.only(left: 16.0),
-            title: Column(
+          flexibleSpace: Container(
+            padding: const EdgeInsets.only(left: 16.0),
+            color: Color(0xFF121824),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '미리별 챌린지',
+                  '챌린지',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -147,7 +148,10 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                 );
                               },
                             );
-                          } else if (index + 1 > (challengeStep.isNotEmpty ? challengeStep.last + 1 : 1)) {
+                          } else if (index + 1 >
+                              (challengeStep.isNotEmpty
+                                  ? challengeStep.last + 1
+                                  : 1)) {
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -165,8 +169,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                 );
                               },
                             );
-                          }
-                          else {
+                          } else {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -176,17 +179,19 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                             );
                           }
                         },
-                       style: ButtonStyle(
-  backgroundColor: MaterialStateProperty.all<Color>(
-    // 챌린지를 완료한 경우 회색
-    challengeStep.contains(index + 1)
-        ? Color(0xff1F2839)
-        // 이전 챌린지를 완료하지 않은 경우 빨간색
-        : (index + 1 > (challengeStep.isNotEmpty ? challengeStep.last + 1 : 1))
-            ? Color(0xff1F2839)
-            // 그 외의 경우 기본 색상
-            : const Color(0xff6B42F8)
-  ),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              // 챌린지를 완료한 경우 회색
+                              challengeStep.contains(index + 1)
+                                  ? Color(0xff1F2839)
+                                  // 이전 챌린지를 완료하지 않은 경우 빨간색
+                                  : (index + 1 >
+                                          (challengeStep.isNotEmpty
+                                              ? challengeStep.last + 1
+                                              : 1))
+                                      ? Color(0xff1F2839)
+                                      // 그 외의 경우 기본 색상
+                                      : const Color(0xff6B42F8)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
