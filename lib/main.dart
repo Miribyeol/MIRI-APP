@@ -17,6 +17,7 @@ import 'screens/mypage.dart';
 import 'services/kakao_login.dart';
 import 'screens/miri_station.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+// import 'package:provider/provider.dart';
 // import 'route.dart';
 
 void main() async {
@@ -28,6 +29,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   final AuthHelper authHelper = AuthHelper();
+
   @override
   Widget build(BuildContext context) {
     final KakaoLoginService kakaoLogin = KakaoLoginService();
