@@ -162,6 +162,7 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 }
+
 class LogoScreen extends StatefulWidget {
   @override
   _LogoScreenState createState() => _LogoScreenState();
@@ -173,14 +174,15 @@ class _LogoScreenState extends State<LogoScreen> {
     super.initState();
 
     // 3초 동안 대기 후 start.dart 화면으로 이동
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 1), () {
       Navigator.of(context).pushReplacementNamed('/start');
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121824), 
+      backgroundColor: const Color(0xFF121824),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
