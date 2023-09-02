@@ -17,6 +17,7 @@ import 'screens/mypage.dart';
 import 'services/kakao_login.dart';
 import 'screens/miri_station.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+// import 'route.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
     final KakaoLoginService kakaoLogin = KakaoLoginService();
 
     return MaterialApp(
+      // onGenerateRoute: AppRoutes.generateRoute,
       debugShowCheckedModeBanner: false,
       // title: 'Flutter Widgets',
       theme: ThemeData(primaryColor: Colors.blue, brightness: Brightness.dark),
@@ -63,7 +65,7 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const OnboardingScreen(),
         '/mypage_my_info': (context) => const InformationScreen(),
         '/mypage_pet_info': (context) => const AnimalScreen(),
-        '/mypage': (context) => const MypageScreen(),
+        '/mypage': (context) => MypageScreen(),
         '/miri_station': (context) => const MiriStationScreen(),
         // '/challenge': (context) {
         //   final Map<String, dynamic> args = ModalRoute.of(context)!
