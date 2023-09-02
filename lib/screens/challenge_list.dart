@@ -1,67 +1,35 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:miri_app/screens/challenge.dart';
+import 'package:miri_app/services/challenge_services.dart';
 
+//챌린지 목록 시작
 class ChallengeListScreen extends StatefulWidget {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   const ChallengeListScreen({super.key});
 
   @override
   ChallengeListScreenState createState() => ChallengeListScreenState();
 }
 
+//챌린지 목록상태 불러오기 및 확인
 class ChallengeListScreenState extends State<ChallengeListScreen> {
   List<bool> daysCompleted = List.filled(14, false);
   List<int> challengeStep = [];
+  FlutterSecureStorage storage = const FlutterSecureStorage();
+
+  void loadDays() async {
+    List<int>? result = await loadChallengeStatusFromServer(storage);
+    if (result != null) {
+      setState(() {
+        challengeStep = result;
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    loadChallengeStatusFromServer();
-    //loadDays();
-  }
-
-  Future<void> loadChallengeStatusFromServer() async {
-    try {
-      final storedToken = await widget._storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var apiUrl = dotenv.env['API_URL'];
-
-        var url = Uri.parse('$apiUrl/main');
-        var response = await http.get(
-          url,
-          headers: {
-            'Authorization': 'Bearer $storedToken',
-            'Content-Type': 'application/json',
-          },
-        );
-        print('Response status code: ${response.statusCode}');
-        print('Response body: ${response.body}');
-
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
-
-          // challengerStep 값을 가져옵니다.
-          int stepValue = data['result']['challengerStep'];
-
-          // 가져온 challengerStep 값을 로그로 출력합니다.
-          print('challengeStep from server: $stepValue');
-
-          // stepValue를 원하는 방식으로 사용합니다. 예를 들어, List를 생성하려면:
-          setState(() {
-            challengeStep = List.generate(stepValue, (index) => index + 1);
-          });
-        } else {
-          print(
-              'Server returned an error: ${response.statusCode} - ${response.body}');
-        }
-      }
-    } catch (e) {
-      print('Error getting challenge status: $e');
-    }
+    loadDays();
   }
 
   //챌린지 리스트 UI
@@ -132,25 +100,14 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (challengeStep.contains(index + 1)) {
-                            // 버튼이 회색일 경우 (챌린지 완료한 경우)
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  backgroundColor:
-                                      Colors.white, // 팝업창 배경색을 하얀색으로 설정
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  // title: const Text(
-                                  //   "알림",
-                                  //   textAlign: TextAlign.center,
-                                  //   style: TextStyle(
-                                  //     fontSize: 25,
-                                  //     fontWeight: FontWeight.bold,
-                                  //     color: Colors.black, // 글자색을 검정색으로 설정
-                                  //   ),
-                                  // ),
                                   content: const Padding(
                                     padding: EdgeInsets.only(top: 20),
                                     child: Text(
@@ -163,7 +120,6 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                       ),
                                     ),
                                   ),
-
                                   actionsAlignment: MainAxisAlignment.center,
                                   actions: <Widget>[
                                     SizedBox(
@@ -171,7 +127,8 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                       height: 35,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(0xff6B42F8),
+                                          backgroundColor:
+                                              const Color(0xff6B42F8),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10),
@@ -224,7 +181,8 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                       height: 35,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color(0xff6B42F8),
+                                          backgroundColor:
+                                              const Color(0xff6B42F8),
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10),

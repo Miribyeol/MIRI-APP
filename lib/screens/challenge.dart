@@ -1,42 +1,13 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:miri_app/models/challenge_store.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:miri_app/screens/challenge_pop_up.dart';
+import 'package:miri_app/services/challenge_services.dart';
 
 //챌린지 시작부분
 class ChallengPage extends StatelessWidget {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
   final int day;
-
-  Future<void> sendChallengeStatusToServer(int day, int challengeStep) async {
-    try {
-      final storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var apiUrl = dotenv.env['API_URL'];
-        var url = Uri.parse('$apiUrl/challenge/status');
-
-        var response = await http.patch(
-          url,
-          headers: {
-            'Authorization': 'Bearer $storedToken',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'day': day.toString(),
-            'challengeStep': challengeStep.toString(),
-          }),
-        );
-
-        print('Response status code: ${response.statusCode}');
-        print('Response body: ${response.body}');
-      }
-    } catch (e) {
-      print('Error sending challenge status: $e');
-    }
-  }
 
   const ChallengPage({Key? key, required this.day}) : super(key: key);
 
@@ -51,6 +22,7 @@ class ChallengPage extends StatelessWidget {
     print(todayChallenge);
   }
 
+//챌린지 이미지
   Widget _challengeImage(int day) {
     assert(day >= 1 && day <= 14, 'Day should be between 1 and 14');
 
@@ -61,9 +33,11 @@ class ChallengPage extends StatelessWidget {
     );
   }
 
+//챌린지 단계 서버 보내기
   void _completeChallenge(BuildContext context, int day) async {
-    // int challengeStep = day;
-    // await sendChallengeStatusToServer(day, challengeStep);
+    int challengeStep = day;
+
+    await sendChallengeStatusToServer(day, challengeStep, storage);
 
     showDialog(
       context: context,
@@ -185,11 +159,6 @@ class ChallengPage extends StatelessWidget {
                         const SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: () async {
-                            int challengeStep = day;
-
-                            await sendChallengeStatusToServer(
-                                day, challengeStep);
-
                             _completeChallenge(context, day);
                           },
                           style: ButtonStyle(
