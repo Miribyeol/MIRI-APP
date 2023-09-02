@@ -48,7 +48,8 @@ class MyApp extends StatelessWidget {
             }
           }
         },
-      ), //home:OnboardingScreen();
+      ), 
+      // home:OnboardingScreen();
       routes: {
         '/login': (context) => LoginScreen(kakaoLoginService: kakaoLogin),
         '/start': (context) => const StartScreen(),

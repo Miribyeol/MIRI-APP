@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart'; // Cupertino 패키지 추가
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -15,8 +16,8 @@ class PetInfoInputScreen extends StatefulWidget {
 class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
   String? name;
   String? species;
-  String? birthday;
-  String? deathday;
+  DateTime? birthday;
+  DateTime? deathday;
 
   final _storage = const FlutterSecureStorage();
 
@@ -40,15 +41,15 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
         PetInput petInfo = PetInput(
           name: name!,
           species: species!,
-          birthday: birthday!,
-          deathday: deathday!,
+          birthday: birthday!.toLocal().toString(), // 날짜를 문자열로 변환
+          deathday: deathday!.toLocal().toString(), // 날짜를 문자열로 변환
         );
 
         var url = Uri.parse('http://203.250.32.29:3000/pet');
         var response = await http.post(
           url,
           headers: {
-            'Authorization': 'Bearer $storedToken', // 토큰값을 헤더에 넣어서 전송
+            'Authorization': 'Bearer $storedToken',
             'Content-Type': 'application/json',
           },
           body: jsonEncode(petInfo.toJson()),
@@ -84,6 +85,75 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
     } catch (error) {
       print('반려동물 정보 등록 오류: $error');
     }
+  }
+
+  Widget _buildDateSelector(
+    String labelText,
+    DateTime? selectedDate,
+    Function(DateTime?) onDateSelected,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          labelText,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 15.0),
+        GestureDetector(
+          onTap: () async {
+            DateTime? pickedDate = await showCupertinoModalPopup(
+              context: context,
+              builder: (BuildContext context) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: SizedBox(
+                    height: 300,
+                    child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.date,
+                      initialDateTime: selectedDate ?? DateTime.now(),
+                      maximumYear: DateTime.now().year,
+                      onDateTimeChanged: (DateTime newDateTime) {
+                        onDateSelected(newDateTime);
+                      },
+                      backgroundColor: const Color(0xFF121824),
+                    ),
+                  ),
+                );
+              },
+            );
+
+            if (pickedDate != null) {
+              // 날짜를 선택한 경우에만 CupertinoDatePicker를 닫습니다.
+              Navigator.of(context, rootNavigator: true).pop();
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color(0xFF1F2839),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: const EdgeInsets.all(16.0),
+            child: DefaultTextStyle(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0,
+              ),
+              child: Text(
+                selectedDate != null
+                    ? "${selectedDate.toLocal().year}년 ${selectedDate.toLocal().month}월 ${selectedDate.toLocal().day}일"
+                    : "날짜를 선택하세요",
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 35.0),
+      ],
+    );
   }
 
   @override
@@ -170,78 +240,24 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                   },
                 ),
                 const SizedBox(height: 35.0),
-                const Text(
+                _buildDateSelector(
                   '반려동물 출생일',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-                TextFormField(
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime.now(),
-                    );
-                    if (pickedDate != null) {
-                      setState(() {
-                        birthday = pickedDate.toString();
-                      });
-                    }
+                  birthday,
+                  (pickedDate) {
+                    setState(() {
+                      birthday = pickedDate;
+                    });
                   },
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color(0xFF1F2839),
-                    filled: true,
-                    suffixIcon: Icon(
-                      Icons.calendar_today,
-                      color: Colors.white,
-                    ),
-                  ),
-                  controller: TextEditingController(text: birthday),
                 ),
-                const SizedBox(height: 35.0),
-                const Text(
+                _buildDateSelector(
                   '반려동물 사망일',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 15.0),
-                TextFormField(
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime.now(),
-                    );
-                    if (pickedDate != null) {
-                      setState(() {
-                        deathday = pickedDate.toString();
-                      });
-                    }
+                  deathday,
+                  (pickedDate) {
+                    setState(() {
+                      deathday = pickedDate;
+                    });
                   },
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color(0xFF1F2839),
-                    filled: true,
-                    suffixIcon: Icon(
-                      Icons.calendar_today,
-                      color: Colors.white,
-                    ),
-                  ),
-                  controller: TextEditingController(text: deathday),
                 ),
-                const SizedBox(height: 35.0),
                 ElevatedButton(
                   onPressed: () {
                     registerPetInfo();
