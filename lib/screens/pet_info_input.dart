@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart'; // Cupertino 패키지 추가
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/pet_input_model.dart';
 
 class PetInfoInputScreen extends StatefulWidget {
@@ -44,8 +44,8 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
           birthday: birthday!.toLocal().toString(), // 날짜를 문자열로 변환
           deathday: deathday!.toLocal().toString(), // 날짜를 문자열로 변환
         );
-
-        var url = Uri.parse('http://203.250.32.29:3000/pet');
+        var apiUrl = dotenv.env['API_URL'];
+        var url = Uri.parse('$apiUrl/pet');
         var response = await http.post(
           url,
           headers: {

@@ -15,7 +15,6 @@ import 'screens/mypage_my_info.dart';
 import 'screens/mypage_pet_info.dart';
 import 'screens/mypage.dart';
 import 'services/kakao_login.dart';
-// import 'services/check_token.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 void main() async {
