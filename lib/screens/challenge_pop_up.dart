@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:miri_app/models/challenge_store.dart';
 
 //팝업창
@@ -30,7 +31,8 @@ class ChallengPopUpState extends State<ChallengPopUp> {
 
       final storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
-        final url = Uri.parse('http://203.250.32.29:3000/emotion');
+        var apiUrl = dotenv.env['API_URL'];
+        final url = Uri.parse('$apiUrl/emotion');
 
         final response = await http.patch(
           url,

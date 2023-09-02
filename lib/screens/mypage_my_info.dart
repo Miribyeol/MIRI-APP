@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/user_info_model.dart';
 
 class InformationScreen extends StatefulWidget {
@@ -28,7 +28,9 @@ class InformationScreenState extends State<InformationScreen> {
     try {
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/user/nickname');
+        var apiUrl = dotenv.env['API_URL'];
+
+        var url = Uri.parse('$apiUrl/user/nickname');
         var response = await http.get(url, headers: {
           'Authorization': 'Bearer $storedToken',
         });

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PetCharnelScreen extends StatefulWidget {
   const PetCharnelScreen({Key? key}) : super(key: key);
@@ -26,7 +27,8 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
     try {
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/pet'); // API URL 수정
+        var apiUrl = dotenv.env['API_URL'];
+        var url = Uri.parse('$apiUrl/pet'); // API URL 수정
         var response = await http.get(url, headers: {
           'Authorization': 'Bearer $storedToken',
         });

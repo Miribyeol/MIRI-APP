@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:miri_app/screens/challenge.dart';
 
 class ChallengeListScreen extends StatefulWidget {
@@ -27,9 +28,10 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
     try {
       final storedToken = await widget._storage.read(key: 'jwt_token');
       if (storedToken != null) {
-        final url = Uri.parse('http://203.250.32.29:3000/main');
+        var apiUrl = dotenv.env['API_URL'];
 
-        final response = await http.get(
+        var url = Uri.parse('$apiUrl/main');
+        var response = await http.get(
           url,
           headers: {
             'Authorization': 'Bearer $storedToken',

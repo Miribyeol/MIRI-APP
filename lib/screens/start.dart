@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
@@ -29,7 +30,9 @@ class _StartScreenState extends State<StartScreen> {
     try {
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/main');
+        var apiUrl = dotenv.env['API_URL']; // Get API address from .env
+
+        var url = Uri.parse('$apiUrl/main'); // Use the API address
         var response = await http.get(url, headers: {
           'Authorization': 'Bearer $storedToken',
         });
