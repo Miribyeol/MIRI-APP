@@ -1,7 +1,7 @@
 class MainViewModel {
-  final int challengerStep;
-  final List<Emotion> emotions;
-  final List<Post> posts;
+  int challengerStep;
+  List<Emotion> emotions;
+  List<Post> posts;
 
   MainViewModel({
     required this.challengerStep,
@@ -11,8 +11,8 @@ class MainViewModel {
 }
 
 class Emotion {
-  final String emotion;
-  final int count;
+  String emotion;
+  int count;
 
   Emotion({
     required this.emotion,
@@ -21,9 +21,9 @@ class Emotion {
 }
 
 class Post {
-  final String title;
-  final String content;
-  final String author;
+  String title;
+  String content;
+  String author;
 
   Post({
     required this.title,
