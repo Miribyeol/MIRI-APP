@@ -122,6 +122,7 @@ class KakaoLoginService {
     }
   }
 }
+
 class AuthHelper {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 

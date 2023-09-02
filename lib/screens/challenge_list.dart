@@ -137,37 +137,57 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
+                                  backgroundColor:
+                                      Colors.white, // 팝업창 배경색을 하얀색으로 설정
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  title: const Text(
-                                    "알림",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold),
+                                  // title: const Text(
+                                  //   "알림",
+                                  //   textAlign: TextAlign.center,
+                                  //   style: TextStyle(
+                                  //     fontSize: 25,
+                                  //     fontWeight: FontWeight.bold,
+                                  //     color: Colors.black, // 글자색을 검정색으로 설정
+                                  //   ),
+                                  // ),
+                                  content: Padding(
+                                    padding: EdgeInsets.only(top: 20),
+                                    child: const Text(
+                                      "이미 완료한 챌린지입니다",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   ),
-                                  content: const Text(
-                                    "이미 완료한 챌린지입니다",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+
                                   actionsAlignment: MainAxisAlignment.center,
                                   actions: <Widget>[
-                                    TextButton(
-                                      child: const Text(
-                                        "확인",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          decoration: TextDecoration.underline,
-                                          fontWeight: FontWeight.bold,
+                                    Container(
+                                      width: 140,
+                                      height: 35,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          primary: const Color(0xff6B42F8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
                                         ),
+                                        child: const Text(
+                                          "확인",
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
                                       ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
                                     ),
                                   ],
                                 );
@@ -181,38 +201,47 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  title: const Text(
-                                    "알림",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  content: const Text(
-                                    "이전 챌린지를 완료하지\n않았습니다",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
+                                  content: Padding(
+                                    padding: EdgeInsets.only(top: 20),
+                                    child: const Text(
+                                      "이전 챌린지를 완료하지\n않았습니다",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   ),
                                   actionsAlignment: MainAxisAlignment.center,
                                   actions: <Widget>[
-                                    TextButton(
-                                      child: const Text(
-                                        "확인",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          decoration: TextDecoration.underline,
-                                          fontWeight: FontWeight.bold,
+                                    Container(
+                                      width: 140,
+                                      height: 35,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          primary: const Color(0xff6B42F8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
                                         ),
+                                        child: const Text(
+                                          "확인",
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
                                       ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    )
+                                    ),
                                   ],
                                 );
                               },
