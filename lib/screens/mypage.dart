@@ -3,7 +3,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // 추가
 //import 'start.dart';
 
 class MypageScreen extends StatelessWidget {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage(); // 추가
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  const MypageScreen({super.key}); // 추가
 
   Future<void> _logout(context) async {
     await _storage.delete(key: 'jwt_token'); // jwt_token 토큰값 삭제
@@ -79,7 +81,7 @@ class MypageScreen extends StatelessWidget {
                 padding: EdgeInsets.zero, // 버튼 내부 패딩 제거
               ),
               child: Padding( //const 없앰
-                padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
+                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
                 child: Align(
                   alignment: Alignment.centerLeft, // 텍스트를 왼쪽으로 정렬
                   child: Text(

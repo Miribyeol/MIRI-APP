@@ -39,7 +39,7 @@ class AIConsultingScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  content: Padding(
+                                  content: const Padding(
                                     padding: EdgeInsets.only(top: 20),
                                     child: Text(
                                       "별이와의 대화를 그만두실건가요?",
@@ -199,7 +199,7 @@ class ChoiceElevatedButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  ChoiceElevatedButton({required this.text, required this.onPressed});
+  const ChoiceElevatedButton({super.key, required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -208,19 +208,19 @@ class ChoiceElevatedButton extends StatelessWidget {
       height: 35,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: const Color(0xff6B42F8),
+          backgroundColor: const Color(0xff6B42F8),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
+        onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
           ),
         ),
-        onPressed: onPressed,
       ),
     );
   }

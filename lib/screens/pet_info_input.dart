@@ -160,20 +160,6 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
-      // appBar: AppBar(
-      //   title: const Text('반려동물 정보 등록',
-      //       style: TextStyle(
-      //         fontWeight: FontWeight.bold,
-      //       )),
-      //   centerTitle: true,
-      //   leading: IconButton(
-      //     icon: const Icon(Icons.arrow_back),
-      //     onPressed: () {
-      //       Navigator.pop(context);
-      //     },
-      //   ),
-      //   backgroundColor: const Color(0xFF121824),
-      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -181,8 +167,8 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 100.0),
-              Center(
-                child: const Text(
+              const Center(
+                child: Text(
                   '반려동물의 정보를 알려주세요.',
                   style: TextStyle(
                     color: Colors.white,
