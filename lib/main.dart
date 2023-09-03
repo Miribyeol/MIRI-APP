@@ -28,12 +28,12 @@ class MyApp extends StatelessWidget {
         future: authHelper.checkKakaoLoginStatus(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else {
             if (snapshot.data == true) {
-              return LogoScreen();
+              return const LogoScreen();
             } else {
-              return OnboardingScreen();
+              return const OnboardingScreen();
             }
           }
         },
