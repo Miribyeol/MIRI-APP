@@ -14,7 +14,7 @@ import 'screens/onboarding.dart';
 import 'screens/mypage_my_info.dart';
 import 'screens/mypage_pet_info.dart';
 import 'screens/mypage.dart';
-import 'services/kakao_login.dart';
+import 'services/kakao_login_service.dart';
 import 'screens/miri_station.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 // import 'package:provider/provider.dart';
@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const OnboardingScreen(),
         '/mypage_my_info': (context) => const InformationScreen(),
         '/mypage_pet_info': (context) => const AnimalScreen(),
-        '/mypage': (context) => MypageScreen(),
+        '/mypage': (context) => const MypageScreen(),
         '/miri_station': (context) => const MiriStationScreen(),
         // '/challenge': (context) {
         //   final Map<String, dynamic> args = ModalRoute.of(context)!

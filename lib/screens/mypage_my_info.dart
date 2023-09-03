@@ -1,9 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../models/user_info_model.dart';
+import '../services/mypage_my_service.dart'; // Import the ApiService
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({Key? key}) : super(key: key);
@@ -13,9 +9,9 @@ class InformationScreen extends StatefulWidget {
 }
 
 class InformationScreenState extends State<InformationScreen> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final ApiService _apiService = ApiService(); // Create an instance of ApiService
   late TextEditingController _nicknameController;
-  String? userNickname; // 사용자 닉네임 상태 변수
+  String? userNickname; // User nickname state variable
 
   @override
   void initState() {
@@ -25,99 +21,74 @@ class InformationScreenState extends State<InformationScreen> {
   }
 
   Future<void> fetchUserNickname() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var apiUrl = dotenv.env['API_URL'];
-
-        var url = Uri.parse('$apiUrl/user/nickname');
-        var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken',
-        });
-
-        if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-          var userNicknameData = UserNickname.fromJson(jsonResponse);
-          userNickname = userNicknameData.result?.nickname; // 닉네임 상태 변수에 저장
-          _nicknameController.text = userNickname ?? ''; // TextFormField에 표시
-        } else {
-          print('Failed to fetch user nickname: ${response.statusCode}');
-        }
-      }
-    } catch (error) {
-      print('Error fetching user nickname: $error');
+    var result = await _apiService.fetchUserNickname();
+    if (result['success']) {
+      userNickname =
+          result['nickname']; // Store the nickname in the state variable
+      _nicknameController.text =
+          userNickname ?? ''; // Display in the TextFormField
+    } else {
+      print('Failed to fetch user nickname: ${result['error']}');
     }
   }
 
   Future<void> updateUserNickname() async {
     try {
       var newNickname = _nicknameController.text;
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/user/nickname');
-        var response = await http.patch(
-          url,
-          headers: {
-            'Authorization': 'Bearer $storedToken',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({'nickname': newNickname}),
-        );
-
-        if (response.statusCode == 200) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                content: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "닉네임이 변경되었습니다 :)",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                backgroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                actions: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF6B42F8),
-                      minimumSize: const Size(
-                        double.infinity,
-                        50,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      fetchUserNickname();
-                    },
-                    child: const Text(
-                      "닫기",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+      var result = await _apiService.updateUserNickname(newNickname);
+      if (result['success']) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "닉네임이 변경되었습니다 :)",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
-              );
-            },
-          );
-        } else {
-          print('Failed to update user nickname: ${response.statusCode}');
-        }
+              ),
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              actions: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF6B42F8),
+                    minimumSize: const Size(
+                      double.infinity,
+                      50,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    fetchUserNickname();
+                  },
+                  child: const Text(
+                    "닫기",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        print('Failed to update user nickname: ${result['error']}');
       }
     } catch (error) {
       print('Failed to update user nickname: $error');

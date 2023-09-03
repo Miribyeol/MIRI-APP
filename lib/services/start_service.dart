@@ -6,7 +6,7 @@ import 'dart:convert';
 class ApiService {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  Future<Map<String, dynamic>?> fetchDataFromServer() async {
+  Future<Map<String, dynamic>> fetchDataFromServer() async {
     try {
       String? storedToken = await _storage.read(key: 'jwt_token');
       if (storedToken != null) {
@@ -18,15 +18,23 @@ class ApiService {
         });
 
         if (response.statusCode == 200) {
-          return jsonDecode(response.body);
+          var jsonResponse = jsonDecode(response.body);
+          print(response.body);
+
+          if (jsonResponse['result'].containsKey('challengerStep')) {
+            return jsonResponse['result'];
+          } else {
+            print(
+                "The key 'challengerStep' was not found in the jsonResponse.");
+          }
         } else {
           print('Failed to fetch data from server: ${response.statusCode}');
-          return null;
         }
       }
     } catch (error) {
       print('Error fetching data from server: $error');
-      return null;
     }
+
+    return {}; // Return an empty map if there's an error
   }
 }

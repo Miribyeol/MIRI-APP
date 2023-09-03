@@ -1,10 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart'; // Cupertino 패키지 추가
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import '../models/pet_input_model.dart';
+import '../services/pet_info_input_service.dart'; // Import the ApiService
 
 class PetInfoInputScreen extends StatefulWidget {
   const PetInfoInputScreen({Key? key}) : super(key: key);
@@ -19,72 +15,28 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
   DateTime? birthday;
   DateTime? deathday;
 
-  final _storage = const FlutterSecureStorage();
+  ApiService apiService = ApiService(); // Create an instance of the ApiService
 
   @override
   void initState() {
     super.initState();
   }
 
-  Future<void> registerPetInfo() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        if (name == null ||
-            species == null ||
-            birthday == null ||
-            deathday == null) {
-          print('반려동물 정보 등록 실패: 필수 정보가 누락되었습니다.');
-          return;
-        }
-
-        PetInput petInfo = PetInput(
-          name: name!,
-          species: species!,
-          birthday: birthday!.toLocal().toString(), // 날짜를 문자열로 변환
-          deathday: deathday!.toLocal().toString(), // 날짜를 문자열로 변환
-        );
-        var apiUrl = dotenv.env['API_URL'];
-        var url = Uri.parse('$apiUrl/pet');
-        var response = await http.post(
-          url,
-          headers: {
-            'Authorization': 'Bearer $storedToken',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode(petInfo.toJson()),
-        );
-
-        if (response.statusCode == 201) {
-          print('반려동물 정보 등록 성공');
-
-          Navigator.pushReplacementNamed(context, '/start');
-        } else {
-          print('반려동물 정보 등록 실패: ${response.statusCode}');
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('반려동물 정보 등록 실패'),
-                content: const Text('반려동물 정보 등록에 실패하였습니다.'),
-                actions: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('확인'),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      } else {
-        print('저장된 토큰 없음');
-      }
-    } catch (error) {
-      print('반려동물 정보 등록 오류: $error');
+  void registerPetInfo() {
+    if (name == null ||
+        species == null ||
+        birthday == null ||
+        deathday == null) {
+      print('반려동물 정보 등록 실패: 필수 정보가 누락되었습니다.');
+      return;
     }
+
+    apiService.registerPetInfo(
+      name: name!,
+      species: species!,
+      birthday: birthday!.toLocal().toString(), // Convert DateTime to String
+      deathday: deathday!.toLocal().toString(), // Convert DateTime to String
+    );
   }
 
   Widget _buildDateSelector(

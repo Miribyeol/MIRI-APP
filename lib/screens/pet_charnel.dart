@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../services/pet_charnel_service.dart'; // Import the ApiService
 
 class PetCharnelScreen extends StatefulWidget {
   const PetCharnelScreen({Key? key}) : super(key: key);
@@ -12,7 +9,9 @@ class PetCharnelScreen extends StatefulWidget {
 }
 
 class _PetCharnelScreenState extends State<PetCharnelScreen> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final ApiService apiService =
+      ApiService(); // Create an instance of ApiService
+
   String? petName = '';
   String? petBirthDate = '';
   String? petDeathDate = '';
@@ -24,30 +23,12 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
   }
 
   Future<void> fetchPetInfo() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var apiUrl = dotenv.env['API_URL'];
-        var url = Uri.parse('$apiUrl/pet'); // API URL 수정
-        var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken',
-        });
-
-        if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-          print('JSON Response: $jsonResponse');
-          setState(() {
-            petName = jsonResponse['result']['petInfo']['name'];
-            petBirthDate = jsonResponse['result']['petInfo']['birthday'];
-            petDeathDate = jsonResponse['result']['petInfo']['deathday'];
-          });
-        } else {
-          print('Failed to fetch pet info: ${response.statusCode}');
-        }
-      }
-    } catch (error) {
-      print('Error fetching pet info: $error');
-    }
+    final petInfo = await apiService.fetchPetInfo();
+    setState(() {
+      petName = petInfo['petName'];
+      petBirthDate = petInfo['petBirthDate'];
+      petDeathDate = petInfo['petDeathDate'];
+    });
   }
 
   @override
