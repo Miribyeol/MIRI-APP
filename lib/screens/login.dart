@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/kakao_login.dart';
+import '../services/kakao_login_service.dart';
 
 class LoginScreen extends StatelessWidget {
   final KakaoLoginService kakaoLoginService;

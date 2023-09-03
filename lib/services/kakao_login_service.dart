@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -11,8 +12,8 @@ class KakaoLoginService {
   Future<void> sendToken(dynamic token) async {
     try {
       print('사용자 토큰 요청 성공\n토큰: $token');
-
-      var url = Uri.parse('http://203.250.32.29:3000/auth/login');
+      var apiUrl = dotenv.env['API_URL'];
+      var url = Uri.parse('$apiUrl/auth/login');
       var body = jsonEncode(token);
       var response = await http.post(url,
           headers: {
@@ -72,7 +73,8 @@ class KakaoLoginService {
     if (storedToken != null) {
       print('저장된 토큰으로 자동 로그인 시도');
       try {
-        var url = Uri.parse('http://203.250.32.29:3000/auth/check');
+        var apiUrl = dotenv.env['API_URL'];
+        var url = Uri.parse('$apiUrl/auth/check');
         var response = await http.get(url, headers: {
           'Authorization': 'Bearer $storedToken',
         });
@@ -99,7 +101,8 @@ class KakaoLoginService {
     final storedToken = await _storage.read(key: 'jwt_token');
     if (storedToken != null) {
       try {
-        var url = Uri.parse('http://203.250.32.29:3000/pet/check');
+        var apiUrl = dotenv.env['API_URL'];
+        var url = Uri.parse('$apiUrl/pet/check');
         var response = await http.get(url, headers: {
           'Authorization': 'Bearer $storedToken',
         });
@@ -119,6 +122,19 @@ class KakaoLoginService {
       } catch (error) {
         print('반려동물 정보 등록 확인 실패: $error');
       }
+    }
+  }
+}
+
+class AuthHelper {
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  Future<bool> checkKakaoLoginStatus() async {
+    final storedToken = await _storage.read(key: 'jwt_token');
+    if (storedToken != null) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

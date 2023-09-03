@@ -18,14 +18,64 @@ class AIConsultingScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '별이와 대화하기',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween, // 두 항목을 양쪽 끝으로 분배
+                      children: [
+                        const Text(
+                          '별이와 대화하기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  content: const Padding(
+                                    padding: EdgeInsets.only(top: 20),
+                                    child: Text(
+                                      "별이와의 대화를 그만두실건가요?",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  actions: <Widget>[
+                                    ChoiceElevatedButton(
+                                      text: "아니요,계속할래요",
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    ChoiceElevatedButton(
+                                      text: "네,그만할래요",
+                                      onPressed: () {
+                                        Navigator.pushNamed(context, '/start');
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 30.0,
+                          ),
+                        )
+                      ]),
                   const SizedBox(height: 10),
                   const Text(
                     'AI에게 하고싶은 말을 보내보세요!',
@@ -50,7 +100,7 @@ class AIConsultingScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 150.0,
+            top: 170.0,
             left: 20.0,
             right: 20.0,
             bottom: 80.0,
@@ -115,7 +165,8 @@ class MessageBubble extends StatelessWidget {
   final bool isReceived;
   final String text;
 
-  const MessageBubble({super.key, 
+  const MessageBubble({
+    super.key,
     required this.isSent,
     required this.text,
     this.isReceived = false,
@@ -137,6 +188,37 @@ class MessageBubble extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ChoiceElevatedButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
+
+  const ChoiceElevatedButton({super.key, required this.text, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 140,
+      height: 35,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xff6B42F8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

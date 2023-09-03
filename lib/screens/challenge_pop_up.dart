@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:miri_app/models/challenge_store.dart';
+import 'package:miri_app/services/challenge_services.dart';
 
 //팝업창
 class ChallengPopUp extends StatefulWidget {
@@ -19,57 +20,6 @@ class ChallengPopUpState extends State<ChallengPopUp> {
 
   int selectedDay = 1;
   Set<int> selectedButtons = {};
-
-//감정 선택후 전송기능
-  Future<void> sendChallengeFeedbackToServer(List<String> emotions) async {
-    try {
-      if (emotions.isEmpty || emotions.length > 3) {
-        print('최대 3개까지 선택하세요');
-        return;
-      }
-
-      final storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        final url = Uri.parse('http://203.250.32.29:3000/emotion');
-
-        final response = await http.patch(
-          url,
-          headers: {
-            'Authorization': 'Bearer $storedToken',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'emotions': emotions, // Only the list of emotions is sent
-          }),
-        );
-
-        print('Response status code: ${response.statusCode}');
-        print('Response body: ${response.body}');
-
-        if (response.statusCode == 201) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('완료되었습니다'),
-              content: const Text('챌린지가 성공적으로 완료되었습니다!'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // 성공 대화 상자 닫기
-                    Navigator.of(context).pop(); // 도전 팝업 닫기
-                    Navigator.of(context).pushReplacementNamed('/start');
-                  },
-                  child: const Text('확인'),
-                ),
-              ],
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      print('Error sending challenge feedback: $e');
-    }
-  }
 
 //팝업창에서 최대 3개의 버튼을 선택하게하기
   Widget createButton(int index, {double width = 100.0, double height = 30.0}) {
@@ -210,7 +160,8 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               List<String> selectedEmotions = selectedButtons.map((int index) {
                 return buttonTexts[index];
               }).toList();
-              sendChallengeFeedbackToServer(selectedEmotions);
+              sendChallengeFeedbackToServer(
+                  selectedEmotions, _storage, context);
             },
             style: ButtonStyle(
               fixedSize: MaterialStateProperty.all(const Size(308, 35)),
@@ -244,6 +195,29 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           ),
         ],
       ),
+    );
+  }
+}
+
+//성공적인 감정전달 시
+class ChallengeCompleteDialog extends StatelessWidget {
+  const ChallengeCompleteDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('완료되었습니다'),
+      content: const Text('챌린지가 성공적으로 완료되었습니다!'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(); // 성공 대화 상자 닫기
+            Navigator.of(context).pop(); // 도전 팝업 닫기
+            Navigator.of(context).pushReplacementNamed('/start');
+          },
+          child: const Text('확인'),
+        ),
+      ],
     );
   }
 }

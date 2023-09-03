@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import '../services/start_service.dart'; // Import the ApiService
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -12,12 +10,12 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   double progressValue = 0.1;
   int challengerStep = 0;
 
   List<String> emotion = [];
   List<Map<String, dynamic>> contentData = [];
+  ApiService apiService = ApiService(); // Create an instance of the ApiService
 
   @override
   void initState() {
@@ -26,42 +24,21 @@ class _StartScreenState extends State<StartScreen> {
   }
 
   Future<void> fetchDataFromServer() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/main');
-        var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken',
-        });
+    var result = await apiService.fetchDataFromServer();
 
-        if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-          print(response.body);
+    if (result.isNotEmpty) {
+      setState(() {
+        // Emotion & Content Data
+        emotion = (result['emotions'] as List)
+            .map((item) => item['emotion'].toString())
+            .toSet()
+            .toList();
+        contentData = List<Map<String, dynamic>>.from(result['posts']);
 
-          if (jsonResponse['result'].containsKey('challengerStep')) {
-            setState(() {
-              // Emotion & Content Data
-              emotion = (jsonResponse['result']['emotions'] as List)
-                  .map((item) => item['emotion'].toString())
-                  .toSet()
-                  .toList();
-              contentData = List<Map<String, dynamic>>.from(
-                  jsonResponse['result']['posts']);
-
-              // Day Data
-              challengerStep = jsonResponse['result']['challengerStep'] ?? 0;
-              print("Updated challengerStep: $challengerStep");
-            });
-          } else {
-            print(
-                "The key 'challengerStep' was not found in the jsonResponse.");
-          }
-        } else {
-          print('Failed to fetch data from server: ${response.statusCode}');
-        }
-      }
-    } catch (error) {
-      print('Error fetching data from server: $error');
+        // Day Data
+        challengerStep = result['challengerStep'] ?? 0;
+        print("Updated challengerStep: $challengerStep");
+      });
     }
   }
 
@@ -70,11 +47,32 @@ class _StartScreenState extends State<StartScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
+    // Calculate relative values based on screen size
+    double appBarHeight = screenHeight * 0.44;
+    double appBarTextTop = screenHeight * 0.10;
+    double appBarIconButtonTop = screenHeight * 0.06;
+    double appBarStepTop = screenHeight * 0.17;
+    double appBarEmotionTextTop = screenHeight * 0.27;
+    double appBarEmotionButtonsTop = screenHeight * 0.30;
+    double contentPaddingHorizontal = screenWidth * 0.05;
+    double contentPaddingVertical = screenHeight * 0.03;
+    double buttonHeight = screenHeight * 0.13;
+    double buttonTextTop = screenHeight * 0.012;
+    double buttonTextSize = 22;
+    double buttonTextDescSize = 15;
+    double buttonMarginTop = screenHeight * 0.02;
+    double progressIndicatorPaddingBottom = screenHeight * 0.025;
+    double buttonTitleSize = 20;
+    double buttonContentSize = 14;
+    double buttonAuthorSize = 13;
+    double footerTextSize = 11;
+    double footerTextButtonSize = 13;
+
     var children2 = [
       Positioned(
-        top: screenHeight * 0.10,
+        top: appBarTextTop,
         left: screenWidth * 0.07,
-        child: Text(
+        child: const Text(
           '오늘 챌린지\n완료 하셨나요 ?',
           style: TextStyle(
             color: Colors.white,
@@ -84,13 +82,13 @@ class _StartScreenState extends State<StartScreen> {
         ),
       ),
       Positioned(
-        top: screenHeight * 0.06,
-        right: screenWidth * 0.05,
+        top: appBarIconButtonTop,
+        right: contentPaddingHorizontal,
         child: IconButton(
           onPressed: () {
             Navigator.pushNamed(context, '/mypage');
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.person,
             color: Colors.white,
             size: 30,
@@ -98,19 +96,19 @@ class _StartScreenState extends State<StartScreen> {
         ),
       ),
       Positioned(
-        top: screenHeight * 0.17,
-        left: screenWidth * 0.05,
-        right: screenWidth * 0.05,
+        top: appBarStepTop,
+        left: contentPaddingHorizontal,
+        right: contentPaddingHorizontal,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: screenHeight * 0.01),
+            SizedBox(height: progressIndicatorPaddingBottom),
             DayProgressIndicator(challengerStep: challengerStep),
-            SizedBox(height: screenHeight * 0.01),
+            // SizedBox(height: buttonMarginTop),
             Text(
               "DAY $challengerStep",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: buttonTextDescSize,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -118,19 +116,19 @@ class _StartScreenState extends State<StartScreen> {
         ),
       ),
       Positioned(
-        top: screenHeight * 0.29,
-        left: screenWidth * 0.03,
+        top: appBarEmotionTextTop,
+        left: buttonMarginTop,
         child: Text(
-          '  다른 사람들은 어떤 감정을 갖고 있을까요?',
+          '다른 사람들은 어떤 감정을 갖고 있을까요?',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 15,
+            fontSize: buttonTextDescSize,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       Positioned(
-        top: screenHeight * 0.32,
+        top: appBarEmotionButtonsTop,
         right: screenWidth * 0.01,
         left: screenWidth * 0.01,
         child: SingleChildScrollView(
@@ -142,13 +140,13 @@ class _StartScreenState extends State<StartScreen> {
               if (index < 5) {
                 return createButton(emotion[index]);
               }
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }),
           ),
         ),
       ),
       Positioned(
-        top: screenHeight * 0.32 +
+        top: appBarEmotionButtonsTop +
             50.0, // Adjust the top value for the second row
         right: screenWidth * 0.01,
         left: screenWidth * 0.01,
@@ -161,7 +159,7 @@ class _StartScreenState extends State<StartScreen> {
               if (index >= 5 && index < 10) {
                 return createButton(emotion[index]);
               }
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             }),
           ),
         ),
@@ -172,7 +170,7 @@ class _StartScreenState extends State<StartScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(screenHeight * 0.40),
         child: Container(
-          height: screenHeight * 0.44,
+          height: appBarHeight,
           color: const Color(0xff6B42F8),
           child: Stack(
             children: [
@@ -192,14 +190,14 @@ class _StartScreenState extends State<StartScreen> {
           children: [
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.05,
-                vertical: screenHeight * 0.03,
+                horizontal: contentPaddingHorizontal,
+                vertical: contentPaddingVertical,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(
-                    height: screenHeight * 0.12,
+                    height: buttonHeight,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/challenge_list');
@@ -219,16 +217,16 @@ class _StartScreenState extends State<StartScreen> {
                               '\n 챌린지',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
+                                fontSize: buttonTextSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: screenHeight * 0.012),
+                            SizedBox(height: buttonTextTop),
                             Text(
-                              ' 14일동안 미션을 수행해보아요',
+                              ' 14일동안 미션을 수행해보아요 !',
                               style: TextStyle(
-                                color: Color(0xFFBBBBBB),
-                                fontSize: 15,
+                                color: const Color(0xFFBBBBBB),
+                                fontSize: buttonTextDescSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -237,9 +235,9 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: buttonMarginTop),
                   SizedBox(
-                    height: screenHeight * 0.12,
+                    height: buttonHeight,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/ai_onboarding');
@@ -259,16 +257,16 @@ class _StartScreenState extends State<StartScreen> {
                               '\n 별이와 대화하기',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
+                                fontSize: buttonTextSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: screenHeight * 0.012),
+                            SizedBox(height: buttonTextTop),
                             Text(
                               ' 미리별 만의 AI 친구 별이에게 고민을 말해보세요 !',
                               style: TextStyle(
-                                color: Color(0xFFBBBBBB),
-                                fontSize: 15,
+                                color: const Color(0xFFBBBBBB),
+                                fontSize: buttonTextDescSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -277,9 +275,9 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: buttonMarginTop),
                   SizedBox(
-                    height: screenHeight * 0.12,
+                    height: buttonHeight,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/pet_charnel');
@@ -299,16 +297,16 @@ class _StartScreenState extends State<StartScreen> {
                               '\n 영원한 발자국',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22,
+                                fontSize: buttonTextSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: screenHeight * 0.012),
+                            SizedBox(height: buttonTextTop),
                             Text(
                               ' 애완동물과 함께한 순간들을 기억하는 공간',
                               style: TextStyle(
-                                color: Color(0xFFBBBBBB),
-                                fontSize: 15,
+                                color: const Color(0xFFBBBBBB),
+                                fontSize: buttonTextDescSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -317,7 +315,47 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.015),
+                  SizedBox(height: buttonMarginTop),
+                  SizedBox(
+                    height: buttonHeight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/miri_station');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1F2839),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '\n 미리별 정거장',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: buttonTextSize,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: buttonTextTop),
+                            Text(
+                              ' 애완동물에게 하지 못했던 말을 전하는 공간',
+                              style: TextStyle(
+                                color: const Color(0xFFBBBBBB),
+                                fontSize: buttonTextDescSize,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: buttonTextDescSize),
                   SizedBox(
                     height: screenHeight * 0.1,
                     child: Row(
@@ -327,16 +365,16 @@ class _StartScreenState extends State<StartScreen> {
                           '   이런 글이\n   당신에게 위로가 될까요?',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 22,
+                            fontSize: buttonTextSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsets.only(bottom: screenHeight * 0.025),
+                          padding: EdgeInsets.only(
+                              bottom: progressIndicatorPaddingBottom),
                           child: TextButton(
                             onPressed: () {},
-                            child: Text(
+                            child: const Text(
                               '더보기',
                               style: TextStyle(
                                 color: Color(0xFFBBBBBB),
@@ -374,25 +412,25 @@ class _StartScreenState extends State<StartScreen> {
                                         item['title'],
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 20,
+                                          fontSize: buttonTitleSize,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(height: screenHeight * 0.012),
+                                      SizedBox(height: buttonTextTop),
                                       Text(
                                         item['content'],
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 15,
+                                          fontSize: buttonContentSize,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(height: screenHeight * 0.012),
+                                      SizedBox(height: buttonTextTop),
                                       Text(
                                         'Author: ${item['author']}',
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 13,
+                                          fontSize: footerTextButtonSize,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -401,13 +439,13 @@ class _StartScreenState extends State<StartScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: screenHeight * 0.02),
+                            SizedBox(height: buttonMarginTop),
                           ],
                         ),
                       );
                     }).toList(),
                   ),
-                  SizedBox(height: screenHeight * 0.03),
+                  SizedBox(height: contentPaddingVertical),
                   SizedBox(
                     height: screenHeight * 0.145,
                     child: Column(
@@ -417,8 +455,8 @@ class _StartScreenState extends State<StartScreen> {
                           '이 앱을 통해 팻로스 증후군을 극복하시 분의 소중한 경험을 공유해 주세요.\n여러분의 소중한 이야기는 다른 사용자들에게 희망과 위로를 전달하고,\n함께 힘을 나눌 수 있는 소중한 자산이 될 것입니다.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Color(0xff7d8086),
-                            fontSize: 13,
+                            color: const Color(0xff7d8086),
+                            fontSize: footerTextSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -433,7 +471,7 @@ class _StartScreenState extends State<StartScreen> {
                           },
                           child: Text(
                             'hnvvely@gmail.com',
-                            style: TextStyle(fontSize: 13),
+                            style: TextStyle(fontSize: buttonAuthorSize),
                           ),
                         )
                       ],
@@ -458,7 +496,7 @@ class _StartScreenState extends State<StartScreen> {
   }
 
   Widget createButton(String label) {
-    double fontSize = 15.0;
+    double fontSize = 15;
     double widthPerChar = fontSize;
 
     double width = (label.length * widthPerChar) + 30.0;
@@ -467,7 +505,7 @@ class _StartScreenState extends State<StartScreen> {
     return Container(
       width: width,
       height: height,
-      margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+      margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
       decoration: BoxDecoration(
         color: const Color(0xFF3D4353),
         borderRadius: BorderRadius.circular(8.0),
@@ -476,7 +514,7 @@ class _StartScreenState extends State<StartScreen> {
             color: Colors.black.withOpacity(0.2),
             spreadRadius: 0,
             blurRadius: 5,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -497,20 +535,20 @@ class _StartScreenState extends State<StartScreen> {
 class DayProgressIndicator extends StatelessWidget {
   final int challengerStep;
 
-  const DayProgressIndicator({this.challengerStep = 0});
+  const DayProgressIndicator({super.key, this.challengerStep = 0});
 
   @override
   Widget build(BuildContext context) {
     double value = challengerStep / 14.0;
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 2.0),
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
       child: SizedBox(
         height: 15,
         child: LinearProgressIndicator(
           value: value,
           backgroundColor: Colors.white,
-          valueColor: AlwaysStoppedAnimation<Color>(
+          valueColor: const AlwaysStoppedAnimation<Color>(
             Color(0xFF492E9D),
           ),
         ),

@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
-
+import 'package:flutter/material.dart';
 import '../models/pet_info_model.dart';
+import '../services/mypage_pet_service.dart';
 
 class AnimalScreen extends StatefulWidget {
   const AnimalScreen({Key? key}) : super(key: key);
@@ -14,13 +11,11 @@ class AnimalScreen extends StatefulWidget {
 }
 
 class AnimalScreenState extends State<AnimalScreen> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final ApiService _apiService = ApiService();
   DateTime? _pickedBirthDate;
   DateTime? _pickedDeathDate;
 
-  final TextEditingController _nameController =
-      TextEditingController(); // TextEditingController 추가
-
+  final TextEditingController _nameController = TextEditingController();
   String? petName = '';
   String? petSpecies;
   String? petBirthDate = '';
@@ -46,81 +41,48 @@ class AnimalScreenState extends State<AnimalScreen> {
 
   @override
   void dispose() {
-    _nameController.dispose(); // 사용이 끝나면 Controller를 dispose 해야합니다.
+    _nameController.dispose();
     super.dispose();
   }
 
   Future<void> fetchPetInfo() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/pet');
-        var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken',
-        });
-
-        if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-          print('JSON Response: $jsonResponse');
-          setState(() {
-            petName = jsonResponse['result']['petInfo']['name'];
-            petSpecies = jsonResponse['result']['petInfo']['species'];
-            petBirthDate = jsonResponse['result']['petInfo']['birthday'];
-            petDeathDate = jsonResponse['result']['petInfo']['deathday'];
-            _pickedBirthDate = DateTime.parse(petBirthDate!);
-            _pickedDeathDate = DateTime.parse(petDeathDate!);
-
-            _nameController.text = petName ?? ''; // 닉네임 초기화
-          });
-        } else {
-          print('Failed to fetch pet info: ${response.statusCode}');
-        }
-      }
-    } catch (error) {
-      print('Error fetching pet info: $error');
+    var result = await _apiService.fetchPetInfo();
+    if (result['success']) {
+      PetInfo petInfo = result['petInfo'];
+      setState(() {
+        petName = petInfo.name;
+        petSpecies = petInfo.species;
+        petBirthDate = petInfo.birthday;
+        petDeathDate = petInfo.deathday;
+        _pickedBirthDate = DateTime.parse(petBirthDate!);
+        _pickedDeathDate = DateTime.parse(petDeathDate!);
+        _nameController.text = petName ?? '';
+      });
+    } else {
+      print('Failed to fetch pet info: ${result['error']}');
     }
   }
 
   Future<void> _updatePetInfo() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var url = Uri.parse('http://203.250.32.29:3000/pet');
-        var response = await http.put(
-          url,
-          headers: {
-            'Authorization': 'Bearer $storedToken',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode(
-            PetInfo(
-              name: petName ?? '',
-              species: petSpecies ?? '',
-              birthday: petBirthDate ?? '',
-              deathday: petDeathDate ?? '',
-            ).toJson(),
-          ),
-        );
+    var updatedPetInfo = PetInfo(
+      name: petName ?? '',
+      species: petSpecies ?? '',
+      birthday: petBirthDate ?? '',
+      deathday: petDeathDate ?? '',
+    );
 
-        if (response.statusCode == 201) {
-          var jsonResponse = jsonDecode(response.body);
-          print('Update Response: $jsonResponse');
-          setState(() {
-            // Update the pet information in the UI
-            var updatedPetInfo = jsonResponse['result']['petInfo'];
-            petName = updatedPetInfo['name'];
-            petSpecies = updatedPetInfo['species'];
-            petBirthDate = updatedPetInfo['birthday'];
-            petDeathDate = updatedPetInfo['deathday'];
-          });
-          showUpdateDialog(true);
-        } else {
-          print('Failed to update pet info: ${response.statusCode}');
-          showUpdateDialog(false);
-        }
-      }
-    } catch (error) {
-      print('Error updating pet info: $error');
+    var result = await _apiService.updatePetInfo(updatedPetInfo);
+    if (result['success']) {
+      PetInfo petInfo = result['petInfo'];
+      setState(() {
+        petName = petInfo.name;
+        petSpecies = petInfo.species;
+        petBirthDate = petInfo.birthday;
+        petDeathDate = petInfo.deathday;
+      });
+      showUpdateDialog(true);
+    } else {
+      print('Failed to update pet info: ${result['error']}');
       showUpdateDialog(false);
     }
   }
@@ -170,7 +132,10 @@ class AnimalScreenState extends State<AnimalScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('반려동물 정보 관리'),
+        title: const Text('반려동물 정보 관리',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            )),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
