@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import '../services/start_service.dart'; // Import the ApiService
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -13,12 +10,12 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
   double progressValue = 0.1;
   int challengerStep = 0;
 
   List<String> emotion = [];
   List<Map<String, dynamic>> contentData = [];
+  ApiService apiService = ApiService(); // Create an instance of the ApiService
 
   @override
   void initState() {
@@ -27,44 +24,21 @@ class _StartScreenState extends State<StartScreen> {
   }
 
   Future<void> fetchDataFromServer() async {
-    try {
-      String? storedToken = await _storage.read(key: 'jwt_token');
-      if (storedToken != null) {
-        var apiUrl = dotenv.env['API_URL']; // Get API address from .env
+    var result = await apiService.fetchDataFromServer();
 
-        var url = Uri.parse('$apiUrl/main'); // Use the API address
-        var response = await http.get(url, headers: {
-          'Authorization': 'Bearer $storedToken',
-        });
+    if (result.isNotEmpty) {
+      setState(() {
+        // Emotion & Content Data
+        emotion = (result['emotions'] as List)
+            .map((item) => item['emotion'].toString())
+            .toSet()
+            .toList();
+        contentData = List<Map<String, dynamic>>.from(result['posts']);
 
-        if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-          print(response.body);
-
-          if (jsonResponse['result'].containsKey('challengerStep')) {
-            setState(() {
-              // Emotion & Content Data
-              emotion = (jsonResponse['result']['emotions'] as List)
-                  .map((item) => item['emotion'].toString())
-                  .toSet()
-                  .toList();
-              contentData = List<Map<String, dynamic>>.from(
-                  jsonResponse['result']['posts']);
-
-              // Day Data
-              challengerStep = jsonResponse['result']['challengerStep'] ?? 0;
-              print("Updated challengerStep: $challengerStep");
-            });
-          } else {
-            print(
-                "The key 'challengerStep' was not found in the jsonResponse.");
-          }
-        } else {
-          print('Failed to fetch data from server: ${response.statusCode}');
-        }
-      }
-    } catch (error) {
-      print('Error fetching data from server: $error');
+        // Day Data
+        challengerStep = result['challengerStep'] ?? 0;
+        print("Updated challengerStep: $challengerStep");
+      });
     }
   }
 
