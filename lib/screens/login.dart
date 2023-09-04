@@ -10,6 +10,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(context) {
     // 자동 로그인 로직 실행
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    // Calculate relative values based on screen size
+
     kakaoLoginService.autoLogin(context);
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
@@ -21,12 +25,12 @@ class LoginScreen extends StatelessWidget {
               bottomRight: Radius.circular(40.0),
             ),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.8,
+              height: screenHeight * 0.8,
               color: const Color(0xFF6B42F8),
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.2,
+            top: screenHeight * 0.15,
             left: 0,
             right: 0,
             child: Column(
@@ -34,16 +38,16 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/icon/Logo.png',
-                  width: 300.0,
-                  height: 300.0,
+                  width: screenWidth * 0.8, //300.0 buttonTitleSize*15
+                  height: screenWidth * 0.8, //300.0 buttonTitleSize*15
                   color: const Color(0xFF3109AD),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: screenHeight * 0.001),
                 const Text(
                   '미리별로\n\n펫로스 증후군을\n\n극복해보아요 !',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 24.0,
+                    fontSize: 24.0, 
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -81,8 +85,8 @@ class LoginScreen extends StatelessWidget {
                   },
                   child: Image.asset(
                     'assets/image/kakao_login_large_wide.png',
-                    width: 380,
-                    height: 130,
+                    width: screenWidth * 0.9, //380
+                    height: screenHeight * 0.15, //130
                   ),
                 ),
                 const SizedBox(height: 20),

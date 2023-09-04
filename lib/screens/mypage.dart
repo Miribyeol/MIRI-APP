@@ -17,7 +17,7 @@ class MypageScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double buttonHeight = screenHeight * 0.13;
     double buttonTitleSize = 20;
-    
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF6B42F8),
@@ -39,7 +39,7 @@ class MypageScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: screenHeight *0.04),
+            SizedBox(height: screenHeight * 0.04),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/mypage_my_info');
@@ -52,8 +52,10 @@ class MypageScreen extends StatelessWidget {
                 ),
                 padding: EdgeInsets.zero, // 버튼 내부 패딩 제거
               ),
-              child: Padding( //const 없앰
-                padding: const  EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
+              child: Padding(
+                //const 없앰
+                padding:
+                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
                 child: Align(
                   alignment: Alignment.centerLeft, // 텍스트를 왼쪽으로 정렬
                   child: Text(
@@ -74,14 +76,16 @@ class MypageScreen extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1F2839),
-                minimumSize:  Size(double.infinity, buttonHeight),
+                minimumSize: Size(double.infinity, buttonHeight),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 padding: EdgeInsets.zero, // 버튼 내부 패딩 제거
               ),
-              child: Padding( //const 없앰
-                padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
+              child: Padding(
+                //const 없앰
+                padding:
+                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0), // 왼쪽 패딩 추가
                 child: Align(
                   alignment: Alignment.centerLeft, // 텍스트를 왼쪽으로 정렬
                   child: Text(
@@ -95,22 +99,22 @@ class MypageScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: screenHeight* 0.43 ),//430 //400
+            SizedBox(height: screenHeight * 0.43), //430 //400
             ElevatedButton(
               onPressed: () {
                 _logout(context); // 로그아웃 버튼을 눌렀을 때 로그아웃 처리
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff3a3b50),
-                minimumSize: Size(double.infinity, buttonHeight*0.5),
+                minimumSize: Size(double.infinity, buttonHeight * 0.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
               ),
               child: const Align(
                 alignment: Alignment.center,
-                child:  Text(
+                child: Text(
                   '로그아웃',
                   style: TextStyle(
                     color: Colors.white,
@@ -120,11 +124,9 @@ class MypageScreen extends StatelessWidget {
                 ),
               ),
             ),
-        
-        ],
+          ],
         ),
       ),
     );
   }
-
 }
