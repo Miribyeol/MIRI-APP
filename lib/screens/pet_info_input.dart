@@ -142,7 +142,15 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
               DropdownButtonFormField<String>(
                 value: species,
                 items: const [
-                  // ... (기존의 항목들을 그대로 유지)
+                  DropdownMenuItem(value: '강아지', child: Text('강아지')),
+                  DropdownMenuItem(value: '고양이', child: Text('고양이')),
+                  DropdownMenuItem(value: '햄스터', child: Text('햄찌')),
+                  DropdownMenuItem(value: '앵무새', child: Text('앵무새')),
+                  DropdownMenuItem(value: '고슴도치', child: Text('고슴도치')),
+                  DropdownMenuItem(value: '물고기', child: Text('물고기')),
+                  DropdownMenuItem(value: '조류', child: Text('조류')),
+                  DropdownMenuItem(value: '파충류', child: Text('파충류')),
+                  DropdownMenuItem(value: '그 외', child: Text('그 외')),
                 ],
                 onChanged: (value) {
                   setState(() {
