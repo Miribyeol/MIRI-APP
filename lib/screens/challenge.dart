@@ -24,12 +24,14 @@ class ChallengPage extends StatelessWidget {
 
 //챌린지 이미지
   Widget _challengeImage(int day) {
+    double width=500;
+    double height=500;
     assert(day >= 1 && day <= 14, 'Day should be between 1 and 14');
 
     return Image.asset(
       'assets/image/challenge_day_$day.png',
-      width: 500,
-      height: 500,
+      width: width,
+      height: height,
     );
   }
 
@@ -49,7 +51,13 @@ class ChallengPage extends StatelessWidget {
 
 // 챌린지 화면 UI
   @override
-  Widget build(BuildContext context) {
+   Widget build(BuildContext context) {
+    double contentButtonSize=36;
+    double contentgapHeight=20;
+    double height=10;
+    double width=10;
+    double fontSize=16;
+    double buttonText=15;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
@@ -78,19 +86,19 @@ class ChallengPage extends StatelessWidget {
                       flex: 1,
                       child: Text(
                         'Day $day',
-                        style: const TextStyle(
-                            fontSize: 36.0, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: contentButtonSize, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: contentgapHeight,
                     ),
-                    const Expanded(
+                    Expanded(
                       flex: 1,
                       child: Text(
                         '오늘 하루는 어떠셨나요?',
                         style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold),
+                            fontSize: fontSize, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Expanded(
@@ -111,16 +119,16 @@ class ChallengPage extends StatelessWidget {
               color: const Color(0xff121824),
               child: Center(
                 child: Column(children: [
-                  const SizedBox(
-                    height: 10,
+                  SizedBox(
+                    height: height,
                   ),
                   Expanded(
                     flex: 3,
                     child: Center(
                       child: Text(
                         challengeEnd(day),
-                        style: const TextStyle(
-                          fontSize: 15.0,
+                        style: TextStyle(
+                          fontSize: buttonText,
                           fontWeight: FontWeight.bold,
                         ),
                         textAlign: TextAlign.center,
@@ -148,15 +156,15 @@ class ChallengPage extends StatelessWidget {
                             ),
                             elevation: MaterialStateProperty.all(5.0),
                           ),
-                          child: const Text(
+                          child: Text(
                             '목록으로',
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: fontSize,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: width),
                         ElevatedButton(
                           onPressed: () async {
                             _completeChallenge(context, day);
@@ -173,10 +181,10 @@ class ChallengPage extends StatelessWidget {
                             ),
                             elevation: MaterialStateProperty.all(5.0),
                           ),
-                          child: const Text(
+                          child: Text(
                             '완료',
                             style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: fontSize,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

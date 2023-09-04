@@ -33,8 +33,18 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
   }
 
   //챌린지 리스트 UI
-  @override
+   @override
   Widget build(BuildContext context) {
+    double buttonText=20;
+    double buttonSideSize=5;
+    double buttonContentSize=13;
+    double buttonGapSize=10;
+    double height=35;
+    double width=140;
+    double footerTextButtonSize = 13;
+    double contentPaddingSize=18;
+    double buttonSize=24;
+    double contentheight=111;
     return Scaffold(
       backgroundColor: const Color(0xff121824),
       appBar: PreferredSize(
@@ -49,26 +59,26 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
           flexibleSpace: Container(
             padding: const EdgeInsets.only(left: 16.0),
             color: const Color(0xFF121824),
-            child: const Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '챌린지',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: buttonText,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 5),
+                SizedBox(height: buttonSideSize),
                 Text(
                   '14일동안 미션을 수행해보아요',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: buttonContentSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height:  buttonGapSize),
               ],
             ),
           ),
@@ -86,7 +96,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                 return Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: SizedBox(
-                    height: 111,
+                    height: contentheight,
                     child: Container(
                       decoration: const BoxDecoration(
                         boxShadow: [
@@ -108,13 +118,13 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  content: const Padding(
+                                  content: Padding(
                                     padding: EdgeInsets.only(top: 20),
                                     child: Text(
                                       "이미 완료한 챌린지입니다",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: contentPaddingSize,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                       ),
@@ -123,8 +133,8 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                   actionsAlignment: MainAxisAlignment.center,
                                   actions: <Widget>[
                                     SizedBox(
-                                      width: 140,
-                                      height: 35,
+                                      width: width,
+                                      height: height,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
@@ -134,10 +144,10 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                                 BorderRadius.circular(10),
                                           ),
                                         ),
-                                        child: const Text(
+                                        child: Text(
                                           "확인",
                                           style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: footerTextButtonSize,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -162,13 +172,13 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  content: const Padding(
+                                  content: Padding(
                                     padding: EdgeInsets.only(top: 20),
                                     child: Text(
                                       "이전 챌린지를 완료하지\n않았습니다",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: contentPaddingSize,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                       ),
@@ -177,8 +187,8 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                   actionsAlignment: MainAxisAlignment.center,
                                   actions: <Widget>[
                                     SizedBox(
-                                      width: 140,
-                                      height: 35,
+                                      width: width,
+                                      height: height,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
@@ -188,10 +198,10 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                                                 BorderRadius.circular(10),
                                           ),
                                         ),
-                                        child: const Text(
+                                        child: Text(
                                           "확인",
                                           style: TextStyle(
-                                            fontSize: 13,
+                                            fontSize: footerTextButtonSize,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -238,8 +248,8 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             'Day ${index + 1}',
-                            style: const TextStyle(
-                              fontSize: 24.0,
+                            style: TextStyle(
+                              fontSize: buttonSize,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

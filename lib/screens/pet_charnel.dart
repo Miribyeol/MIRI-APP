@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/pet_charnel_service.dart'; // Import the ApiService
+import 'dart:io';
 
 class PetCharnelScreen extends StatefulWidget {
   const PetCharnelScreen({Key? key}) : super(key: key);
@@ -9,12 +10,15 @@ class PetCharnelScreen extends StatefulWidget {
 }
 
 class _PetCharnelScreenState extends State<PetCharnelScreen> {
+  String baseUrl = "http://203.250.32.29:3000/pet/image/";
+  String get fullImageUrl => baseUrl + (petImage ?? '');
   final ApiService apiService =
       ApiService(); // Create an instance of ApiService
 
   String? petName = '';
   String? petBirthDate = '';
   String? petDeathDate = '';
+  String? petImage;
 
   @override
   void initState() {
@@ -23,16 +27,23 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
   }
 
   Future<void> fetchPetInfo() async {
-    final petInfo = await apiService.fetchPetInfo();
-    setState(() {
-      petName = petInfo['petName'];
-      petBirthDate = petInfo['petBirthDate'];
-      petDeathDate = petInfo['petDeathDate'];
-    });
-  }
+  final petInfo = await apiService.fetchPetInfo();
+
+  setState(() {
+    petName = petInfo['petName'];
+    petBirthDate = petInfo['petBirthDate'];
+    petDeathDate = petInfo['petDeathDate'];
+    petImage = petInfo['petImage'];
+  });
+}
 
   @override
   Widget build(BuildContext context) {
+     double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double width =210;
+    double height=247;
+    double buttonTitleSize = 20;
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       body: Column(
@@ -55,8 +66,8 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 281.0,
-                    height: 440.0,
+                     width: screenWidth*0.7,//281.0
+                    height: screenHeight*0.53,//440.0
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
@@ -65,15 +76,19 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.asset(
-                              'assets/image/common-4.jpeg',
-                              width: 210.0,
-                              height: 247.0,
-                            ),
-                          ),
-                          const SizedBox(height: 10.0),
+ ClipRRect(
+  borderRadius: BorderRadius.circular(10.0),
+  child: petImage != null 
+    ? Image.network(
+        fullImageUrl,
+        width: 210.0,
+        height: 247.0,
+      )
+    : Center(child: Text("이미지 없음")),
+),
+
+
+                             SizedBox(height: buttonTitleSize*0.5),//10.0
                           Text(
                             petName ?? '',
                             style: const TextStyle(
@@ -83,7 +98,7 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 10.0),
+                            SizedBox(height: buttonTitleSize*0.5),//10.0
                           Text(
                             '$petBirthDate ~ $petDeathDate',
                             style: const TextStyle(

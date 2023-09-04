@@ -51,19 +51,6 @@ class MiriStationScreen extends StatelessWidget {
                     width: 200.0,
                     height: 200.0,
                   ),
-                  const SizedBox(height: 70.0),
-                  const Text(
-                    '별이는 상담을 도와주는 AI의 이름으로\n'
-                    '별이와의 대화를 통해 고민과 어려움을\n'
-                    '해결하는 동반자가 되어 줄 거에요 !',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      height: 2,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
                 ],
               ),
             ),

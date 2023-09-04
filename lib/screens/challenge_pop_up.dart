@@ -16,7 +16,7 @@ class ChallengPopUp extends StatefulWidget {
 }
 
 class ChallengPopUpState extends State<ChallengPopUp> {
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final FlutterSecureStorage storage = const FlutterSecureStorage();
 
   int selectedDay = 1;
   Set<int> selectedButtons = {};
@@ -160,8 +160,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               List<String> selectedEmotions = selectedButtons.map((int index) {
                 return buttonTexts[index];
               }).toList();
-              sendChallengeFeedbackToServer(
-                  selectedEmotions, _storage, context);
+              sendChallengeFeedbackToServer(selectedEmotions, storage, context);
             },
             style: ButtonStyle(
               fixedSize: MaterialStateProperty.all(const Size(308, 35)),

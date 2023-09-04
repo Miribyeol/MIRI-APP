@@ -97,6 +97,9 @@ class InformationScreenState extends State<InformationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double buttonHeight = screenHeight * 0.13;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -116,9 +119,9 @@ class InformationScreenState extends State<InformationScreen> {
       body: Stack(
         children: [
           Positioned(
-            top: 50.0,
-            left: 20.0,
-            right: 20.0,
+             top: screenHeight*0.07,//50.0
+            left: screenWidth*0.05,//20.0
+            right: screenWidth*0.05,//20.0
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -130,7 +133,7 @@ class InformationScreenState extends State<InformationScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 30.0),
+             SizedBox(height: buttonHeight*0.2), //30.0
                 TextFormField(
                   controller: _nicknameController,
                   decoration: const InputDecoration(
@@ -146,16 +149,16 @@ class InformationScreenState extends State<InformationScreen> {
             ),
           ),
           Positioned(
-            bottom: 40.0,
-            left: 20.0,
-            right: 20.0,
+         bottom: buttonHeight*0.3,//40.0
+            left: screenWidth*0.05,//20.0
+            right: screenWidth*0.05,//20.0
             child: ElevatedButton(
               onPressed: () {
                 updateUserNickname();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6B42F8),
-                minimumSize: const Size(double.infinity, 50),
+            minimumSize: Size(double.infinity, buttonHeight*0.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

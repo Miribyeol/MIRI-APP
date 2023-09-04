@@ -3,14 +3,14 @@ class PetInput {
   final String species;
   final String birthday;
   final String deathday;
-  // final String image;
+  final String? image;
 
   PetInput({
     required this.name,
     required this.species,
     required this.birthday,
     required this.deathday,
-    // required this.image,
+    this.image,
   });
 
   Map<String, dynamic> toJson() {
@@ -19,7 +19,7 @@ class PetInput {
       'species': species,
       'birthday': birthday,
       'deathday': deathday,
-      // 'image': image,
+      'image': image,
     };
   }
 }

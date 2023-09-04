@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../services/pet_info_input_service.dart'; // Import the ApiService
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:http_parser/http_parser.dart';
 
 class PetInfoInputScreen extends StatefulWidget {
   const PetInfoInputScreen({Key? key}) : super(key: key);
@@ -14,6 +19,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
   String? species;
   DateTime? birthday;
   DateTime? deathday;
+  File? _selectedImage;
 
   ApiService apiService = ApiService(); // Create an instance of the ApiService
 
@@ -22,28 +28,65 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
     super.initState();
   }
 
-  void registerPetInfo() {
-    if (name == null ||
-        species == null ||
-        birthday == null ||
-        deathday == null) {
-      print('반려동물 정보 등록 실패: 필수 정보가 누락되었습니다.');
-      return;
-    }
-
-    apiService.registerPetInfo(
-      name: name!,
-      species: species!,
-      birthday: birthday!.toLocal().toString(), // Convert DateTime to String
-      deathday: deathday!.toLocal().toString(), // Convert DateTime to String
-    );
+  void registerPetInfo({
+  required String name,
+  required String species,
+  required String birthday,
+  required String deathday,
+  String? filename,
+}) {
+  if (name.isEmpty ||
+      species.isEmpty ||
+      birthday.isEmpty ||
+      deathday.isEmpty) {
+    print('반려동물 정보 등록 실패: 필수 정보가 누락되었습니다.');
+    return;
   }
+
+  apiService.registerPetInfo(
+    name: name,
+    species: species,
+    birthday: birthday,
+    deathday: deathday,
+    filename: filename,
+  );
+}
+
+
+ void registerAndUploadImage() {
+  if (_selectedImage != null) {
+    apiService.uploadPetImage(_selectedImage!).then((result) {
+      if (result['success']) {
+        String uploadedFilename = result['filename'];
+      
+        registerPetInfo(
+          name: name!,
+          species: species!,
+          birthday: birthday!.toLocal().toString(),
+          deathday: deathday!.toLocal().toString(),
+          filename: uploadedFilename, 
+        );
+      } else {
+        print('이미지 업로드 실패: ${result['error']}');
+      }
+    });
+  } else {
+    print('업로드할 이미지가 선택되지 않았습니다.');
+  }
+}
+
+
 
   Widget _buildDateSelector(
     String labelText,
     DateTime? selectedDate,
     Function(DateTime?) onDateSelected,
   ) {
+     double contentText=35.0;
+    double iconTop=15.0;
+    double height=300;
+    double titleButtonSize=18;
+    double buttonfontsize=16;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -51,11 +94,11 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
           labelText,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 18.0,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 15.0),
+       SizedBox(height: iconTop),
         GestureDetector(
           onTap: () async {
             DateTime? pickedDate = await showCupertinoModalPopup(
@@ -64,7 +107,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: SizedBox(
-                    height: 300,
+                       height: height,
                     child: CupertinoDatePicker(
                       mode: CupertinoDatePickerMode.date,
                       initialDateTime: selectedDate ?? DateTime.now(),
@@ -93,7 +136,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
             child: DefaultTextStyle(
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 16.0,
+               fontSize: 16,
               ),
               child: Text(
                 selectedDate != null
@@ -110,6 +153,14 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double titleSize=20;
+    double contentSize=18;
+    double buttonHeight = screenHeight * 0.13;
+    double textTop=100;
+    double contentText=35;
+    double iconTop=15;
+    double footerButtonSize=18;
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       body: SingleChildScrollView(
@@ -118,27 +169,27 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 100.0),
-              const Center(
+              SizedBox(height: textTop),
+              Center(
                 child: Text(
                   '반려동물의 정보를 알려주세요.',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20.0,
+                    fontSize: titleSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 100.0),
-              const Text(
+              SizedBox(height: textTop),
+              Text(
                 '반려동물 종류',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18.0,
+                  fontSize:contentSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 15.0),
+              SizedBox(height: iconTop),
               DropdownButtonFormField<String>(
                 value: species,
                 items: const [
@@ -163,16 +214,16 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                   filled: true,
                 ),
               ),
-              const SizedBox(height: 35.0),
-              const Text(
+              SizedBox(height: contentText),
+              Text(
                 '반려동물 이름',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18.0,
+                  fontSize: contentSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 15.0),
+              SizedBox(height: iconTop),
               TextFormField(
                 decoration: const InputDecoration(
                   border: InputBorder.none,
@@ -185,7 +236,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                   });
                 },
               ),
-              const SizedBox(height: 35.0),
+              SizedBox(height: contentText),
               _buildDateSelector(
                 '반려동물 출생일',
                 birthday,
@@ -204,13 +255,57 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                   });
                 },
               ),
+              const Text(
+                '반려동물 사진 업로드',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: contentText),
+              GestureDetector(
+                onTap: () async {
+                  final picker = ImagePicker();
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.gallery);
+
+                  if (pickedFile != null) {
+                    _selectedImage = File(pickedFile.path);
+                    setState(() {});
+                  } else {
+                    print('사진 선택이 취소되었습니다.');
+                  }
+                },
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1F2839),
+                    border: Border.all(color: Colors.white, width: 1.0),
+                  ),
+                  child: _selectedImage == null
+                      ? Center(
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 50.0,
+                          ),
+                        )
+                      : Image.file(
+                          _selectedImage!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              ),
+             SizedBox(height: contentText),
               ElevatedButton(
                 onPressed: () {
-                  registerPetInfo();
+                  registerAndUploadImage();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6B42F8),
-                  minimumSize: const Size(double.infinity, 50),
+                    minimumSize: Size(double.infinity, buttonHeight*0.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
