@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     // Calculate relative values based on screen size
-    
+
     kakaoLoginService.autoLogin(context);
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: screenHeight* 0.15,
+            top: screenHeight * 0.15,
             left: 0,
             right: 0,
             child: Column(
@@ -38,11 +38,11 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/icon/Logo.png',
-                  width:  screenWidth*0.8,//300.0 buttonTitleSize*15
-                  height:  screenWidth*0.8, //300.0 buttonTitleSize*15
+                  width: screenWidth * 0.8, //300.0 buttonTitleSize*15
+                  height: screenWidth * 0.8, //300.0 buttonTitleSize*15
                   color: const Color(0xFF3109AD),
                 ),
-                SizedBox(height: screenHeight*0.001), 
+                SizedBox(height: screenHeight * 0.001),
                 const Text(
                   '미리별로\n\n펫로스 증후군을\n\n극복해보아요 !',
                   style: TextStyle(
@@ -85,8 +85,8 @@ class LoginScreen extends StatelessWidget {
                   },
                   child: Image.asset(
                     'assets/image/kakao_login_large_wide.png',
-                    width: screenWidth*0.9, //380
-                    height: screenHeight*0.15, //130
+                    width: screenWidth * 0.9, //380
+                    height: screenHeight * 0.15, //130
                   ),
                 ),
                 const SizedBox(height: 20),
