@@ -22,7 +22,7 @@ class KakaoLoginService {
           },
           body: body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print('서버 응답 성공: ${response.body}');
         var data = jsonDecode(response.body)["result"]["token"];
         await _storage.write(key: 'jwt_token', value: data);

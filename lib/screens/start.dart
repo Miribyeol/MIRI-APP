@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../services/start_service.dart'; // Import the ApiService
+import '../services/start_service.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -15,7 +15,7 @@ class _StartScreenState extends State<StartScreen> {
 
   List<String> emotion = [];
   List<Map<String, dynamic>> contentData = [];
-  ApiService apiService = ApiService(); // Create an instance of the ApiService
+  ApiService apiService = ApiService();
 
   @override
   void initState() {
