@@ -20,7 +20,7 @@ class StoryScreen extends StatelessWidget {
                 '당신의 소중한 반려동물을 기억하며,\n치유와 위로를 전해드립니다.',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20.0,
+                  fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,

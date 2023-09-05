@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final KakaoLoginService kakaoLogin = KakaoLoginService();
 
     return MaterialApp(

@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../services/pet_info_input_service.dart'; // Import the ApiService
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:http_parser/http_parser.dart';
+import '../services/pet_info_input_service.dart';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
+// import 'package:http_parser/http_parser.dart';
 
 class PetInfoInputScreen extends StatefulWidget {
   const PetInfoInputScreen({Key? key}) : super(key: key);
@@ -29,64 +29,61 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
   }
 
   void registerPetInfo({
-  required String name,
-  required String species,
-  required String birthday,
-  required String deathday,
-  String? filename,
-}) {
-  if (name.isEmpty ||
-      species.isEmpty ||
-      birthday.isEmpty ||
-      deathday.isEmpty) {
-    print('반려동물 정보 등록 실패: 필수 정보가 누락되었습니다.');
-    return;
+    required String name,
+    required String species,
+    required String birthday,
+    required String deathday,
+    String? filename,
+  }) {
+    if (name.isEmpty ||
+        species.isEmpty ||
+        birthday.isEmpty ||
+        deathday.isEmpty) {
+      print('반려동물 정보 등록 실패: 필수 정보가 누락되었습니다.');
+      return;
+    }
+
+    apiService.registerPetInfo(
+      name: name,
+      species: species,
+      birthday: birthday,
+      deathday: deathday,
+      filename: filename,
+    );
   }
 
-  apiService.registerPetInfo(
-    name: name,
-    species: species,
-    birthday: birthday,
-    deathday: deathday,
-    filename: filename,
-  );
-}
+  void registerAndUploadImage() {
+    if (_selectedImage != null) {
+      apiService.uploadPetImage(_selectedImage!).then((result) {
+        if (result['success']) {
+          String uploadedFilename = result['filename'];
 
-
- void registerAndUploadImage() {
-  if (_selectedImage != null) {
-    apiService.uploadPetImage(_selectedImage!).then((result) {
-      if (result['success']) {
-        String uploadedFilename = result['filename'];
-      
-        registerPetInfo(
-          name: name!,
-          species: species!,
-          birthday: birthday!.toLocal().toString(),
-          deathday: deathday!.toLocal().toString(),
-          filename: uploadedFilename, 
-        );
-      } else {
-        print('이미지 업로드 실패: ${result['error']}');
-      }
-    });
-  } else {
-    print('업로드할 이미지가 선택되지 않았습니다.');
+          registerPetInfo(
+            name: name!,
+            species: species!,
+            birthday: birthday!.toLocal().toString(),
+            deathday: deathday!.toLocal().toString(),
+            filename: uploadedFilename,
+          );
+        } else {
+          print('이미지 업로드 실패: ${result['error']}');
+        }
+      });
+    } else {
+      print('업로드할 이미지가 선택되지 않았습니다.');
+    }
   }
-}
-
-
 
   Widget _buildDateSelector(
     String labelText,
     DateTime? selectedDate,
     Function(DateTime?) onDateSelected,
   ) {
-     double contentText=35.0;
-    double iconTop=15.0;
-    double height=300;
-    double titleButtonSize=18;
-    double buttonfontsize=16;
+    double contentText = 35.0;
+    double iconTop = 15.0;
+    double height = 300;
+    double titleButtonSize = 18;
+    double buttonfontsize = 16;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -98,7 +95,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-       SizedBox(height: iconTop),
+        SizedBox(height: iconTop),
         GestureDetector(
           onTap: () async {
             DateTime? pickedDate = await showCupertinoModalPopup(
@@ -107,7 +104,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: SizedBox(
-                       height: height,
+                    height: height,
                     child: CupertinoDatePicker(
                       mode: CupertinoDatePickerMode.date,
                       initialDateTime: selectedDate ?? DateTime.now(),
@@ -136,7 +133,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
             child: DefaultTextStyle(
               style: const TextStyle(
                 color: Colors.white,
-               fontSize: 16,
+                fontSize: 16,
               ),
               child: Text(
                 selectedDate != null
@@ -154,13 +151,13 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double titleSize=20;
-    double contentSize=18;
+    double titleSize = 20;
+    double contentSize = 18;
     double buttonHeight = screenHeight * 0.13;
-    double textTop=100;
-    double contentText=35;
-    double iconTop=15;
-    double footerButtonSize=18;
+    double textTop = 100;
+    double contentText = 35;
+    double iconTop = 15;
+    double footerButtonSize = 18;
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       body: SingleChildScrollView(
@@ -185,7 +182,7 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                 '반려동물 종류',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize:contentSize,
+                  fontSize: contentSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -298,14 +295,15 @@ class _PetInfoInputScreenState extends State<PetInfoInputScreen> {
                         ),
                 ),
               ),
-             SizedBox(height: contentText),
+              SizedBox(height: contentText),
               ElevatedButton(
                 onPressed: () {
                   registerAndUploadImage();
+                  Navigator.pushNamed(context, '/story');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6B42F8),
-                    minimumSize: Size(double.infinity, buttonHeight*0.5),
+                  minimumSize: Size(double.infinity, buttonHeight * 0.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
