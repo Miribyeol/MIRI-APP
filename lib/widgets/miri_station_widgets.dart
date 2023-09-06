@@ -15,8 +15,8 @@ void letterTextDialog(BuildContext context, Function onConfirmPressed) {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 300,
-              height: 300,
+              width: 500,
+              height: 500,
               padding: EdgeInsets.all(20.0),
               decoration: BoxDecoration(
                 // color: Colors.white,

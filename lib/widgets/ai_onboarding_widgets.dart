@@ -10,6 +10,7 @@ class AIOnboardingWidget extends StatelessWidget {
     double width = 200;
     double height = 200;
     double contentSize = 18;
+    double textSize = 16;
     double buttonWidth = 20;
     double charTextTop = 60;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -85,14 +86,55 @@ class AIOnboardingWidget extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/ai_consulting');
+                    // 알림창 띄우기
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.white, // 알림창 배경색 흰색으로 설정
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(15.0), // 모서리 둥글게 설정
+                          ), // 글자 굵기 bold로 설정
+                          content: Text(
+                            '앗..! 죄송해요 아직 개발중이에요..!',
+                            style: TextStyle(
+                              color: Colors.black, // 텍스트 글자색 검정으로 설정
+                              fontSize: textSize,
+                              fontWeight: FontWeight.bold,
+                              height: 2,
+                            ),
+                          ),
+
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                // 알림창 닫기
+                                Navigator.of(context).pop();
+                                // 메인 화면으로 이동
+                                Navigator.pushNamed(context, '/start');
+                              },
+                              style: TextButton.styleFrom(
+                                backgroundColor:
+                                    const Color(0xFF6B42F8), // 확인 버튼 배경색 설정
+                                minimumSize: Size(260, 30), // 확인 버튼 가로 길이 설정
+                              ),
+                              child: const Text(
+                                '확인',
+                                style: TextStyle(
+                                  color: Colors.white, // 버튼 글자색 흰색으로 설정
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF6B42F8),
-                    minimumSize: const Size(
-                      250,
-                      50,
-                    ),
+                    minimumSize: Size(150, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
                     ),
