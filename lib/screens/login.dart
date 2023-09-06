@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                   '미리별로\n\n펫로스 증후군을\n\n극복해보아요 !',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 24.0, 
+                    fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -62,12 +62,9 @@ class LoginScreen extends StatelessWidget {
                 InkWell(
                   onTap: () async {
                     try {
-                      final success =
-                          await kakaoLoginService.kakaoLogin(context);
-                      if (success) {
-                        Navigator.pushReplacementNamed(
-                            context, '/pet_info_input');
-                      } else {
+                      final success = await kakaoLoginService
+                          .kakaoLogin(context); // context를 전달
+                      if (!success) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('카카오 로그인에 실패하였습니다.'),
