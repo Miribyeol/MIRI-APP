@@ -72,6 +72,7 @@ class AnimalScreenState extends State<AnimalScreen> {
   }
 
   Future<void> _updatePetInfo() async {
+    print(petSpecies);
     String? uploadedFilename;
     if (_selectedImage != null) {
       // 이미지를 먼저 업로드
@@ -84,10 +85,9 @@ class AnimalScreenState extends State<AnimalScreen> {
     } else {
       print('업로드할 이미지가 선택되지 않았습니다.');
       // 이미지가 선택되지 않았을 경우 fetchPetInfo로부터 가져온 petImage 사용
-      await fetchPetInfo();
+      // await fetchPetInfo();
       uploadedFilename = petImage;
     }
-    print(petSpecies);
     var updatedPetInfo = PetInfo(
       name: petName ?? '',
       species: petSpecies ?? '',

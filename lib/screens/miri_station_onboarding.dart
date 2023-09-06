@@ -76,26 +76,6 @@ class _MiriStationOnboardingState extends State<MiriStationOnboarding> {
                 );
               },
             ),
-            // Uncomment the below Positioned widget if you want to show the page indicator dots
-            // Positioned(
-            //   bottom: 20,
-            //   left: 0,
-            //   right: 0,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: List.generate(onboardingPages.length, (index) {
-            //       return Container(
-            //         margin: const EdgeInsets.all(4),
-            //         width: 10,
-            //         height: 10,
-            //         decoration: BoxDecoration(
-            //           shape: BoxShape.circle,
-            //           color: currentPage == index ? Colors.blue : Colors.grey,
-            //         ),
-            //       );
-            //     }),
-            //   ),
-            // ),
           ],
         ),
       ),

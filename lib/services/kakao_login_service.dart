@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KakaoLoginService {
   // final String serverUrl = 'http://192.168.200.192:3000/auth';
@@ -53,7 +54,23 @@ class KakaoLoginService {
     if (token != null) {
       print('카카오 로그인 성공');
       sendToken(token);
-      Navigator.pushReplacementNamed(context, '/pet_info_input');
+
+      // SharedPreferences 인스턴스를 가져옵니다.
+      final prefs = await SharedPreferences.getInstance();
+
+      // /pet_info_input 페이지를 방문한 적이 있는지 확인합니다.
+      bool visitedPetInfoInput =
+          prefs.getBool('visited_pet_info_input') ?? false;
+
+      if (visitedPetInfoInput) {
+        // 방문한 적이 있으면 /start로 리디렉션합니다.
+        Navigator.pushReplacementNamed(context, '/start');
+      } else {
+        // 방문한 적이 없으면 /pet_info_input으로 리디렉션하고 방문 여부를 저장합니다.
+        prefs.setBool('visited_pet_info_input', true);
+        Navigator.pushReplacementNamed(context, '/pet_info_input');
+      }
+
       return true;
     }
     return false;

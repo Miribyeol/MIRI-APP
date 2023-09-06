@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miri_app/screens/miri_station_onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:miri_app/widgets/miri_station_widgets.dart';
 
 class MiriStationScreen extends StatefulWidget {
   const MiriStationScreen({Key? key}) : super(key: key);
@@ -11,15 +10,22 @@ class MiriStationScreen extends StatefulWidget {
 }
 
 class _MiriStationScreenState extends State<MiriStationScreen> {
+  final _textController = TextEditingController();
   bool showOnboarding = true;
   double offsetY = 0;
   String currentImagePath = 'assets/image/letter_2.png';
   String? backgroundImagePath;
+  String? textFieldImagePath;
+  bool showTextField = true;
+  bool showButton = true;
+  double imageYOffset = 10;
 
   @override
   void initState() {
     super.initState();
     _checkOnboarding();
+    backgroundImagePath = 'assets/image/post_letter_1.png';
+    textFieldImagePath = 'assets/image/letter_2.png';
   }
 
   _checkOnboarding() async {
@@ -52,17 +58,10 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/image/blue_cosmos.png',
+              backgroundImagePath!,
               fit: BoxFit.cover,
             ),
           ),
-          if (backgroundImagePath != null)
-            Positioned.fill(
-              child: Image.asset(
-                backgroundImagePath!,
-                fit: BoxFit.cover,
-              ),
-            ),
           Positioned(
             top: 0,
             left: 0,
@@ -88,65 +87,78 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                       ),
                     ],
                   ),
-                  // const Text(
-                  //   '미리별 정거장',
-                  //   style: TextStyle(
-                  //     color: Colors.white,
-                  //     fontSize: 28.0,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  //   textAlign: TextAlign.center,
-                  // ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  if (showButton)
+                    ButtonBar(
+                      alignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              backgroundImagePath = 'assets/image/post_1.png';
+                              textFieldImagePath = 'assets/image/letter_1.png';
+                              showTextField = !showTextField;
+                              showButton = false;
+                            });
+                          },
+                          child: Container(
+                            width: 40.0,
+                            height: 40.0,
+                            child: Image.asset('assets/icon/star.png'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                    child: Stack(
+                      children: [
+                        if (!showTextField)
+                          Transform.translate(
+                            offset: Offset(0, imageYOffset),
+                            child: GestureDetector(
+                              onVerticalDragUpdate: (details) {
+                                setState(() {
+                                  imageYOffset += details.delta.dy;
+                                });
+                              },
+                              onVerticalDragEnd: (details) {
+                                if (details.velocity.pixelsPerSecond.dy < 0) {
+                                  _showSuccessDialog(context);
+                                }
+                              },
+                              child: Image.asset(textFieldImagePath!),
+                            ),
+                          ),
+                        if (showTextField)
+                          TextField(
+                            maxLines: 13,
+                            controller: _textController,
+                            decoration: InputDecoration(
+                              hintText: '반려동물에게 편지를 작성해봐요',
+                              hintStyle: TextStyle(color: Colors.black),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 80 - offsetY,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              onVerticalDragUpdate: (details) {
-                setState(() {
-                  // offsetY에 드래그 값을 추가합니다.
-                  offsetY += details.delta.dy;
-
-                  // offsetY 값을 0에서 20 사이로 제한합니다.
-                  if (offsetY > 0) {
-                    offsetY = 0;
-                  } else if (offsetY < -250) {
-                    offsetY = -250;
-                  }
-
-                  // offsetY가 20에 도달했을 때와 이미지 경로가 'assets/image/letter_1.png'일 때
-                  if (offsetY == -250 &&
-                      currentImagePath == 'assets/image/letter_1.png') {
-                    currentImagePath = 'assets/image/letter_2.png';
-                    offsetY = 0;
-                    _showSuccessDialog(context);
-                  }
-                });
-              },
-              onTap: () {
-                setState(() {
-                  if (currentImagePath == 'assets/image/letter_2.png') {
-                    currentImagePath = 'assets/image/letter_3.png';
-                    letterTextDialog(context, () {
-                      setState(() {
-                        currentImagePath = 'assets/image/letter_1.png';
-                        backgroundImagePath = 'assets/image/post_1.png';
-                      });
-                    });
-                  } else {
-                    currentImagePath = 'assets/image/letter_1.png';
-                    backgroundImagePath = null;
-                  }
-                });
-              },
-              child: Image.asset(
-                currentImagePath,
-                width: 600.0,
-                height: 500.0,
               ),
             ),
           ),
@@ -161,16 +173,47 @@ void _showSuccessDialog(context) {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text('작성하신 편지가'),
-        content: const Text('미리별로 보내졌습니다!'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // 성공 대화 상자 닫기
-              Navigator.of(context).pop(); // 도전 팝업 닫기
-              Navigator.of(context).pushReplacementNamed('/start');
-            },
-            child: const Text('확인'),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        content: Padding(
+          padding: EdgeInsets.only(top: 20),
+          child: Text(
+            '작성하신 편지가\n미리별로 보내졌습니다!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: <Widget>[
+          SizedBox(
+            width: 140,
+            height: 35,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff6B42F8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text(
+                "확인",
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacementNamed('/start');
+              },
+            ),
           ),
         ],
       );
