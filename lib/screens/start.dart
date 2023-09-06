@@ -387,59 +387,64 @@ class _StartScreenState extends State<StartScreen> {
                       ],
                     ),
                   ),
+                  SizedBox(height: buttonTextDescSize * 0.9),
                   Column(
                     children: contentData.map((item) {
                       return Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start, // 가로 정렬을 왼쪽 정렬로 설정
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: screenHeight * 0.12,
+                            height: screenHeight * 0.13,
                             child: Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1F2839),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
+                                decoration: BoxDecoration(
                                   color: const Color(0xFF1F2839),
-                                  width: 2.0,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: const Color(0xFF1F2839),
+                                    width: 2.0,
+                                  ),
                                 ),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .start, // 가로 정렬을 왼쪽 정렬로 설정
-                                  children: [
-                                    Text(
-                                      item['title'],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: buttonTitleSize,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0), // 왼쪽에 10의 패딩 추가
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item['title'],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: buttonTitleSize,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: buttonTextTop),
+                                        Text(
+                                          item['content'],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: buttonContentSize,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: buttonTextTop),
+                                        Text(
+                                          '  ${item['author']}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: footerTextButtonSize,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(height: buttonTextTop),
-                                    Text(
-                                      item['content'],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: buttonContentSize,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: buttonTextTop),
-                                    Text(
-                                      'Author: ${item['author']}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: footerTextButtonSize,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                                  ),
+                                )),
                           ),
                           SizedBox(height: buttonMarginTop),
                         ],

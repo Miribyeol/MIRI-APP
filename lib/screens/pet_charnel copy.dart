@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../services/pet_charnel_service.dart';
 
 class PetCharnelScreen extends StatefulWidget {
@@ -12,7 +12,7 @@ class PetCharnelScreen extends StatefulWidget {
 }
 
 class _PetCharnelScreenState extends State<PetCharnelScreen> {
-  String baseUrl = "http://203.250.32.29:3000/pet/image/";
+  late String baseUrl;
   String get fullImageUrl => baseUrl + (petImage ?? '');
   final ApiService apiService = ApiService();
 
@@ -26,6 +26,7 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
   @override
   void initState() {
     super.initState();
+    baseUrl = "${dotenv.env['API_URL']}/pet/image/";
     // 앱이 처음 실행되었는지 확인
     checkFirstRun();
     fetchPetInfo();

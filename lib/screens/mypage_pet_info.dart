@@ -4,6 +4,7 @@ import '../models/pet_info_model.dart';
 import '../services/mypage_pet_service.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AnimalScreen extends StatefulWidget {
   const AnimalScreen({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class AnimalScreen extends StatefulWidget {
 }
 
 class AnimalScreenState extends State<AnimalScreen> {
-  String baseUrl = "http://203.250.32.29:3000/pet/image/";
+  late String baseUrl;
   String get fullImageUrl => baseUrl + (petImage ?? '');
   final ApiService _apiService = ApiService();
   DateTime? _pickedBirthDate;
@@ -43,6 +44,7 @@ class AnimalScreenState extends State<AnimalScreen> {
   @override
   void initState() {
     super.initState();
+    baseUrl = "${dotenv.env['API_URL']}/pet/image/";
     fetchPetInfo();
   }
 
