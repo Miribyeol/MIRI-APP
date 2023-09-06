@@ -213,8 +213,9 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: buttonTextDescSize * 0.9),
                             Text(
-                              '\n 챌린지',
+                              '챌린지',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
@@ -253,8 +254,9 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: buttonTextDescSize * 0.9),
                             Text(
-                              '\n 미리별 정거장',
+                              '미리별 정거장',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
@@ -293,8 +295,9 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: buttonTextDescSize * 0.9),
                             Text(
-                              '\n 영원한 발자국',
+                              ' 영원한 발자국',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
@@ -333,8 +336,9 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(height: buttonTextDescSize * 0.9),
                             Text(
-                              '\n 별이와 대화하기',
+                              ' 별이와 대화하기',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
@@ -394,7 +398,7 @@ class _StartScreenState extends State<StartScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: screenHeight * 0.13,
+                            height: screenHeight * 0.14,
                             child: Container(
                                 decoration: BoxDecoration(
                                   color: const Color(0xFF1F2839),
@@ -406,7 +410,7 @@ class _StartScreenState extends State<StartScreen> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 10.0), // 왼쪽에 10의 패딩 추가
+                                      left: 20.0), // 왼쪽에 10의 패딩 추가
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Column(
@@ -415,6 +419,8 @@ class _StartScreenState extends State<StartScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        SizedBox(
+                                            height: buttonTextDescSize * 0.9),
                                         Text(
                                           item['title'],
                                           style: TextStyle(

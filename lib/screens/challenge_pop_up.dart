@@ -217,16 +217,62 @@ class ChallengeCompleteDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('완료되었습니다'),
-      content: const Text('챌린지가 성공적으로 완료되었습니다!'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(); // 성공 대화 상자 닫기
-            Navigator.of(context).pop(); // 도전 팝업 닫기
-            Navigator.of(context).pushReplacementNamed('/start');
-          },
-          child: const Text('확인'),
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      content: Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '완료되었습니다',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '챌린지가 성공적으로 완료되었습니다!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+      actionsAlignment: MainAxisAlignment.center,
+      actions: <Widget>[
+        SizedBox(
+          width: 140,
+          height: 35,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xff6B42F8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(
+              "확인",
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // 성공 대화 상자 닫기
+              Navigator.of(context).pop(); // 도전 팝업 닫기
+              Navigator.of(context).pushReplacementNamed('/start');
+            },
+          ),
         ),
       ],
     );

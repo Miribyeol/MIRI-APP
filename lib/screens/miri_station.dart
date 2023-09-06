@@ -94,6 +94,10 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                     ButtonBar(
                       alignment: MainAxisAlignment.end,
                       children: [
+                        Text(
+                          '눌러주세요',
+                          style: TextStyle(color: Colors.black),
+                        ),
                         InkWell(
                           onTap: () {
                             setState(() {
@@ -141,7 +145,7 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                             controller: _textController,
                             decoration: InputDecoration(
                               hintText: '반려동물에게 편지를 작성해봐요',
-                              hintStyle: TextStyle(color: Colors.black),
+                              hintStyle: TextStyle(color: Colors.grey),
                               filled: true,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
