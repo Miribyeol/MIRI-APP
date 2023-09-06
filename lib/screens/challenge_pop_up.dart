@@ -16,7 +16,7 @@ class ChallengPopUp extends StatefulWidget {
 }
 
 class ChallengPopUpState extends State<ChallengPopUp> {
-  final FlutterSecureStorage storage = const FlutterSecureStorage();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   int selectedDay = 1;
   Set<int> selectedButtons = {};
@@ -24,6 +24,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
 //팝업창에서 최대 3개의 버튼을 선택하게하기
   Widget createButton(int index, {double width = 100.0, double height = 30.0}) {
     bool isSelected = selectedButtons.contains(index);
+    double buttonContentSize = 13;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -70,7 +71,8 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           ),
           child: Text(
             '# ${buttonTexts[index]}',
-            style: const TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: buttonContentSize, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -80,6 +82,12 @@ class ChallengPopUpState extends State<ChallengPopUp> {
 // 완료시 팝업창 UI
   @override
   Widget build(BuildContext context) {
+    double iconSize = 20;
+    double iconText = 13.5;
+    double buttonheight = 10;
+    double width = 383;
+    double footerTextSize = 16;
+    double footerTextButtonSize = 12;
     return AlertDialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -88,26 +96,28 @@ class ChallengPopUpState extends State<ChallengPopUp> {
       elevation: 5.0,
       title: Text(
         '${widget.day}일차 수고했어요!',
-        style: const TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black),
+        style: TextStyle(
+            fontSize: iconSize,
+            fontWeight: FontWeight.bold,
+            color: Colors.black),
         textAlign: TextAlign.center,
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
+          Text(
             '방금 챌린지를 마친 기분이 어떤지 알려줄래요?',
             style: TextStyle(
-                fontSize: 13.5,
+                fontSize: iconText,
                 fontWeight: FontWeight.bold,
                 color: Colors.black),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: buttonheight),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.zero,
             child: SizedBox(
-              width: 383,
+              width: width,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -154,13 +164,14 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: buttonheight),
           ElevatedButton(
             onPressed: () {
               List<String> selectedEmotions = selectedButtons.map((int index) {
                 return buttonTexts[index];
               }).toList();
-              sendChallengeFeedbackToServer(selectedEmotions, storage, context);
+              sendChallengeFeedbackToServer(
+                  selectedEmotions, _storage, context);
             },
             style: ButtonStyle(
               fixedSize: MaterialStateProperty.all(const Size(308, 35)),
@@ -173,17 +184,18 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               ),
               elevation: MaterialStateProperty.all(5.0),
             ),
-            child: const Text(
+            child: Text(
               '완료',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: footerTextSize, fontWeight: FontWeight.bold),
             ),
           ),
           // const SizedBox(height: 10),
           TextButton(
-            child: const Text(
+            child: Text(
               '안할래요',
               style: TextStyle(
-                fontSize: 12.0,
+                fontSize: footerTextButtonSize,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
               ),

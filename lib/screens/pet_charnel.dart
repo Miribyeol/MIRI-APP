@@ -41,8 +41,6 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double width = 210;
-    double height = 247;
     double buttonTitleSize = 20;
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
