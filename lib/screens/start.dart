@@ -240,7 +240,7 @@ class _StartScreenState extends State<StartScreen> {
                     height: buttonHeight,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/ai_onboarding');
+                        Navigator.pushNamed(context, '/miri_station');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1F2839),
@@ -254,7 +254,7 @@ class _StartScreenState extends State<StartScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '\n 별이와 대화하기',
+                              '\n 미리별 정거장',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
@@ -263,7 +263,7 @@ class _StartScreenState extends State<StartScreen> {
                             ),
                             SizedBox(height: buttonTextTop * 0.9),
                             Text(
-                              ' 미리별 만의 AI 친구 별이에게 고민을 말해보세요 !',
+                              ' 애완동물에게 하지 못했던 말을 전하는 공간',
                               style: TextStyle(
                                 color: const Color(0xFFBBBBBB),
                                 fontSize: buttonTextDescSize,
@@ -320,7 +320,7 @@ class _StartScreenState extends State<StartScreen> {
                     height: buttonHeight,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/miri_station');
+                        Navigator.pushNamed(context, '/ai_onboarding');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1F2839),
@@ -334,7 +334,7 @@ class _StartScreenState extends State<StartScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '\n 미리별 정거장',
+                              '\n 별이와 대화하기',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
@@ -343,7 +343,7 @@ class _StartScreenState extends State<StartScreen> {
                             ),
                             SizedBox(height: buttonTextTop * 0.9),
                             Text(
-                              ' 애완동물에게 하지 못했던 말을 전하는 공간',
+                              ' 미리별 만의 AI 친구 별이에게 고민을 말해보세요 !',
                               style: TextStyle(
                                 color: const Color(0xFFBBBBBB),
                                 fontSize: buttonTextDescSize,
@@ -389,59 +389,60 @@ class _StartScreenState extends State<StartScreen> {
                   ),
                   Column(
                     children: contentData.map((item) {
-                      return Align(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: screenHeight * 0.12,
-                              child: Container(
-                                decoration: BoxDecoration(
+                      return Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // 가로 정렬을 왼쪽 정렬로 설정
+                        children: [
+                          SizedBox(
+                            height: screenHeight * 0.12,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1F2839),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
                                   color: const Color(0xFF1F2839),
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: const Color(0xFF1F2839),
-                                    width: 2.0,
-                                  ),
+                                  width: 2.0,
                                 ),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        item['title'],
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: buttonTitleSize,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                              ),
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .start, // 가로 정렬을 왼쪽 정렬로 설정
+                                  children: [
+                                    Text(
+                                      item['title'],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: buttonTitleSize,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      SizedBox(height: buttonTextTop),
-                                      Text(
-                                        item['content'],
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: buttonContentSize,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    ),
+                                    SizedBox(height: buttonTextTop),
+                                    Text(
+                                      item['content'],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: buttonContentSize,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      SizedBox(height: buttonTextTop),
-                                      Text(
-                                        'Author: ${item['author']}',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: footerTextButtonSize,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    ),
+                                    SizedBox(height: buttonTextTop),
+                                    Text(
+                                      'Author: ${item['author']}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: footerTextButtonSize,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                            SizedBox(height: buttonMarginTop),
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: buttonMarginTop),
+                        ],
                       );
                     }).toList(),
                   ),
