@@ -221,7 +221,7 @@ class _StartScreenState extends State<StartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: buttonTextTop),
+                            SizedBox(height: buttonTextTop * 0.9),
                             Text(
                               ' 14일동안 미션을 수행해보아요 !',
                               style: TextStyle(
@@ -235,7 +235,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: buttonMarginTop),
+                  SizedBox(height: buttonMarginTop * 0.9),
                   SizedBox(
                     height: buttonHeight,
                     child: ElevatedButton(
@@ -261,7 +261,7 @@ class _StartScreenState extends State<StartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: buttonTextTop),
+                            SizedBox(height: buttonTextTop * 0.9),
                             Text(
                               ' 미리별 만의 AI 친구 별이에게 고민을 말해보세요 !',
                               style: TextStyle(
@@ -275,7 +275,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: buttonMarginTop),
+                  SizedBox(height: buttonMarginTop * 0.9),
                   SizedBox(
                     height: buttonHeight,
                     child: ElevatedButton(
@@ -301,7 +301,7 @@ class _StartScreenState extends State<StartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: buttonTextTop),
+                            SizedBox(height: buttonTextTop * 0.9),
                             Text(
                               ' 애완동물과 함께한 순간들을 기억하는 공간',
                               style: TextStyle(
@@ -315,7 +315,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: buttonMarginTop),
+                  SizedBox(height: buttonMarginTop * 0.9),
                   SizedBox(
                     height: buttonHeight,
                     child: ElevatedButton(
@@ -341,7 +341,7 @@ class _StartScreenState extends State<StartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: buttonTextTop),
+                            SizedBox(height: buttonTextTop * 0.9),
                             Text(
                               ' 애완동물에게 하지 못했던 말을 전하는 공간',
                               style: TextStyle(
@@ -355,7 +355,7 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: buttonTextDescSize),
+                  SizedBox(height: buttonTextDescSize * 0.9),
                   SizedBox(
                     height: screenHeight * 0.1,
                     child: Row(

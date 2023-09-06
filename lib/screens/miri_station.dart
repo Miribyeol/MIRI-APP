@@ -5,6 +5,14 @@ class MiriStationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double contentSize = 18;
+    double width = 200;
+    double height = 200;
+    double titleTextSize = 28;
+    double iconSize = 40;
+    double buttonTextTop = 60;
+    double buttonContentSize = 20;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0xFF121824),
       body: Stack(
@@ -18,7 +26,7 @@ class MiriStationScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 50.0),
+                  SizedBox(height: screenHeight * 0.1), //50.0
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -27,38 +35,38 @@ class MiriStationScreen extends StatelessWidget {
                           Navigator.pop(
                               context); // '<' 아이콘 클릭 시 이전 화면으로 돌아가도록 수정
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.chevron_left,
                           color: Colors.white,
-                          size: 40.0,
+                          size: iconSize,
                         ),
                       ),
                     ],
                   ),
                   // const SizedBox(height: 90.0),
-                  const Text(
+                  Text(
                     '미리별 정거장',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 28.0,
+                      fontSize: titleTextSize,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 80.0),
+                  SizedBox(height: screenHeight * 0.1), //80.0
                   Image.asset(
                     'assets/icon/star.png', // Add the image 'star.png' to your assets folder
-                    width: 200.0,
-                    height: 200.0,
+                    width: width,
+                    height: height,
                   ),
                 ],
               ),
             ),
           ),
           Positioned(
-            bottom: 60.0,
-            left: 20.0,
-            right: 20.0,
+            bottom: buttonTextTop,
+            left: buttonContentSize,
+            right: buttonContentSize,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -75,10 +83,10 @@ class MiriStationScreen extends StatelessWidget {
                           25.0), // Set the border radius here
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     '시작하기',
                     style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: contentSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

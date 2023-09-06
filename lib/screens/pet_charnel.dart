@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../services/pet_charnel_service.dart'; // Import the ApiService
-// import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../services/pet_charnel_service.dart';
 
 class PetCharnelScreen extends StatefulWidget {
   const PetCharnelScreen({Key? key}) : super(key: key);
@@ -12,17 +13,19 @@ class PetCharnelScreen extends StatefulWidget {
 class _PetCharnelScreenState extends State<PetCharnelScreen> {
   String baseUrl = "http://203.250.32.29:3000/pet/image/";
   String get fullImageUrl => baseUrl + (petImage ?? '');
-  final ApiService apiService =
-      ApiService(); // Create an instance of ApiService
+  final ApiService apiService = ApiService();
 
   String? petName = '';
   String? petBirthDate = '';
   String? petDeathDate = '';
   String? petImage;
 
+  bool isBoxDecorationVisible = false;
+
   @override
   void initState() {
     super.initState();
+    showToast(); // 화면 시작 시 토스트 메시지 표시
     fetchPetInfo();
   }
 
@@ -37,107 +40,143 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
     });
   }
 
+  double boxDecorationHeight = 10.0;
+
+  void toggleBoxDecoration() {
+    setState(() {
+      if (isBoxDecorationVisible) {
+        boxDecorationHeight = 10.0;
+      } else {
+        boxDecorationHeight = MediaQuery.of(context).size.height * 0.6;
+      }
+      isBoxDecorationVisible = !isBoxDecorationVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    double width = 210;
-    double height = 247;
     double buttonTitleSize = 20;
+
     return Scaffold(
-      backgroundColor: const Color(0xFF121824),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: Colors.transparent,
+      body: Stack(
         children: [
-          // Back button
-          Padding(
-            padding: const EdgeInsets.all(10.0),
+          // 배경 이미지
+          Image.asset(
+            'assets/image/pet_charnel.png',
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () {
+                toggleBoxDecoration();
+                // 화면 클릭 시 토스트 메시지 사라짐
+                Fluttertoast.cancel();
+              },
+              onVerticalDragEnd: (details) {
+                if (details.primaryVelocity != null &&
+                    details.primaryVelocity! > 0) {
+                  toggleBoxDecoration();
+                  // 화면 클릭 시 토스트 메시지 사라짐
+                  Fluttertoast.cancel();
+                } else if (details.primaryVelocity != null &&
+                    details.primaryVelocity! < 0) {
+                  toggleBoxDecoration();
+                  // 화면 클릭 시 토스트 메시지 사라짐
+                  Fluttertoast.cancel();
+                }
+              },
+              child: AnimatedOpacity(
+                opacity: isBoxDecorationVisible ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 500),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 500),
+                  width: screenWidth * 0.73,
+                  height: boxDecorationHeight,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF121824),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: petImage != null
+                              ? Image.network(
+                                  fullImageUrl,
+                                  width: 220.0,
+                                  height: 200.0,
+                                )
+                              : const Center(child: Text("이미지 없음")),
+                        ),
+                        SizedBox(height: buttonTitleSize * 2),
+                        Text(
+                          petName ?? '',
+                          style: const TextStyle(
+                            color: Color(0xFFBBBBBB),
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: buttonTitleSize * 0.5),
+                        Text(
+                          '$petBirthDate ~ $petDeathDate',
+                          style: const TextStyle(
+                            color: Color(0xFFBBBBBB),
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: buttonTitleSize * 2),
+                        const Text(
+                          '고마웠어. \n너와 함께한 모든 순간들에게.',
+                          style: TextStyle(
+                            color: Color(0xFFBBBBBB),
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // 뒤로 가기 버튼
+          Positioned(
+            left: 10.0,
+            top: 45.0,
             child: IconButton(
               icon: const Icon(Icons.arrow_back_ios),
               onPressed: () => Navigator.pop(context),
               color: Colors.white,
             ),
           ),
-          // Image and text
-          Expanded(
-            flex: 4,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: screenWidth * 0.7, //281.0
-                    height: screenHeight * 0.53, //440.0
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: petImage != null
-                                ? Image.network(
-                                    fullImageUrl,
-                                    width: 210.0,
-                                    height: 247.0,
-                                  )
-                                : Center(child: Text("이미지 없음")),
-                          ),
-
-                          SizedBox(height: buttonTitleSize * 0.5), //10.0
-                          Text(
-                            petName ?? '',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: buttonTitleSize * 0.5), //10.0
-                          Text(
-                            '$petBirthDate ~ $petDeathDate',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          // Text positioned at the bottom
-          Expanded(
-            flex: 2,
-            child: Transform.translate(
-              offset: const Offset(0, 0),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 50.0),
-                child: Center(
-                  child: Text(
-                    '고마워, 햄찌.\n함께한 모든 순간들을 기억할게.',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-          )
         ],
       ),
+    );
+  }
+
+  // 토스트 메시지 표시 함수
+  void showToast() {
+    Fluttertoast.showToast(
+      msg: "화면 클릭 시 반려동물 정보가 보입니다.",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP, // 화면 위에 표시
+      timeInSecForIosWeb: 3,
+      backgroundColor: const Color(0xFF6B42F8),
+      textColor: Colors.white,
+      fontSize: 16.0,
     );
   }
 }
