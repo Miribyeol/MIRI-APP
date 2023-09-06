@@ -70,54 +70,53 @@ class AnimalScreenState extends State<AnimalScreen> {
     }
   }
 
- Future<void> _updatePetInfo() async {
-  String? uploadedFilename;
+  Future<void> _updatePetInfo() async {
+    String? uploadedFilename;
 
-  if (_selectedImage != null) {
-    // 이미지를 먼저 업로드
-    var imageResult = await _apiService.uploadPetImage(_selectedImage!);
-    if (!imageResult['success']) {
-      print('이미지 업로드 실패: ${imageResult['error']}');
-      return;
+    if (_selectedImage != null) {
+      // 이미지를 먼저 업로드
+      var imageResult = await _apiService.uploadPetImage(_selectedImage!);
+      if (!imageResult['success']) {
+        print('이미지 업로드 실패: ${imageResult['error']}');
+        return;
+      }
+      uploadedFilename = imageResult['filename'];
+    } else {
+      print('업로드할 이미지가 선택되지 않았습니다.');
+      // 이미지가 선택되지 않았을 경우 fetchPetInfo로부터 가져온 petImage 사용
+      await fetchPetInfo();
+      uploadedFilename = petImage;
     }
-    uploadedFilename = imageResult['filename'];
-  } else {
-    print('업로드할 이미지가 선택되지 않았습니다.');
-    // 이미지가 선택되지 않았을 경우 fetchPetInfo로부터 가져온 petImage 사용
-    await fetchPetInfo();
-    uploadedFilename = petImage;
+
+    var updatedPetInfo = PetInfo(
+      name: petName ?? '',
+      species: petSpecies ?? '',
+      birthday: petBirthDate ?? '',
+      deathday: petDeathDate ?? '',
+      image: uploadedFilename ?? petImage,
+    );
+
+    var result = await _apiService.updatePetInfo(
+        updatedPetInfo, null); // 이미지가 업로드 되지 않았으므로 null 전달
+    if (result['success']) {
+      PetInfo petInfo = result['petInfo'];
+      setState(() {
+        petName = petInfo.name;
+        petSpecies = petInfo.species;
+        petBirthDate = petInfo.birthday;
+        petDeathDate = petInfo.deathday;
+      });
+      showUpdateDialog(true);
+    } else {
+      print('Failed to update pet info: ${result['error']}');
+      showUpdateDialog(false);
+    }
   }
-
-  var updatedPetInfo = PetInfo(
-    name: petName ?? '',
-    species: petSpecies ?? '',
-    birthday: petBirthDate ?? '',
-    deathday: petDeathDate ?? '',
-    image: uploadedFilename ?? petImage,
-  );
-
-  var result = await _apiService.updatePetInfo(updatedPetInfo, null); // 이미지가 업로드 되지 않았으므로 null 전달
-  if (result['success']) {
-    PetInfo petInfo = result['petInfo'];
-    setState(() {
-      petName = petInfo.name;
-      petSpecies = petInfo.species;
-      petBirthDate = petInfo.birthday;
-      petDeathDate = petInfo.deathday;
-    });
-    showUpdateDialog(true);
-  } else {
-    print('Failed to update pet info: ${result['error']}');
-    showUpdateDialog(false);
-  }
-}
-
-
 
   Future<DateTime?> _showCustomModal(
       BuildContext context, bool isBirthDate) async {
-        double screenHeight = MediaQuery.of(context).size.height;
-        double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return await showDialog<DateTime>(
       context: context,
       builder: (BuildContext context) {
@@ -159,7 +158,7 @@ class AnimalScreenState extends State<AnimalScreen> {
 
   @override
   Widget build(BuildContext context) {
-     double screenHeight = MediaQuery.of(context).size.height;
+    double screenHeight = MediaQuery.of(context).size.height;
     double buttonTitleSize = 20;
     double buttonHeight = screenHeight * 0.13;
     return Scaffold(
@@ -199,7 +198,7 @@ class AnimalScreenState extends State<AnimalScreen> {
               },
               style: const TextStyle(color: Colors.white),
             ),
-          SizedBox(height: buttonTitleSize),
+            SizedBox(height: buttonTitleSize),
             _buildSectionTitle('반려동물 종류'),
             DropdownFormField(
               onChanged: (String? newValue) {
@@ -212,63 +211,64 @@ class AnimalScreenState extends State<AnimalScreen> {
             ),
             SizedBox(height: buttonTitleSize),
             _buildSectionTitle('반려동물 출생일'),
-             SizedBox(height: buttonTitleSize),
+            SizedBox(height: buttonTitleSize),
             _buildDateSelector(true),
             SizedBox(height: buttonTitleSize),
             _buildSectionTitle('반려동물 사망일'),
-             SizedBox(height: buttonTitleSize),
+            SizedBox(height: buttonTitleSize),
             _buildDateSelector(false),
             SizedBox(height: buttonTitleSize),
             _buildSectionTitle('반려동물 사진 업로드'),
             SizedBox(height: buttonTitleSize),
-           GestureDetector(
-  onTap: () async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+            GestureDetector(
+              onTap: () async {
+                final picker = ImagePicker();
+                final pickedFile =
+                    await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      _selectedImage = File(pickedFile.path);
-      setState(() {});
-    } else {
-      print('사진 선택이 취소되었습니다.');
-    }
-  },
-  child: Container(
-    width: 200,
-    height: 200,
-    decoration: BoxDecoration(
-      color: const Color(0xFF1F2839),
-      border: Border.all(color: Colors.white, width: 1.0),
-      borderRadius: BorderRadius.circular(10.0), // ClipRRect와 동일한 효과를 주기 위해 추가
-    ),
-    child: _selectedImage != null
-        ? Image.file(
-            _selectedImage!,
-            fit: BoxFit.cover,
-          )
-        : petImage != null
-            ? Image.network(
-                fullImageUrl,
-                fit: BoxFit.cover,
-              )
-            : Center(
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 50.0,
+                if (pickedFile != null) {
+                  _selectedImage = File(pickedFile.path);
+                  setState(() {});
+                } else {
+                  print('사진 선택이 취소되었습니다.');
+                }
+              },
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1F2839),
+                  border: Border.all(color: Colors.white, width: 1.0),
+                  borderRadius: BorderRadius.circular(
+                      10.0), // ClipRRect와 동일한 효과를 주기 위해 추가
                 ),
+                child: _selectedImage != null
+                    ? Image.file(
+                        _selectedImage!,
+                        fit: BoxFit.cover,
+                      )
+                    : petImage != null
+                        ? Image.network(
+                            fullImageUrl,
+                            fit: BoxFit.cover,
+                          )
+                        : Center(
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 50.0,
+                            ),
+                          ),
               ),
-  ),
-),
-        
-             SizedBox(height: buttonTitleSize),
+            ),
+            SizedBox(height: buttonTitleSize),
             ElevatedButton(
               onPressed: () async {
                 await _updatePetInfo();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6B42F8),
-                minimumSize:  Size(double.infinity, buttonHeight*0.5),
+                minimumSize: Size(double.infinity, buttonHeight * 0.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -348,14 +348,14 @@ class AnimalScreenState extends State<AnimalScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-         double screenWidth = MediaQuery.of(context).size.width;
+        // double screenWidth = MediaQuery.of(context).size.width;
         double screenHeight = MediaQuery.of(context).size.height;
         double buttonHeight = screenHeight * 0.13;
         return AlertDialog(
           content: SingleChildScrollView(
             child: SizedBox(
-           width: screenWidth , //335
-              height: screenHeight, //100
+              width: 335, //335
+              height: 110, //100
               child: Center(
                 child: Text(
                   isSuccess ? "수정이 완료되었습니다 :)" : "수정에 실패했습니다 :(",
@@ -373,7 +373,7 @@ class AnimalScreenState extends State<AnimalScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF6B42F8),
-                minimumSize:  Size(double.infinity, buttonHeight*0.5),
+                minimumSize: Size(double.infinity, buttonHeight * 0.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

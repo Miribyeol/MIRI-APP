@@ -55,7 +55,7 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double buttonTitleSize = 20;
 
