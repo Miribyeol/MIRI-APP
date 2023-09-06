@@ -3,7 +3,7 @@ class Pet {
   final String species;
   final String birthday;
   final String deathday;
-    final String? image;
+  final String? image;
 
   Pet({
     required this.name,

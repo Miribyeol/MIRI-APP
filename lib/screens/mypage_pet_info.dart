@@ -20,10 +20,11 @@ class AnimalScreenState extends State<AnimalScreen> {
   DateTime? _pickedDeathDate;
   File? _selectedImage;
   String? petImage;
+  String? petSpecies;
 
   final TextEditingController _nameController = TextEditingController();
   String? petName = '';
-  String? petSpecies;
+  // String? petSpecies;
   String? petBirthDate = '';
   String? petDeathDate = '';
 
@@ -72,7 +73,6 @@ class AnimalScreenState extends State<AnimalScreen> {
 
   Future<void> _updatePetInfo() async {
     String? uploadedFilename;
-
     if (_selectedImage != null) {
       // 이미지를 먼저 업로드
       var imageResult = await _apiService.uploadPetImage(_selectedImage!);
@@ -87,7 +87,7 @@ class AnimalScreenState extends State<AnimalScreen> {
       await fetchPetInfo();
       uploadedFilename = petImage;
     }
-
+    print(petSpecies);
     var updatedPetInfo = PetInfo(
       name: petName ?? '',
       species: petSpecies ?? '',
@@ -96,8 +96,7 @@ class AnimalScreenState extends State<AnimalScreen> {
       image: uploadedFilename ?? petImage,
     );
 
-    var result = await _apiService.updatePetInfo(
-        updatedPetInfo, null); // 이미지가 업로드 되지 않았으므로 null 전달
+    var result = await _apiService.updatePetInfo(updatedPetInfo, null);
     if (result['success']) {
       PetInfo petInfo = result['petInfo'];
       setState(() {
