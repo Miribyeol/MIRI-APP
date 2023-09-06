@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:miri_app/screens/miri_station_onboarding.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:miri_app/widgets/miri_station_widgets.dart';
 
 class MiriStationScreen extends StatefulWidget {
   const MiriStationScreen({Key? key}) : super(key: key);
@@ -11,25 +12,27 @@ class MiriStationScreen extends StatefulWidget {
 
 class _MiriStationScreenState extends State<MiriStationScreen> {
   bool showOnboarding = true;
+  double offsetY = 0;
+  String currentImagePath = 'assets/image/letter_2.png';
 
   @override
   void initState() {
     super.initState();
-    // _checkOnboarding();
+    _checkOnboarding();
   }
 
-  // _checkOnboarding() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   bool seen = (prefs.getBool('seenOnboarding') ?? false);
+  _checkOnboarding() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seen = (prefs.getBool('seenOnboarding') ?? false);
 
-  //   if (seen) {
-  //     setState(() {
-  //       showOnboarding = false;
-  //     });
-  //   } else {
-  //     await prefs.setBool('seenOnboarding', true);
-  //   }
-  // }
+    if (seen) {
+      setState(() {
+        showOnboarding = false;
+      });
+    } else {
+      await prefs.setBool('seenOnboarding', true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,43 +89,54 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 80.0),
-                  Image.asset(
-                    'assets/icon/star.png',
-                    width: 200.0,
-                    height: 200.0,
-                  ),
                 ],
               ),
             ),
           ),
           Positioned(
-            bottom: 60.0,
-            left: 20.0,
-            right: 20.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/ai_consulting');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF6B42F8),
-                    minimumSize: const Size(250, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  child: const Text(
-                    '시작하기',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
+            bottom: 80 - offsetY,
+            left: 0,
+            right: 0,
+            child: GestureDetector(
+              onVerticalDragUpdate: (details) {
+                setState(() {
+                  // offsetY에 드래그 값을 추가합니다.
+                  offsetY += details.delta.dy;
+
+                  // offsetY 값을 0에서 20 사이로 제한합니다.
+                  if (offsetY > 0) {
+                    offsetY = 0;
+                  } else if (offsetY < -100) {
+                    offsetY = -100;
+                  }
+
+                  // offsetY가 20에 도달했을 때와 이미지 경로가 'assets/image/letter_1.png'일 때
+                  if (offsetY == -100 &&
+                      currentImagePath == 'assets/image/letter_1.png') {
+                    currentImagePath = 'assets/image/letter_2.png';
+                    offsetY = 0;
+                  }
+                });
+              },
+              onTap: () {
+                setState(() {
+                  if (currentImagePath == 'assets/image/letter_2.png') {
+                    currentImagePath = 'assets/image/letter_3.png';
+                    letterTextDialog(context, () {
+                      setState(() {
+                        currentImagePath = 'assets/image/letter_1.png';
+                      });
+                    });
+                  } else {
+                    currentImagePath = 'assets/image/letter_1.png';
+                  }
+                });
+              },
+              child: Image.asset(
+                currentImagePath,
+                width: 600.0,
+                height: 500.0,
+              ),
             ),
           ),
         ],
