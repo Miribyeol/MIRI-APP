@@ -186,10 +186,10 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
   // 토스트 메시지 표시 함수
   void showToast() {
     Fluttertoast.showToast(
-      msg: "화면 클릭 시 반려동물 정보가 보입니다.",
+      msg: "화면 클릭 시 나의 반려동물 정보가 보입니다.",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 3,
+      timeInSecForIosWeb: 2,
       backgroundColor: Color(0xFF6B42F8),
       textColor: Colors.white,
       fontSize: 16.0,
