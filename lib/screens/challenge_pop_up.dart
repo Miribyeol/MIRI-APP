@@ -97,7 +97,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
       title: Text(
         '${widget.day}일차 수고했어요!',
         style: TextStyle(
-            fontSize: iconSize * 1,
+            fontSize: iconSize * 0.9,
             fontWeight: FontWeight.bold,
             color: Colors.black),
         textAlign: TextAlign.center,
@@ -198,6 +198,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
                 fontSize: footerTextButtonSize * 1,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
+                color: Colors.black,
               ),
             ),
             onPressed: () {
@@ -221,26 +222,16 @@ class ChallengeCompleteDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      content: Padding(
-        padding: EdgeInsets.only(top: 20),
+      content: const Padding(
+        padding: EdgeInsets.only(top: 30, left: 20, right: 20, bottom: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '완료되었습니다',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
               '챌린지가 성공적으로 완료되었습니다!',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
@@ -260,10 +251,10 @@ class ChallengeCompleteDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
+            child: const Text(
               "확인",
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),

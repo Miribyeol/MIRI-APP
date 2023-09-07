@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //챌린지 윗부분 내용
 List<Widget> challengeStart(int day) {
   const TextStyle customStyle =
-      TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+      TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
   switch (day) {
     case 1:
       return [
@@ -80,7 +80,7 @@ String challengeEnd(int day) {
     case 4:
       return '좋아하는 음악을 듣고 감상해보세요.\n 음악은 감정을 표현하고 치유하는 데\n 큰 도움이 될 수 있습니다.';
     case 5:
-      return '거울을 보면서 자신에게"나를 사랑합니다."하고 말해보세요.\n 자기 자신을 받아들이고 사랑하는 것은\n 펫로스 증후군 극복에 중요한 부분입니다.';
+      return '거울을 보면서 자신에게 "나를 사랑합니다."하고 말해보세요.\n 자기 자신을 받아들이고 사랑하는 것은\n 펫로스 증후군 극복에 중요한 부분입니다.';
     case 6:
       return '긍정적인 인용구를 찾아 모아보세요.\n 이를 읽으면서 긍정적인 생각과 에너지를 얻을 수 있습니다.';
     case 7:

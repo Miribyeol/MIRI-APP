@@ -40,13 +40,14 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            content: Padding(
-              padding: EdgeInsets.only(top: 20),
+            content: const Padding(
+              padding:
+                  EdgeInsets.only(top: 30, left: 50, right: 50, bottom: 10),
               child: Text(
                 "이미 완료한 챌린지입니다",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 17.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -64,7 +65,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     "확인",
                     style: TextStyle(
                       fontSize: 13,
@@ -90,7 +91,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            content: Padding(
+            content: const Padding(
               padding: EdgeInsets.only(top: 20),
               child: Text(
                 "이전 챌린지를 완료하지\n않았습니다",
@@ -114,7 +115,7 @@ class ChallengeListScreenState extends State<ChallengeListScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     "확인",
                     style: TextStyle(
                       fontSize: 13,

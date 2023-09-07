@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../services/pet_charnel_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../services/pet_charnel_service.dart';
 
 class PetCharnelScreen extends StatefulWidget {
   const PetCharnelScreen({Key? key}) : super(key: key);
@@ -26,7 +27,8 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
   void initState() {
     super.initState();
     baseUrl = "${dotenv.env['API_URL']}/pet/image/";
-    showToast(); // 화면 시작 시 토스트 메시지 표시
+    // 앱이 처음 실행되었는지 확인
+    checkFirstRun();
     fetchPetInfo();
   }
 
@@ -39,6 +41,19 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
       petDeathDate = petInfo['petDeathDate'];
       petImage = petInfo['petImage'];
     });
+  }
+
+  // 앱이 처음 실행되었는지 확인하는 함수
+  Future<void> checkFirstRun() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstRun = prefs.getBool('isFirstRun') ?? true; // 처음 실행되었는지 여부 확인
+
+    if (isFirstRun) {
+      // 처음 실행되었으면 토스트 메시지 표시
+      showToast();
+      // isFirstRun 값을 false로 설정하여 다음 실행부터는 표시하지 않음
+      prefs.setBool('isFirstRun', false);
+    }
   }
 
   double boxDecorationHeight = 10.0;
@@ -116,12 +131,12 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                                 )
                               : const Center(child: Text("이미지 없음")),
                         ),
-                        SizedBox(height: buttonTitleSize * 2),
+                        SizedBox(height: buttonTitleSize * 0.8),
                         Text(
                           petName ?? '',
                           style: const TextStyle(
                             color: Color(0xFFBBBBBB),
-                            fontSize: 24.0,
+                            fontSize: 25.0,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
@@ -131,17 +146,17 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                           '$petBirthDate ~ $petDeathDate',
                           style: const TextStyle(
                             color: Color(0xFFBBBBBB),
-                            fontSize: 15.0,
+                            fontSize: 17.0,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: buttonTitleSize * 2),
+                        SizedBox(height: buttonTitleSize * 5),
                         const Text(
                           '고마웠어. \n너와 함께한 모든 순간들에게.',
                           style: TextStyle(
                             color: Color(0xFFBBBBBB),
-                            fontSize: 18.0,
+                            fontSize: 20.0,
                             fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
@@ -171,11 +186,11 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
   // 토스트 메시지 표시 함수
   void showToast() {
     Fluttertoast.showToast(
-      msg: "화면 클릭 시 반려동물 정보가 보입니다.",
+      msg: "화면 클릭 시 나의 반려동물 정보가 보입니다.",
       toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP, // 화면 위에 표시
-      timeInSecForIosWeb: 3,
-      backgroundColor: const Color(0xFF6B42F8),
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 2,
+      backgroundColor: Color(0xFF6B42F8),
       textColor: Colors.white,
       fontSize: 16.0,
     );

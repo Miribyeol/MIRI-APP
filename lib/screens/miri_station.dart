@@ -87,6 +87,10 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                       ),
                     ],
                   ),
+<<<<<<< HEAD
+=======
+                  SizedBox(height: 100),
+>>>>>>> f9e8d4da1560618455dcaa0e8b34d047aa48adf5
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: Stack(
