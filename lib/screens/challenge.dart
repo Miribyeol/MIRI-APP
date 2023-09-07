@@ -203,6 +203,7 @@ class ChallengPage extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(height: 20),
                 ]),
               ),
             ),

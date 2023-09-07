@@ -131,12 +131,12 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                                 )
                               : const Center(child: Text("이미지 없음")),
                         ),
-                        SizedBox(height: buttonTitleSize * 2),
+                        SizedBox(height: buttonTitleSize * 0.8),
                         Text(
                           petName ?? '',
                           style: const TextStyle(
                             color: Color(0xFFBBBBBB),
-                            fontSize: 24.0,
+                            fontSize: 25.0,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
@@ -146,17 +146,17 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
                           '$petBirthDate ~ $petDeathDate',
                           style: const TextStyle(
                             color: Color(0xFFBBBBBB),
-                            fontSize: 15.0,
+                            fontSize: 17.0,
                             fontWeight: FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: buttonTitleSize * 2),
+                        SizedBox(height: buttonTitleSize * 5),
                         const Text(
                           '고마웠어. \n너와 함께한 모든 순간들에게.',
                           style: TextStyle(
                             color: Color(0xFFBBBBBB),
-                            fontSize: 18.0,
+                            fontSize: 20.0,
                             fontWeight: FontWeight.w600,
                           ),
                           textAlign: TextAlign.center,
