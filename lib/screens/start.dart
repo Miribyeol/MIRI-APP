@@ -362,14 +362,14 @@ class _StartScreenState extends State<StartScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: buttonTextDescSize * 0.9),
+                  SizedBox(height: buttonTextDescSize * 1),
                   SizedBox(
                     height: screenHeight * 0.1,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '   이런 글이\n   당신에게 위로가 될까요?',
+                          '  이런 글이\n  당신에게 위로가 될까요?',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: buttonTextSize * 1,
@@ -394,7 +394,7 @@ class _StartScreenState extends State<StartScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: buttonTextDescSize * 0.9),
+                  SizedBox(height: buttonTextDescSize * 0.5),
                   Column(
                     children: contentData.map((item) {
                       return Column(
@@ -423,7 +423,7 @@ class _StartScreenState extends State<StartScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
-                                            height: buttonTextDescSize * 1),
+                                            height: buttonTextDescSize * 0.9),
                                         Text(
                                           item['title'],
                                           style: TextStyle(
@@ -432,7 +432,7 @@ class _StartScreenState extends State<StartScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        SizedBox(height: buttonTextTop * 1.1),
+                                        SizedBox(height: buttonTextTop * 0.7),
                                         Text(
                                           item['content'],
                                           style: TextStyle(
@@ -463,7 +463,7 @@ class _StartScreenState extends State<StartScreen> {
                   ),
                   SizedBox(height: contentPaddingVertical),
                   SizedBox(
-                    height: screenHeight * 0.145,
+                    height: 90,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
