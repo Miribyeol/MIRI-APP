@@ -50,4 +50,5 @@ class MyApp extends StatelessWidget {
       ],
     );
   }
+  // 2023.09.07 개발자대회 제출 완료 !
 }
