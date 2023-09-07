@@ -33,6 +33,7 @@ class _StartScreenState extends State<StartScreen> {
             .map((item) => item['emotion'].toString())
             .toSet()
             .toList();
+
         contentData = List<Map<String, dynamic>>.from(result['posts']);
 
         // Day Data
@@ -187,6 +188,7 @@ class _StartScreenState extends State<StartScreen> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center, // 세로 중앙 정렬
           children: [
             Container(
               padding: EdgeInsets.symmetric(
@@ -208,25 +210,21 @@ class _StartScreenState extends State<StartScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: buttonTextDescSize * 2),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              ' 챌린지',
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '\n 챌린지',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          SizedBox(height: buttonTextTop * 0.9),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
+                            SizedBox(height: buttonTextTop * 0.3),
+                            Text(
                               ' 14일동안 미션을 수행해보아요 !',
                               style: TextStyle(
                                 color: const Color(0xFFBBBBBB),
@@ -234,8 +232,8 @@ class _StartScreenState extends State<StartScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -257,16 +255,15 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 2),
                             Text(
-                              ' 미리별 정거장',
+                              '\n 미리별 정거장',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: buttonTextTop * 0.9),
+                            SizedBox(height: buttonTextTop * 0.3),
                             Text(
                               ' 애완동물에게 하지 못했던 말을 전하는 공간',
                               style: TextStyle(
@@ -298,16 +295,15 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 2),
                             Text(
-                              ' 영원한 발자국',
+                              '\n 영원한 발자국',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: buttonTextTop * 0.9),
+                            SizedBox(height: buttonTextTop * 0.3),
                             Text(
                               ' 애완동물과 함께한 순간들을 기억하는 공간',
                               style: TextStyle(
@@ -339,16 +335,15 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 2),
                             Text(
-                              ' 별이와 대화하기',
+                              '\n 별이와 대화하기',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: buttonTextSize,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: buttonTextTop * 0.9),
+                            SizedBox(height: buttonTextTop * 0.3),
                             Text(
                               ' 미리별 만의 AI 친구 별이에게 고민을 말해보세요 !',
                               style: TextStyle(
@@ -394,66 +389,72 @@ class _StartScreenState extends State<StartScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: buttonTextDescSize * 0.9),
                   Column(
                     children: contentData.map((item) {
                       return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // 가로 정렬을 왼쪽 정렬로 설정
                         children: [
                           SizedBox(
-                            height: screenHeight * 0.14,
+                            height: screenHeight * 0.12,
                             child: Container(
-                                decoration: BoxDecoration(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1F2839),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
                                   color: const Color(0xFF1F2839),
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: const Color(0xFF1F2839),
-                                    width: 2.0,
-                                  ),
+                                  width: 2.0,
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20.0), // 왼쪽에 10의 패딩 추가
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                            height: buttonTextDescSize * 1.5),
-                                        Text(
-                                          item['title'],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: buttonTitleSize,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  // 가로 정렬을 왼쪽 정렬로 설정
+
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 16.0),
+                                      child: Text(
+                                        item['title'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: buttonTitleSize,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        SizedBox(height: buttonTextTop * 1.1),
-                                        Text(
-                                          item['content'],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: buttonContentSize,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(height: buttonTextTop * 1.5),
-                                        Text(
-                                          '${item['author']}',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: footerTextButtonSize,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
+                                        //textAlign: TextAlign.start, // 왼쪽 정렬
+                                      ),
                                     ),
-                                  ),
-                                )),
+                                    SizedBox(height: buttonTextTop),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 16.0),
+                                      child: Text(
+                                        item['content'],
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: buttonContentSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        //textAlign: TextAlign.start, // 왼쪽 정렬
+                                      ),
+                                    ),
+                                    SizedBox(height: buttonTextTop),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 16.0),
+                                      child: Text(
+                                        'Author: ${item['author']}',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: footerTextButtonSize,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        // textAlign: TextAlign.start, // 왼쪽 정렬
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                           SizedBox(height: buttonMarginTop),
                         ],
