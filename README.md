@@ -60,15 +60,24 @@
 
 <div>
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/fbcdf0e7-8778-4587-a9b0-b460c49dd225" width="300" height="600" alt="메인화면">
+</div>
+
+- 14일 챌린지 화면
+
+<div>
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/4377ae04-901a-462e-b5a0-f76268405268" width="300" height="600" alt="챌린지리스트화면">
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/c020371b-2adb-47a4-822c-82a7aa3cfa7b" width="300" height="600" alt="챌린지화면">
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/b474a0ff-dd04-4086-8811-9dd1c3b31b0b" width="300" height="600" alt="챌린지완료화면">
 </div>
 
+- 영원한 발자국 화면
+
 <div>
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/e2c1a173-55a1-4a72-8aca-abd3b7ba0bb2" width="300" height="600" alt="반려동물납골당">
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/67e6a9b2-8d2b-4ec7-9b6d-0112ee970648" width="300" height="600" alt="반려동물납골당">
 </div>
+
+- 미리별 정거장 화면
 
 <div>
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/584837ce-bcbf-43ea-ad5a-adc0c629a4aa" width="300" height="600" alt="반려동물납골당">
