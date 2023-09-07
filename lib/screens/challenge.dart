@@ -24,8 +24,8 @@ class ChallengPage extends StatelessWidget {
 
 //챌린지 이미지
   Widget _challengeImage(int day) {
-    double width=500;
-    double height=500;
+    double width = 500;
+    double height = 500;
     assert(day >= 1 && day <= 14, 'Day should be between 1 and 14');
 
     return Image.asset(
@@ -51,13 +51,13 @@ class ChallengPage extends StatelessWidget {
 
 // 챌린지 화면 UI
   @override
-   Widget build(BuildContext context) {
-    double contentButtonSize=36;
-    double contentgapHeight=20;
-    double height=10;
-    double width=10;
-    double fontSize=16;
-    double buttonText=15;
+  Widget build(BuildContext context) {
+    double contentButtonSize = 35;
+    double contentgapHeight = 20;
+    double height = 10;
+    double width = 10;
+    double fontSize = 18;
+    double buttonText = 15;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
@@ -87,7 +87,8 @@ class ChallengPage extends StatelessWidget {
                       child: Text(
                         'Day $day',
                         style: TextStyle(
-                            fontSize: contentButtonSize, fontWeight: FontWeight.bold),
+                            fontSize: contentButtonSize,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(
@@ -106,7 +107,7 @@ class ChallengPage extends StatelessWidget {
                       child: _challengeImage(day),
                     ),
                     for (var widget in challengeStart(day))
-                      Expanded(flex: 1, child: widget),
+                      Expanded(flex: 2, child: widget),
                     // ..._challengeStory(day),
                   ],
                 ),
@@ -119,19 +120,26 @@ class ChallengPage extends StatelessWidget {
               color: const Color(0xff121824),
               child: Center(
                 child: Column(children: [
-                  SizedBox(
-                    height: height,
-                  ),
+                  SizedBox(height: height),
                   Expanded(
                     flex: 3,
                     child: Center(
-                      child: Text(
-                        challengeEnd(day),
-                        style: TextStyle(
-                          fontSize: buttonText,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
+                      child: Column(
+                        mainAxisAlignment:
+                            MainAxisAlignment.center, // 텍스트를 수직으로 중간에 정렬
+                        children: challengeEnd(day).split('\n').map((sentence) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 3.0),
+                            child: Text(
+                              sentence,
+                              style: TextStyle(
+                                fontSize: buttonText,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
