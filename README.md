@@ -144,6 +144,12 @@ Hyu-noo has one repository available. Follow their code on GitHub.
 - 편지 보내기 기능
   - 편지 작성 기능 구현
   - 편지 보내기 기능 구현
+
+
+## 주요 기능 이미지
+- 메인화면
+![메인화면](https://github.com/Miribyeol/MIRI-APP/assets/92287948/fbcdf0e7-8778-4587-a9b0-b460c49dd225)
+
 ---
 
 ## 프로젝트 설치 및 실행 방법
@@ -156,16 +162,17 @@ Hyu-noo has one repository available. Follow their code on GitHub.
    $ Flutter 3.13.1
    $ Dart 3.1.0
    ```
-   
 
 ### 세팅 및 실행
 
 1. GitHub 저장소를 클론합니다.
+
    ```
    $ git clone https://github.com/Miribyeol/MIRI-APP.git
    ```
 
 2. 프로젝트 루트 경로에 .env 파일 생성 후 아래 예시를 참고하여 내용을 작성해 주세요.
+
    ```
    # .env 예시
     KAKAO_APP_KEY=
