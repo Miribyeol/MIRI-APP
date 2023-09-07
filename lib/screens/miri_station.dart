@@ -87,41 +87,39 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  if (showButton)
-                    ButtonBar(
-                      alignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          '눌러주세요',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              backgroundImagePath = 'assets/image/post_1.png';
-                              textFieldImagePath = 'assets/image/letter_1.png';
-                              showTextField = !showTextField;
-                              showButton = false;
-                            });
-                          },
-                          child: Container(
-                            width: 40.0,
-                            height: 40.0,
-                            child: Image.asset('assets/icon/airplane.jpg'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  SizedBox(
-                    height: 100,
-                  ),
+                  SizedBox(height: 100),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: Stack(
                       children: [
+                        if (showButton)
+                          ButtonBar(
+                            alignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                '눌러주세요',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    backgroundImagePath =
+                                        'assets/image/post_1.png';
+                                    textFieldImagePath =
+                                        'assets/image/letter_1.png';
+                                    showTextField = !showTextField;
+                                    showButton = false;
+                                  });
+                                },
+                                child: Container(
+                                  width: 40.0,
+                                  height: 40.0,
+                                  child:
+                                      Image.asset('assets/icon/airplane.jpg'),
+                                ),
+                              ),
+                            ],
+                          ),
                         if (!showTextField)
                           Transform.translate(
                             offset: Offset(0, imageYOffset),
@@ -132,7 +130,7 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                                 });
                               },
                               onVerticalDragEnd: (details) {
-                                if (details.velocity.pixelsPerSecond.dy < 0) {
+                                if (imageYOffset <= -50) {
                                   _showSuccessDialog(context);
                                 }
                               },
@@ -140,23 +138,26 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                             ),
                           ),
                         if (showTextField)
-                          TextField(
-                            maxLines: 13,
-                            controller: _textController,
-                            decoration: InputDecoration(
-                              hintText: '반려동물에게 편지를 작성해봐요',
-                              hintStyle: TextStyle(color: Colors.grey),
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide.none,
+                          Transform.translate(
+                            offset: Offset(0, 100), // y축으로 100만큼 아래로 이동
+                            child: TextField(
+                              maxLines: 13,
+                              controller: _textController,
+                              decoration: InputDecoration(
+                                hintText: '반려동물에게 편지를 작성해봐요',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide.none,
+                                ),
+                                contentPadding: EdgeInsets.zero,
                               ),
-                              contentPadding: EdgeInsets.zero,
-                            ),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                       ],
@@ -181,7 +182,7 @@ void _showSuccessDialog(context) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        content: Padding(
+        content: const Padding(
           padding: EdgeInsets.only(top: 20),
           child: Text(
             '작성하신 편지가\n미리별로 보내졌습니다!',
@@ -205,7 +206,7 @@ void _showSuccessDialog(context) {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 "확인",
                 style: TextStyle(
                   fontSize: 13,

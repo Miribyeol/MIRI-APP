@@ -253,7 +253,7 @@ class AnimalScreenState extends State<AnimalScreen> {
                             fullImageUrl,
                             fit: BoxFit.cover,
                           )
-                        : Center(
+                        : const Center(
                             child: Icon(
                               Icons.add,
                               color: Colors.white,

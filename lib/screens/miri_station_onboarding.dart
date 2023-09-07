@@ -35,7 +35,8 @@ class _MiriStationOnboardingState extends State<MiriStationOnboarding> {
         onTap: () {
           if (currentPage < onboardingPages.length - 1) {
             _controller.nextPage(
-                duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut);
           } else {
             widget.onCompleted();
           }
@@ -65,10 +66,8 @@ class _MiriStationOnboardingState extends State<MiriStationOnboarding> {
                       padding: const EdgeInsets.only(bottom: 150.0),
                       child: Text(
                         onboardingPages[index].description,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.normal,
-                        ),
+                        style: const TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ),

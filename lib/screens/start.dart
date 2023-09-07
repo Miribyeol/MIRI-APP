@@ -211,7 +211,7 @@ class _StartScreenState extends State<StartScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: buttonTextDescSize * 1),
+                          SizedBox(height: buttonTextDescSize * 2),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
@@ -257,7 +257,7 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 1),
+                            SizedBox(height: buttonTextDescSize * 2),
                             Text(
                               ' 미리별 정거장',
                               style: TextStyle(
@@ -298,7 +298,7 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 1),
+                            SizedBox(height: buttonTextDescSize * 2),
                             Text(
                               ' 영원한 발자국',
                               style: TextStyle(
@@ -339,7 +339,7 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 1),
+                            SizedBox(height: buttonTextDescSize * 2),
                             Text(
                               ' 별이와 대화하기',
                               style: TextStyle(
@@ -401,7 +401,7 @@ class _StartScreenState extends State<StartScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: screenHeight * 0.16,
+                            height: screenHeight * 0.13,
                             child: Container(
                                 decoration: BoxDecoration(
                                   color: const Color(0xFF1F2839),
@@ -423,7 +423,7 @@ class _StartScreenState extends State<StartScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
-                                            height: buttonTextDescSize * 1),
+                                            height: buttonTextDescSize * 1.2),
                                         Text(
                                           item['title'],
                                           style: TextStyle(
