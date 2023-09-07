@@ -18,7 +18,7 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
   String? textFieldImagePath;
   bool showTextField = true;
   bool showButton = true;
-  double imageYOffset = 10;
+  double imageYOffset = 100;
 
   @override
   void initState() {

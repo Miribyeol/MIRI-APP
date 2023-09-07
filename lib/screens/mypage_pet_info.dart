@@ -116,7 +116,7 @@ class AnimalScreenState extends State<AnimalScreen> {
 
   Future<DateTime?> _showCustomModal(
       BuildContext context, bool isBirthDate) async {
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return await showDialog<DateTime>(
       context: context,
@@ -128,7 +128,7 @@ class AnimalScreenState extends State<AnimalScreen> {
           ),
           child: SizedBox(
             width: screenWidth,
-            height: screenHeight,
+            height: 250,
             child: Column(
               children: [
                 Expanded(
