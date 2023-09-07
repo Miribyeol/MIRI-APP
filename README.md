@@ -60,8 +60,7 @@
 
 <div>
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/fbcdf0e7-8778-4587-a9b0-b460c49dd225" width="300" height="600" alt="메인화면">
-<img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/8b8ea4dc-f4ee-4ead-99a6-f5ef39cc03f4
-" width="300" height="600" alt="챌린지리스트화면">
+<img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/4377ae04-901a-462e-b5a0-f76268405268" width="300" height="600" alt="챌린지리스트화면">
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/c020371b-2adb-47a4-822c-82a7aa3cfa7b" width="300" height="600" alt="챌린지화면">
 <img src="https://github.com/Miribyeol/MIRI-APP/assets/92287948/b474a0ff-dd04-4086-8811-9dd1c3b31b0b" width="300" height="600" alt="챌린지완료화면">
 </div>
