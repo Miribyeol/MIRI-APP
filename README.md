@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 MIRI_APP
 펫로스 증후군 극복 서비스 미리별의 Front-End Repository 입니다.
 
@@ -148,7 +148,7 @@ Hyu-noo has one repository available. Follow their code on GitHub.
 
 ## 주요 기능 이미지
 - 메인화면
-![메인화면](https://github.com/Miribyeol/MIRI-APP/assets/92287948/fbcdf0e7-8778-4587-a9b0-b460c49dd225)
+![메인화면](https://github.com/Miribyeol/MIRI-APP/assets/92287948/fbcdf0e7-8778-4587-a9b0-b460c49dd225)
 
 ---
 
@@ -196,4 +196,3 @@ Hyu-noo has one repository available. Follow their code on GitHub.
 - 황서이 - [Seoi-Hwang](https://github.com/Hwang-seo-i) - hnvvely@gmail.com
 - 정재욱 - [jjy0921](https://github.com/jjy0921) - jssj0921@naver.com
 - 이현우 - [Lehyunwoo](https://github.com/Hyu-noo) - lehw20@naver.com
->>>>>>> f9e8d4da1560618455dcaa0e8b34d047aa48adf5
