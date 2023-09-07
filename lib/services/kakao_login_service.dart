@@ -124,12 +124,11 @@ class KakaoLoginService {
           }
         } else {
           print('반려동물 정보 등록 확인 실패: ${response.statusCode}');
-          Navigator.pushReplacementNamed(context, '/login');
+          Navigator.pushReplacementNamed(context, '/pet_info_input');
           print('s: ${response.body}');
         }
       } catch (error) {
         print('반려동물 정보 등록 확인 실패: $error');
-        Navigator.pushReplacementNamed(context, '/login');
       }
     }
   }
