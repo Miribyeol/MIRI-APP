@@ -212,11 +212,11 @@ class AnimalScreenState extends State<AnimalScreen> {
             ),
             SizedBox(height: buttonTitleSize),
             _buildSectionTitle('반려동물 출생일'),
-            SizedBox(height: buttonTitleSize),
+            // SizedBox(height: buttonTitleSize),
             _buildDateSelector(true),
             SizedBox(height: buttonTitleSize),
             _buildSectionTitle('반려동물 사망일'),
-            SizedBox(height: buttonTitleSize),
+            // SizedBox(height: buttonTitleSize),
             _buildDateSelector(false),
             SizedBox(height: buttonTitleSize),
             _buildSectionTitle('반려동물 사진 업로드'),
@@ -434,18 +434,21 @@ class DropdownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      value: initialValue,
-      isExpanded: true,
-      items: options.map((value) => itemBuilder(value, value)).toList(),
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide.none,
+    return SizedBox(
+      height: 60,
+      child: DropdownButtonFormField<String>(
+        value: initialValue,
+        isExpanded: true,
+        items: options.map((value) => itemBuilder(value, value)).toList(),
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: BorderSide.none,
+          ),
+          fillColor: const Color(0xFF1F2839),
+          filled: true,
         ),
-        fillColor: const Color(0xFF1F2839),
-        filled: true,
       ),
     );
   }
