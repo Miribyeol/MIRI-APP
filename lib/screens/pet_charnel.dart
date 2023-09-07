@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../services/pet_charnel_service.dart';
 
@@ -27,8 +26,7 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
   void initState() {
     super.initState();
     baseUrl = "${dotenv.env['API_URL']}/pet/image/";
-    // 앱이 처음 실행되었는지 확인
-    checkFirstRun();
+    showToast();
     fetchPetInfo();
   }
 
@@ -41,19 +39,6 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
       petDeathDate = petInfo['petDeathDate'];
       petImage = petInfo['petImage'];
     });
-  }
-
-  // 앱이 처음 실행되었는지 확인하는 함수
-  Future<void> checkFirstRun() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isFirstRun = prefs.getBool('isFirstRun') ?? true; // 처음 실행되었는지 여부 확인
-
-    if (isFirstRun) {
-      // 처음 실행되었으면 토스트 메시지 표시
-      showToast();
-      // isFirstRun 값을 false로 설정하여 다음 실행부터는 표시하지 않음
-      prefs.setBool('isFirstRun', false);
-    }
   }
 
   double boxDecorationHeight = 10.0;
@@ -71,7 +56,6 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     double buttonTitleSize = 20;
 
@@ -79,7 +63,6 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          // 배경 이미지
           Image.asset(
             'assets/image/pet_charnel.png',
             width: double.infinity,
@@ -90,19 +73,16 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
             child: GestureDetector(
               onTap: () {
                 toggleBoxDecoration();
-                // 화면 클릭 시 토스트 메시지 사라짐
                 Fluttertoast.cancel();
               },
               onVerticalDragEnd: (details) {
                 if (details.primaryVelocity != null &&
                     details.primaryVelocity! > 0) {
                   toggleBoxDecoration();
-                  // 화면 클릭 시 토스트 메시지 사라짐
                   Fluttertoast.cancel();
                 } else if (details.primaryVelocity != null &&
                     details.primaryVelocity! < 0) {
                   toggleBoxDecoration();
-                  // 화면 클릭 시 토스트 메시지 사라짐
                   Fluttertoast.cancel();
                 }
               },
@@ -168,7 +148,6 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
               ),
             ),
           ),
-          // 뒤로 가기 버튼
           Positioned(
             left: 10.0,
             top: 45.0,
@@ -183,7 +162,6 @@ class _PetCharnelScreenState extends State<PetCharnelScreen> {
     );
   }
 
-  // 토스트 메시지 표시 함수
   void showToast() {
     Fluttertoast.showToast(
       msg: "화면 클릭 시 나의 반려동물 정보가 보입니다.",
