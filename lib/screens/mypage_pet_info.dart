@@ -160,7 +160,7 @@ class AnimalScreenState extends State<AnimalScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double buttonTitleSize = 20;
+    // double buttonTitleSize = 20;
     double buttonHeight = screenHeight * 0.13;
     return Scaffold(
       appBar: AppBar(
@@ -183,7 +183,7 @@ class AnimalScreenState extends State<AnimalScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildSectionTitle('닉네임'),
+            _buildSectionTitle('반려동물이름'),
             TextFormField(
               controller: _nameController, // 컨트롤러 연결
               decoration: InputDecoration(
@@ -199,7 +199,7 @@ class AnimalScreenState extends State<AnimalScreen> {
               },
               style: const TextStyle(color: Colors.white),
             ),
-            SizedBox(height: buttonTitleSize),
+            const SizedBox(height: 20),
             _buildSectionTitle('반려동물 종류'),
             DropdownFormField(
               onChanged: (String? newValue) {
@@ -210,17 +210,14 @@ class AnimalScreenState extends State<AnimalScreen> {
               initialValue: petSpecies,
               options: petSpeciesOptions,
             ),
-            SizedBox(height: buttonTitleSize),
+            const SizedBox(height: 20),
             _buildSectionTitle('반려동물 출생일'),
-            SizedBox(height: buttonTitleSize),
             _buildDateSelector(true),
-            SizedBox(height: buttonTitleSize),
+            const SizedBox(height: 20),
             _buildSectionTitle('반려동물 사망일'),
-            SizedBox(height: buttonTitleSize),
             _buildDateSelector(false),
-            SizedBox(height: buttonTitleSize),
+            const SizedBox(height: 20),
             _buildSectionTitle('반려동물 사진 업로드'),
-            SizedBox(height: buttonTitleSize),
             GestureDetector(
               onTap: () async {
                 final picker = ImagePicker();
@@ -262,7 +259,7 @@ class AnimalScreenState extends State<AnimalScreen> {
                           ),
               ),
             ),
-            SizedBox(height: buttonTitleSize),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 await _updatePetInfo();
