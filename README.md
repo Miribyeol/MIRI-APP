@@ -47,6 +47,22 @@
   - 편지 작성 기능 구현
   - 편지 보내기 기능 구현
 
+## 주요 기능 이미지
+
+<div>
+  <img src="assets/image/메인화면.png" width="300" height="500">
+</div>
+
+<div>
+  <img src="assets/image/챌린지화면.png" width="300" height="500">
+  <img src="assets/image/챌린지화면(Day 2).png" width="300" height="500">
+  <img src="이미지_URL_4" width="300" height="500">
+</div>
+
+<div>
+  <img src="이미지_URL_5" width="300" height="500">
+  <img src="이미지_URL_6" width="300" height="500">
+</div>
 ---
 
 ## 프로젝트 설치 및 실행 방법
