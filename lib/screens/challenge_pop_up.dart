@@ -72,7 +72,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           child: Text(
             '# ${buttonTexts[index]}',
             style: TextStyle(
-                fontSize: buttonContentSize, fontWeight: FontWeight.bold),
+                fontSize: buttonContentSize * 1, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -97,7 +97,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
       title: Text(
         '${widget.day}일차 수고했어요!',
         style: TextStyle(
-            fontSize: iconSize,
+            fontSize: iconSize * 1,
             fontWeight: FontWeight.bold,
             color: Colors.black),
         textAlign: TextAlign.center,
@@ -108,11 +108,11 @@ class ChallengPopUpState extends State<ChallengPopUp> {
           Text(
             '방금 챌린지를 마친 기분이 어떤지 알려줄래요?',
             style: TextStyle(
-                fontSize: iconText,
+                fontSize: iconText * 1,
                 fontWeight: FontWeight.bold,
                 color: Colors.black),
           ),
-          SizedBox(height: buttonheight),
+          SizedBox(height: buttonheight * 1),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.zero,
@@ -164,7 +164,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
               ),
             ),
           ),
-          SizedBox(height: buttonheight),
+          SizedBox(height: buttonheight * 1),
           ElevatedButton(
             onPressed: () {
               List<String> selectedEmotions = selectedButtons.map((int index) {
@@ -187,7 +187,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
             child: Text(
               '완료',
               style: TextStyle(
-                  fontSize: footerTextSize, fontWeight: FontWeight.bold),
+                  fontSize: footerTextSize * 1, fontWeight: FontWeight.bold),
             ),
           ),
           // const SizedBox(height: 10),
@@ -195,7 +195,7 @@ class ChallengPopUpState extends State<ChallengPopUp> {
             child: Text(
               '안할래요',
               style: TextStyle(
-                fontSize: footerTextButtonSize,
+                fontSize: footerTextButtonSize * 1,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
               ),

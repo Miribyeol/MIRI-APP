@@ -87,7 +87,7 @@ class ChallengPage extends StatelessWidget {
                       child: Text(
                         'Day $day',
                         style: TextStyle(
-                            fontSize: contentButtonSize,
+                            fontSize: contentButtonSize * 1,
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -99,12 +99,16 @@ class ChallengPage extends StatelessWidget {
                       child: Text(
                         '오늘 하루는 어떠셨나요?',
                         style: TextStyle(
-                            fontSize: fontSize, fontWeight: FontWeight.bold),
+                            fontSize: fontSize * 1,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                     Expanded(
                       flex: 5,
                       child: _challengeImage(day),
+                    ),
+                    SizedBox(
+                      height: buttonText * 1,
                     ),
                     for (var widget in challengeStart(day))
                       Expanded(flex: 2, child: widget),
@@ -125,15 +129,14 @@ class ChallengPage extends StatelessWidget {
                     flex: 3,
                     child: Center(
                       child: Column(
-                        mainAxisAlignment:
-                            MainAxisAlignment.center, // 텍스트를 수직으로 중간에 정렬
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: challengeEnd(day).split('\n').map((sentence) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 3.0),
                             child: Text(
                               sentence,
                               style: TextStyle(
-                                fontSize: buttonText,
+                                fontSize: buttonText * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,
@@ -167,7 +170,7 @@ class ChallengPage extends StatelessWidget {
                           child: Text(
                             '목록으로',
                             style: TextStyle(
-                              fontSize: fontSize,
+                              fontSize: fontSize * 1,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -192,7 +195,7 @@ class ChallengPage extends StatelessWidget {
                           child: Text(
                             '완료',
                             style: TextStyle(
-                              fontSize: fontSize,
+                              fontSize: fontSize * 1,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

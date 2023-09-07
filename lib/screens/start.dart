@@ -108,7 +108,7 @@ class _StartScreenState extends State<StartScreen> {
             Text(
               "DAY $challengerStep",
               style: TextStyle(
-                fontSize: buttonTextDescSize,
+                fontSize: buttonTextDescSize * 1,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -122,7 +122,7 @@ class _StartScreenState extends State<StartScreen> {
           '다른 사람들은 어떤 감정을 갖고 있을까요?',
           style: TextStyle(
             color: Colors.white,
-            fontSize: buttonTextDescSize,
+            fontSize: buttonTextDescSize * 1,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -211,14 +211,14 @@ class _StartScreenState extends State<StartScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: buttonTextDescSize * 2),
+                          SizedBox(height: buttonTextDescSize * 1),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
                               ' 챌린지',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: buttonTextSize,
+                                fontSize: buttonTextSize * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -230,7 +230,7 @@ class _StartScreenState extends State<StartScreen> {
                               ' 14일동안 미션을 수행해보아요 !',
                               style: TextStyle(
                                 color: const Color(0xFFBBBBBB),
-                                fontSize: buttonTextDescSize,
+                                fontSize: buttonTextDescSize * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -257,12 +257,12 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 2),
+                            SizedBox(height: buttonTextDescSize * 1),
                             Text(
                               ' 미리별 정거장',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: buttonTextSize,
+                                fontSize: buttonTextSize * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -271,7 +271,7 @@ class _StartScreenState extends State<StartScreen> {
                               ' 애완동물에게 하지 못했던 말을 전하는 공간',
                               style: TextStyle(
                                 color: const Color(0xFFBBBBBB),
-                                fontSize: buttonTextDescSize,
+                                fontSize: buttonTextDescSize * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -298,12 +298,12 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 2),
+                            SizedBox(height: buttonTextDescSize * 1),
                             Text(
                               ' 영원한 발자국',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: buttonTextSize,
+                                fontSize: buttonTextSize * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -312,7 +312,7 @@ class _StartScreenState extends State<StartScreen> {
                               ' 애완동물과 함께한 순간들을 기억하는 공간',
                               style: TextStyle(
                                 color: const Color(0xFFBBBBBB),
-                                fontSize: buttonTextDescSize,
+                                fontSize: buttonTextDescSize * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -339,12 +339,12 @@ class _StartScreenState extends State<StartScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: buttonTextDescSize * 2),
+                            SizedBox(height: buttonTextDescSize * 1),
                             Text(
                               ' 별이와 대화하기',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: buttonTextSize,
+                                fontSize: buttonTextSize * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -353,7 +353,7 @@ class _StartScreenState extends State<StartScreen> {
                               ' 미리별 만의 AI 친구 별이에게 고민을 말해보세요 !',
                               style: TextStyle(
                                 color: const Color(0xFFBBBBBB),
-                                fontSize: buttonTextDescSize,
+                                fontSize: buttonTextDescSize * 1,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -372,25 +372,25 @@ class _StartScreenState extends State<StartScreen> {
                           '   이런 글이\n   당신에게 위로가 될까요?',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: buttonTextSize,
+                            fontSize: buttonTextSize * 1,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              bottom: progressIndicatorPaddingBottom),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: const Text(
-                              '더보기',
-                              style: TextStyle(
-                                color: Color(0xFFBBBBBB),
-                                decoration: TextDecoration.underline,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        )
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //       bottom: progressIndicatorPaddingBottom),
+                        //   child: TextButton(
+                        //     onPressed: () {},
+                        //     child: const Text(
+                        //       '더보기',
+                        //       style: TextStyle(
+                        //         color: Color(0xFFBBBBBB),
+                        //         decoration: TextDecoration.underline,
+                        //         fontWeight: FontWeight.bold,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     ),
                   ),
@@ -401,7 +401,7 @@ class _StartScreenState extends State<StartScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: screenHeight * 0.14,
+                            height: screenHeight * 0.16,
                             child: Container(
                                 decoration: BoxDecoration(
                                   color: const Color(0xFF1F2839),
@@ -423,12 +423,12 @@ class _StartScreenState extends State<StartScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
-                                            height: buttonTextDescSize * 1.5),
+                                            height: buttonTextDescSize * 1),
                                         Text(
                                           item['title'],
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: buttonTitleSize,
+                                            fontSize: buttonTitleSize * 0.9,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -437,7 +437,7 @@ class _StartScreenState extends State<StartScreen> {
                                           item['content'],
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: buttonContentSize,
+                                            fontSize: buttonContentSize * 0.9,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
@@ -446,7 +446,8 @@ class _StartScreenState extends State<StartScreen> {
                                           '${item['author']}',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: footerTextButtonSize,
+                                            fontSize:
+                                                footerTextButtonSize * 0.9,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),

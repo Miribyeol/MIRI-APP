@@ -110,7 +110,7 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                           child: Container(
                             width: 40.0,
                             height: 40.0,
-                            child: Image.asset('assets/icon/star.png'),
+                            child: Image.asset('assets/icon/airplane.png'),
                           ),
                         ),
                       ],
