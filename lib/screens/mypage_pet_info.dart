@@ -212,17 +212,9 @@ class AnimalScreenState extends State<AnimalScreen> {
             ),
             const SizedBox(height: 20),
             _buildSectionTitle('반려동물 출생일'),
-<<<<<<< HEAD
-=======
-            // SizedBox(height: buttonTitleSize),
->>>>>>> 8da3a63c0490ca0c5761e78f428b164957960f84
             _buildDateSelector(true),
             const SizedBox(height: 20),
             _buildSectionTitle('반려동물 사망일'),
-<<<<<<< HEAD
-=======
-            // SizedBox(height: buttonTitleSize),
->>>>>>> 8da3a63c0490ca0c5761e78f428b164957960f84
             _buildDateSelector(false),
             const SizedBox(height: 20),
             _buildSectionTitle('반려동물 사진 업로드'),
