@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:miri_app/screens/miri_station_onboarding.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class MiriStationScreen extends StatefulWidget {
   const MiriStationScreen({Key? key}) : super(key: key);
@@ -23,23 +23,23 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
   @override
   void initState() {
     super.initState();
-    _checkOnboarding();
+    // _checkOnboarding();
     backgroundImagePath = 'assets/image/post_letter_1.png';
     textFieldImagePath = 'assets/image/letter_2.png';
   }
 
-  _checkOnboarding() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool seen = (prefs.getBool('seenOnboarding') ?? false);
+  // _checkOnboarding() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   bool seen = (prefs.getBool('seenOnboarding') ?? false);
 
-    if (seen) {
-      setState(() {
-        showOnboarding = false;
-      });
-    } else {
-      await prefs.setBool('seenOnboarding', true);
-    }
-  }
+  //   if (seen) {
+  //     setState(() {
+  //       showOnboarding = false;
+  //     });
+  //   } else {
+  //     await prefs.setBool('seenOnboarding', true);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,14 @@ class _MiriStationScreenState extends State<MiriStationScreen> {
                       ),
                     ],
                   ),
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
                   SizedBox(height: 100),
+>>>>>>> f9e8d4da1560618455dcaa0e8b34d047aa48adf5
+=======
+                  SizedBox(height: 100),
+>>>>>>> 8da3a63c0490ca0c5761e78f428b164957960f84
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: Stack(
